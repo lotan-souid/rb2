@@ -1,0 +1,67 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-25 12:07:03.085312",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "development_project",
+  "current_status",
+  "notes",
+  "meeting_history"
+ ],
+ "fields": [
+  {
+   "fieldname": "development_project",
+   "fieldtype": "Link",
+   "label": "Development Project",
+   "options": "Development Project"
+  },
+  {
+   "fieldname": "current_status",
+   "fieldtype": "Data",
+   "label": "Current Status",
+   "options": "\u05d0\u05d9\u05e9\u05d5\u05e8\n\u05ea\u05d9\u05e7\u05d5\u05e0\u05d9\u05dd \u05e0\u05d3\u05e8\u05e9\u05d9\u05dd\n\u05d4\u05e7\u05e4\u05d0\u05d4\n\u05d3\u05d7\u05d9\u05d9\u05d4\n\u05d1\u05d9\u05d8\u05d5\u05dc",
+   "read_only": 1
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "meeting_history",
+   "fieldtype": "Table",
+   "label": "Meeting History",
+   "options": "Committee Meeting Entry"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-25 14:47:31.076862",
+ "modified_by": "Administrator",
+ "module": "Development",
+ "name": "Project Approval Committee",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "development_project"
+}

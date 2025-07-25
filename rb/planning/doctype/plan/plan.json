@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-23 08:23:52.196137",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "plan_number",
+  "plan_name",
+  "planning_committee",
+  "planning_zone",
+  "status",
+  "approval_date",
+  "development_project",
+  "notes",
+  "geolocation_wguh"
+ ],
+ "fields": [
+  {
+   "fieldname": "plan_name",
+   "fieldtype": "Data",
+   "label": "Plan Name"
+  },
+  {
+   "fieldname": "planning_committee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Planning Committee",
+   "options": "Planning Committee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "planning_zone",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Planning Zone",
+   "options": "Planning Zone",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "\u05d4\u05db\u05e0\u05d4 \u05d5\u05d4\u05d2\u05e9\u05d4\n\u05d1\u05d3\u05d9\u05e7\u05d4 \u05d5\u05d4\u05d7\u05dc\u05d8\u05ea \u05d4\u05e4\u05e7\u05d3\u05d4\n\u05d4\u05e4\u05e7\u05d3\u05d4 \u05d5\u05d4\u05ea\u05e0\u05d2\u05d3\u05d5\u05d9\u05d5\u05ea\n\u05d0\u05d9\u05e9\u05d5\u05e8 \u05d5\u05de\u05ea\u05df \u05ea\u05d5\u05e7\u05e3\n\u05e1\u05d9\u05d5\u05dd \u05dc\u05dc\u05d0 \u05ea\u05d5\u05e7\u05e3",
+   "reqd": 1
+  },
+  {
+   "fieldname": "approval_date",
+   "fieldtype": "Date",
+   "label": "Approval Date"
+  },
+  {
+   "fieldname": "development_project",
+   "fieldtype": "Link",
+   "label": "Development Project",
+   "options": "Development Project"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "geolocation_wguh",
+   "fieldtype": "Geolocation",
+   "label": "location"
+  },
+  {
+   "fieldname": "plan_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Plan Number",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-25 14:49:43.424709",
+ "modified_by": "Administrator",
+ "module": "Planning",
+ "name": "Plan",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "plan_number"
+}

@@ -1,0 +1,111 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-23 11:40:07.184628",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "arrangement_file_number",
+  "arrangement_file_type",
+  "arrangement_stage",
+  "arrangement_status",
+  "evacuee_a",
+  "evacuee_b",
+  "assigned_lot",
+  "column_break_ifwh",
+  "main_phone",
+  "main_email"
+ ],
+ "fields": [
+  {
+   "fieldname": "arrangement_file_number",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Arrangement File Number",
+   "reqd": 1
+  },
+  {
+   "fieldname": "arrangement_stage",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Arrangement Stage",
+   "reqd": 1
+  },
+  {
+   "fieldname": "arrangement_status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Arrangement Status",
+   "reqd": 1
+  },
+  {
+   "default": "\u05e4\u05d9\u05e0\u05d5\u05d9 \u05e6\u05d1\u05d9\u05e8\u05d9\u05dd",
+   "fieldname": "arrangement_file_type",
+   "fieldtype": "Select",
+   "label": "Arrangement File Type",
+   "options": "\u05d4\u05e1\u05d3\u05e8\u05d4 \u05d1\u05de\u05e7\u05d5\u05dd\n\u05e4\u05d9\u05e0\u05d5\u05d9 \u05e6\u05d1\u05d9\u05e8\u05d9\u05dd"
+  },
+  {
+   "fieldname": "evacuee_a",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Evacuee A",
+   "options": "Evacuee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "evacuee_b",
+   "fieldtype": "Link",
+   "label": "Evacuee B",
+   "options": "Evacuee"
+  },
+  {
+   "fieldname": "assigned_lot",
+   "fieldtype": "Link",
+   "label": "Assigned Lot",
+   "options": "Lot"
+  },
+  {
+   "fieldname": "column_break_ifwh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "main_phone",
+   "fieldtype": "Data",
+   "label": "Main Phone"
+  },
+  {
+   "fieldname": "main_email",
+   "fieldtype": "Data",
+   "label": "Main Email"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-07-25 14:23:43.987865",
+ "modified_by": "Administrator",
+ "module": "Arrangement",
+ "name": "Arrangement File",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "arrangement_file_number"
+}

@@ -1,0 +1,176 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-25 11:27:11.110352",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_5uvb",
+  "lft",
+  "rgt",
+  "is_group",
+  "old_parent",
+  "parent_development_task",
+  "development_project",
+  "stage",
+  "task_type",
+  "description",
+  "estimated_cost",
+  "actual_cost",
+  "responsible_employee",
+  "file_attachments",
+  "column_break_ozvb",
+  "start_date",
+  "end_date",
+  "status_update_date",
+  "task_status"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_5uvb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "lft",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Left",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "rgt",
+   "fieldtype": "Int",
+   "hidden": 1,
+   "label": "Right",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "is_group",
+   "fieldtype": "Check",
+   "label": "Is Group"
+  },
+  {
+   "fieldname": "old_parent",
+   "fieldtype": "Link",
+   "label": "Old Parent",
+   "options": "Development Task"
+  },
+  {
+   "fieldname": "parent_development_task",
+   "fieldtype": "Link",
+   "ignore_user_permissions": 1,
+   "label": "Parent Development Task",
+   "options": "Development Task"
+  },
+  {
+   "fieldname": "development_project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Development Project",
+   "options": "Development Project",
+   "reqd": 1
+  },
+  {
+   "fieldname": "stage",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Stage",
+   "options": "\u05e9\u05dc\u05d1 \u05d0\n\u05e9\u05dc\u05d1 \u05d1\n\u05d2\u05de\u05e8",
+   "reqd": 1
+  },
+  {
+   "fieldname": "task_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Task Type",
+   "options": "\u05d0\u05d5\u05de\u05d3\u05df\n\u05d1\u05d9\u05e6\u05d5\u05e2\n\u05de\u05e1\u05d9\u05e8\u05d4",
+   "reqd": 1
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Small Text",
+   "label": "Description"
+  },
+  {
+   "fieldname": "estimated_cost",
+   "fieldtype": "Currency",
+   "label": "Estimated Cost"
+  },
+  {
+   "fieldname": "actual_cost",
+   "fieldtype": "Currency",
+   "label": "Actual Cost"
+  },
+  {
+   "fieldname": "responsible_employee",
+   "fieldtype": "Link",
+   "label": "Responsible Employee",
+   "options": "User"
+  },
+  {
+   "fieldname": "file_attachments",
+   "fieldtype": "Attach",
+   "label": "File Attachments"
+  },
+  {
+   "fieldname": "column_break_ozvb",
+   "fieldtype": "Column Break",
+   "options": "\u05de\u05e9\u05d9\u05de\u05d4 \u05de\u05ea\u05d5\u05db\u05e0\u05e0\u05ea\n\u05de\u05e9\u05d9\u05de\u05d4 \u05d1\u05e2\u05d1\u05d5\u05d3\u05d4\n\u05de\u05e9\u05d9\u05de\u05d4 \u05ea\u05e7\u05d5\u05e2\u05d4\n\u05de\u05e9\u05d9\u05de\u05d4 \u05d1\u05d5\u05e6\u05e2\u05d4"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Data",
+   "label": "Start Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "task_status",
+   "fieldtype": "Select",
+   "label": "Task Status",
+   "reqd": 1
+  },
+  {
+   "fieldname": "status_update_date",
+   "fieldtype": "Date",
+   "label": "Status Update Date",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_tree": 1,
+ "links": [],
+ "modified": "2025-07-25 11:45:30.031644",
+ "modified_by": "Administrator",
+ "module": "Development",
+ "name": "Development Task",
+ "nsm_parent_field": "parent_development_task",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
