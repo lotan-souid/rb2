@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class DevelopmentPhase(Document):
+class FixtureCompensation(Document):
 	pass

@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "creation": "2025-07-23 08:24:18.669538",
  "doctype": "DocType",
@@ -20,7 +21,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-25 14:44:07.863479",
+ "modified": "2025-07-29 14:56:21.450002",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Planning Committee",

@@ -1,0 +1,97 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:FXC-{########}",
+ "creation": "2025-07-29 11:37:00.566936",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "column_break_cbpg",
+  "fixture_type",
+  "description",
+  "unit_of_measure",
+  "quantity",
+  "existed_before_2000",
+  "eligible_for_compensation",
+  "compensation_amount",
+  "section_break_nmzc",
+  "notes",
+  "column_break_oubg"
+ ],
+ "fields": [
+  {
+   "fieldname": "fixture_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Fixture Type",
+   "options": "\u05de\u05d1\u05e0\u05d4\n\u05e1\u05db\u05db\u05d4\n\u05e2\u05e5\n\u05d0\u05d7\u05e8"
+  },
+  {
+   "fieldname": "description",
+   "fieldtype": "Data",
+   "label": "Description"
+  },
+  {
+   "fieldname": "unit_of_measure",
+   "fieldtype": "Select",
+   "label": "Unit of Measure",
+   "options": "\u05d9\u05d7\u05d9\u05d3\u05d4\n\u05d0\u05d5\u05e8\u05da\n\u05e9\u05d8\u05d7"
+  },
+  {
+   "fieldname": "quantity",
+   "fieldtype": "Float",
+   "label": "Quantity"
+  },
+  {
+   "default": "0",
+   "fieldname": "existed_before_2000",
+   "fieldtype": "Check",
+   "label": "Existed Before 2000"
+  },
+  {
+   "default": "0",
+   "fieldname": "eligible_for_compensation",
+   "fieldtype": "Check",
+   "label": "Eligible for Compensation"
+  },
+  {
+   "fieldname": "compensation_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Compensation Amount"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "column_break_cbpg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_nmzc",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_oubg",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-29 14:48:43.504812",
+ "modified_by": "Administrator",
+ "module": "Arrangement",
+ "name": "Fixture Compensation",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

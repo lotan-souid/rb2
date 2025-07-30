@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "creation": "2025-07-23 08:26:09.905431",
  "doctype": "DocType",
@@ -80,7 +81,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-25 10:42:57.903365",
+ "modified": "2025-07-29 14:55:58.093143",
  "modified_by": "Administrator",
  "module": "Arrangement",
  "name": "Evacuee",
@@ -100,7 +101,9 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "full_name"
 }

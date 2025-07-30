@@ -1,33 +1,34 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
- "creation": "2025-07-25 11:27:11.110352",
+ "autoname": "format:T-{YY}-{MM}-{#####}",
+ "creation": "2025-07-27 09:31:16.510024",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_5uvb",
+  "section_break_6l2t",
   "lft",
   "rgt",
   "is_group",
   "old_parent",
   "parent_development_task",
+  "column_break_nciw",
+  "section_break_yylr",
   "development_project",
-  "stage",
-  "task_type",
-  "description",
+  "task_name",
+  "column_break_pduh",
+  "status",
+  "sequence_number",
+  "notes",
+  "section_break_oiyp",
   "estimated_cost",
-  "actual_cost",
-  "responsible_employee",
-  "file_attachments",
-  "column_break_ozvb",
-  "start_date",
-  "end_date",
-  "status_update_date",
-  "task_status"
+  "column_break_mnio",
+  "actual_cost"
  ],
  "fields": [
   {
-   "fieldname": "section_break_5uvb",
+   "fieldname": "section_break_6l2t",
    "fieldtype": "Section Break"
   },
   {
@@ -62,37 +63,41 @@
    "fieldname": "parent_development_task",
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
+   "in_list_view": 1,
    "label": "Parent Development Task",
    "options": "Development Task"
   },
   {
+   "fetch_from": "parent_development_task.development_project",
    "fieldname": "development_project",
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Development Project",
-   "options": "Development Project",
+   "options": "Development Project"
+  },
+  {
+   "fieldname": "task_name",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Task Name",
    "reqd": 1
   },
   {
-   "fieldname": "stage",
+   "fieldname": "column_break_nciw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "\u05e4\u05ea\u05d5\u05d7",
+   "fieldname": "status",
    "fieldtype": "Select",
    "in_list_view": 1,
-   "label": "Stage",
-   "options": "\u05e9\u05dc\u05d1 \u05d0\n\u05e9\u05dc\u05d1 \u05d1\n\u05d2\u05de\u05e8",
+   "label": "Status",
+   "options": "\u05e4\u05ea\u05d5\u05d7\n\u05d1\u05e2\u05d1\u05d5\u05d3\u05d4\n\u05d1\u05d5\u05e6\u05e2",
    "reqd": 1
   },
   {
-   "fieldname": "task_type",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Task Type",
-   "options": "\u05d0\u05d5\u05de\u05d3\u05df\n\u05d1\u05d9\u05e6\u05d5\u05e2\n\u05de\u05e1\u05d9\u05e8\u05d4",
-   "reqd": 1
-  },
-  {
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "label": "Description"
+   "fieldname": "section_break_oiyp",
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "estimated_cost",
@@ -100,59 +105,43 @@
    "label": "Estimated Cost"
   },
   {
+   "fieldname": "column_break_mnio",
+   "fieldtype": "Column Break"
+  },
+  {
    "fieldname": "actual_cost",
    "fieldtype": "Currency",
    "label": "Actual Cost"
   },
   {
-   "fieldname": "responsible_employee",
-   "fieldtype": "Link",
-   "label": "Responsible Employee",
-   "options": "User"
+   "fieldname": "sequence_number",
+   "fieldtype": "Float",
+   "label": "Sequence Number"
   },
   {
-   "fieldname": "file_attachments",
-   "fieldtype": "Attach",
-   "label": "File Attachments"
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
   },
   {
-   "fieldname": "column_break_ozvb",
-   "fieldtype": "Column Break",
-   "options": "\u05de\u05e9\u05d9\u05de\u05d4 \u05de\u05ea\u05d5\u05db\u05e0\u05e0\u05ea\n\u05de\u05e9\u05d9\u05de\u05d4 \u05d1\u05e2\u05d1\u05d5\u05d3\u05d4\n\u05de\u05e9\u05d9\u05de\u05d4 \u05ea\u05e7\u05d5\u05e2\u05d4\n\u05de\u05e9\u05d9\u05de\u05d4 \u05d1\u05d5\u05e6\u05e2\u05d4"
+   "fieldname": "section_break_yylr",
+   "fieldtype": "Section Break"
   },
   {
-   "fieldname": "start_date",
-   "fieldtype": "Data",
-   "label": "Start Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "end_date",
-   "fieldtype": "Date",
-   "label": "End Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "task_status",
-   "fieldtype": "Select",
-   "label": "Task Status",
-   "reqd": 1
-  },
-  {
-   "fieldname": "status_update_date",
-   "fieldtype": "Date",
-   "label": "Status Update Date",
-   "read_only": 1
+   "fieldname": "column_break_pduh",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
+ "is_calendar_and_gantt": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-07-25 11:45:30.031644",
+ "modified": "2025-07-29 15:33:36.676639",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Development Task",
+ "naming_rule": "Expression",
  "nsm_parent_field": "parent_development_task",
  "owner": "Administrator",
  "permissions": [
@@ -170,7 +159,9 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "task_name"
 }

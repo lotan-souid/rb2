@@ -1,5 +1,6 @@
 {
  "actions": [],
+ "allow_import": 1,
  "allow_rename": 1,
  "creation": "2025-07-23 08:25:57.343170",
  "doctype": "DocType",
@@ -15,7 +16,9 @@
   "column_break_tlmt",
   "location",
   "section_break_tkvd",
-  "notes"
+  "notes",
+  "assistant_section",
+  "plan_number"
  ],
  "fields": [
   {
@@ -75,12 +78,25 @@
    "fieldname": "notes",
    "fieldtype": "Small Text",
    "label": "Notes"
+  },
+  {
+   "fieldname": "assistant_section",
+   "fieldtype": "Section Break",
+   "hidden": 1,
+   "label": "assistant"
+  },
+  {
+   "fetch_from": "plan.plan_number",
+   "fieldname": "plan_number",
+   "fieldtype": "Read Only",
+   "is_virtual": 1,
+   "label": "Plan Number"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-25 14:24:35.829548",
+ "modified": "2025-07-29 14:56:21.321202",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Lot",

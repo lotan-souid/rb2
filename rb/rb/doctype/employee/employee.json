@@ -6,22 +6,25 @@
  "engine": "InnoDB",
  "field_order": [
   "employee_id",
-  "employee_name",
   "user_account",
   "department",
   "designation",
   "email",
   "phone",
   "date_of_birth",
-  "role"
+  "role",
+  "column_break_khcn",
+  "employee_name",
+  "first_name",
+  "last_name"
  ],
  "fields": [
   {
+   "fetch_from": "user_account.full_name",
    "fieldname": "employee_name",
    "fieldtype": "Data",
    "in_list_view": 1,
-   "label": "Employee Name",
-   "reqd": 1
+   "label": "Employee Name"
   },
   {
    "fieldname": "user_account",
@@ -45,6 +48,7 @@
    "reqd": 1
   },
   {
+   "fetch_from": "user_account.email",
    "fieldname": "email",
    "fieldtype": "Data",
    "label": "Email",
@@ -73,14 +77,29 @@
    "fieldname": "role",
    "fieldtype": "Link",
    "label": "Role",
-   "options": "Role",
-   "reqd": 1
+   "options": "Role"
+  },
+  {
+   "fieldname": "column_break_khcn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "user_account.first_name",
+   "fieldname": "first_name",
+   "fieldtype": "Data",
+   "label": "First Name"
+  },
+  {
+   "fetch_from": "user_account.last_name",
+   "fieldname": "last_name",
+   "fieldtype": "Data",
+   "label": "Last Name"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-23 15:04:33.629958",
+ "modified": "2025-07-28 09:39:49.992736",
  "modified_by": "Administrator",
  "module": "rb",
  "name": "Employee",

@@ -5,6 +5,13 @@ app_description = "the new app for rb only frappe framwork"
 app_email = "lotan.suid@gmail.com"
 app_license = "mit"
 
+fixtures = [
+    "Custom Field",
+    "Client Script",
+    "Server Script",
+    "Property Setter",
+    "Workspace"
+]
 # Apps
 # ------------------
 

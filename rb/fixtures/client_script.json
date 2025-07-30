@@ -1,0 +1,46 @@
+[
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Development Project",
+  "enabled": 1,
+  "modified": "2025-07-26 18:09:25.817117",
+  "module": "Development",
+  "name": "Filter Root Tasks in Main Tasks Table",
+  "script": "frappe.ui.form.on('Development Project', {\n  onload: function(frm) {\n    frm.set_query('task', 'main_tasks', function() {\n      return {\n        filters: {\n          development_project: frm.doc.name,\n          parent_development_task: [\"is\", \"not set\"]\n        }\n      };\n    });\n  }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Lot",
+  "enabled": 1,
+  "modified": "2025-07-27 21:29:30.029632",
+  "module": "Planning",
+  "name": "Set Lot ID from Lot Number and Plan",
+  "script": "frappe.ui.form.on('Lot', {\n    lot_number: function(frm) {\n        set_lot_id(frm);\n    },\n    plan: function(frm) {\n        set_lot_id(frm);\n    },\n    plan_number: function(frm) {\n        set_lot_id(frm);\n    }\n});\n\nfunction set_lot_id(frm) {\n    if (frm.doc.lot_number && frm.doc.plan_number) {\n        frm.set_value('lot_id', `${frm.doc.lot_number}@${frm.doc.plan_number}`);\n    }\n}\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Evacuee",
+  "enabled": 0,
+  "modified": "2025-07-29 10:52:02.556652",
+  "module": "Arrangement",
+  "name": "Set Evacuee full name",
+  "script": "frappe.ui.form.on('Evacuee', {\n    first_name: function(frm) {\n        set_full_name(frm);\n    },\n    last_name: function(frm) {\n        set_full_name(frm);\n    }\n});\n\nfunction set_full_name(frm) {\n    if (frm.doc.first_name && frm.doc.last_name) {\n        frm.set_value('full_name', `${frm.doc.first_name} ${frm.doc.last_name}`);\n    }\n}\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Arrangement File",
+  "enabled": 1,
+  "modified": "2025-07-29 12:32:20.808344",
+  "module": "Arrangement",
+  "name": "Calculate Total Fixtures Compensation field",
+  "script": "frappe.ui.form.on('Fixture Compensation', {\n    fixture_compensation_add: function(frm) {\n        calculate_total_fixture_compensation(frm);\n    },\n    fixture_compensation_remove: function(frm) {\n        calculate_total_fixture_compensation(frm);\n    },\n    compensation_amount: function(frm) {\n        calculate_total_fixture_compensation(frm);\n    },\n    quantity: function(frm) {\n        calculate_total_fixture_compensation(frm);\n    }\n});\n\nfunction calculate_total_fixture_compensation(frm) {\n    let total = 0;\n    (frm.doc.fixture_compensation || []).forEach(row => {\n        if (row.compensation_amount) {\n            total += row.compensation_amount;\n        }\n    });\n    frm.set_value('total_fixture_compensation', total);\n}\n",
+  "view": "Form"
+ }
+]

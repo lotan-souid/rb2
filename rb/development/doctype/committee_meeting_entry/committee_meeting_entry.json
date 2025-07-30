@@ -24,7 +24,7 @@
    "fieldtype": "Select",
    "in_list_view": 1,
    "label": "Decision",
-   "options": "\u05d0\u05d9\u05e9\u05d5\u05e8\n\u05ea\u05d9\u05e7\u05d5\u05e0\u05d9\u05dd \u05e0\u05d3\u05e8\u05e9\u05d9\u05dd\n\u05d4\u05e7\u05e4\u05d0\u05d4\n\u05d3\u05d7\u05d9\u05d9\u05d4\n\u05d1\u05d9\u05d8\u05d5\u05dc",
+   "options": "\u05dc\u05e4\u05e0\u05d9 \u05d0\u05d9\u05e9\u05d5\u05e8\n\u05d0\u05d9\u05e9\u05d5\u05e8\n\u05ea\u05d9\u05e7\u05d5\u05e0\u05d9\u05dd \u05e0\u05d3\u05e8\u05e9\u05d9\u05dd\n\u05d4\u05e7\u05e4\u05d0\u05d4\n\u05d3\u05d7\u05d9\u05d9\u05d4\n\u05d1\u05d9\u05d8\u05d5\u05dc",
    "reqd": 1
   },
   {
@@ -46,7 +46,7 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-07-25 12:36:23.294382",
+ "modified": "2025-07-29 14:56:48.931893",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Committee Meeting Entry",
