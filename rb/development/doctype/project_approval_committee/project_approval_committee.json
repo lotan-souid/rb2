@@ -2,6 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "format:PAC-{YY}-{MM}-{###}",
  "creation": "2025-07-25 12:07:03.085312",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -41,10 +42,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-29 14:56:48.736017",
+ "modified": "2025-07-30 10:25:50.876782",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Project Approval Committee",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

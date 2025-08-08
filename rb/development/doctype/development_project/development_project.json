@@ -13,6 +13,7 @@
   "project_manager",
   "estimated_start_date",
   "estimated_end_date",
+  "root_task",
   "column_break_czac",
   "project_approval_committee",
   "committee_status",
@@ -84,6 +85,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "fetch_from": "root_task.estimated_cost",
    "fieldname": "estimated_total_cost",
    "fieldtype": "Currency",
    "label": "Estimated Total Cost",
@@ -94,6 +96,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "fetch_from": "root_task.actual_cost",
    "fieldname": "actual_total_cost",
    "fieldtype": "Currency",
    "label": "Actual Total Cost",
@@ -124,13 +127,19 @@
    "fieldtype": "Link",
    "label": "Project Approval Committee",
    "options": "Project Approval Committee"
+  },
+  {
+   "fieldname": "root_task",
+   "fieldtype": "Link",
+   "label": "Root Task",
+   "options": "Development Task"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_calendar_and_gantt": 1,
  "links": [],
- "modified": "2025-07-29 14:56:49.003802",
+ "modified": "2025-07-31 10:44:30.817825",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Development Project",

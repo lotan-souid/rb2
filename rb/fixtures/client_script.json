@@ -42,5 +42,16 @@
   "name": "Calculate Total Fixtures Compensation field",
   "script": "frappe.ui.form.on('Fixture Compensation', {\n    fixture_compensation_add: function(frm) {\n        calculate_total_fixture_compensation(frm);\n    },\n    fixture_compensation_remove: function(frm) {\n        calculate_total_fixture_compensation(frm);\n    },\n    compensation_amount: function(frm) {\n        calculate_total_fixture_compensation(frm);\n    },\n    quantity: function(frm) {\n        calculate_total_fixture_compensation(frm);\n    }\n});\n\nfunction calculate_total_fixture_compensation(frm) {\n    let total = 0;\n    (frm.doc.fixture_compensation || []).forEach(row => {\n        if (row.compensation_amount) {\n            total += row.compensation_amount;\n        }\n    });\n    frm.set_value('total_fixture_compensation', total);\n}\n",
   "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Development Project",
+  "enabled": 1,
+  "modified": "2025-07-30 22:58:01.835994",
+  "module": "Development",
+  "name": "Filter Development Tasks by Development Project",
+  "script": "frappe.ui.form.on('Development Project', {\n    refresh(frm) {\n        if (frm.doc.name) {\n            // כפתור לעבור לרשימת משימות מסוננת\n            frm.add_custom_button('📋 רשימת משימות לפרויקט', () => {\n                frappe.set_route(\"List\", \"Development Task\", {\n                    development_project: frm.doc.name\n                });\n            });\n\n            // כפתור לעץ משימות (Tree View) מסונן לפי פרויקט\n            frm.add_custom_button('🌳 עץ המשימות לפרויקט', () => {\n                frappe.set_route(\"Tree\", \"Development Task\", {\n                    development_project: frm.doc.name\n                });\n            });\n        }\n    }\n});\n",
+  "view": "Form"
  }
 ]

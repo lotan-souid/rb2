@@ -47,19 +47,23 @@
    "fieldname": "assigned_arrangement_file",
    "fieldtype": "Link",
    "label": "Assigned\u00a0Arrangement File",
-   "options": "Arrangement File"
+   "options": "Arrangement File",
+   "read_only": 1
   },
   {
+   "fetch_from": "related_project.development_stage",
    "fieldname": "lot_arrangement_stage",
    "fieldtype": "Data",
    "label": "Lot Arrangement Stage",
    "read_only": 1
   },
   {
+   "fetch_from": "plan.development_project",
    "fieldname": "related_project",
    "fieldtype": "Link",
    "label": "Related Project",
-   "options": "Development Project"
+   "options": "Development Project",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_tlmt",
@@ -96,7 +100,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-29 14:56:21.321202",
+ "modified": "2025-07-30 12:20:40.663547",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Lot",

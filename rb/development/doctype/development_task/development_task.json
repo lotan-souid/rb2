@@ -1,35 +1,36 @@
 {
  "actions": [],
- "allow_import": 1,
  "allow_rename": 1,
- "autoname": "format:T-{YY}-{MM}-{#####}",
- "creation": "2025-07-27 09:31:16.510024",
+ "autoname": "format:T-{YYYY}-{#####}",
+ "creation": "2025-07-30 14:40:47.309413",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "section_break_6l2t",
   "lft",
   "rgt",
-  "is_group",
   "old_parent",
+  "section_break_ctio",
+  "is_group",
+  "column_break_nowe",
   "parent_development_task",
-  "column_break_nciw",
-  "section_break_yylr",
-  "development_project",
+  "section_break_jyvj",
   "task_name",
-  "column_break_pduh",
-  "status",
-  "sequence_number",
-  "notes",
-  "section_break_oiyp",
+  "development_project",
   "estimated_cost",
-  "column_break_mnio",
-  "actual_cost"
+  "actual_cost",
+  "column_break_ynka",
+  "start_date",
+  "end_date",
+  "status"
  ],
  "fields": [
   {
-   "fieldname": "section_break_6l2t",
-   "fieldtype": "Section Break"
+   "fieldname": "task_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Task Name",
+   "reqd": 1
   },
   {
    "fieldname": "lft",
@@ -56,6 +57,7 @@
   {
    "fieldname": "old_parent",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Old Parent",
    "options": "Development Task"
   },
@@ -63,72 +65,64 @@
    "fieldname": "parent_development_task",
    "fieldtype": "Link",
    "ignore_user_permissions": 1,
-   "in_list_view": 1,
    "label": "Parent Development Task",
    "options": "Development Task"
   },
   {
-   "fetch_from": "parent_development_task.development_project",
+   "fieldname": "section_break_jyvj",
+   "fieldtype": "Section Break"
+  },
+  {
    "fieldname": "development_project",
    "fieldtype": "Link",
+   "in_filter": 1,
    "in_list_view": 1,
-   "label": "Development Project",
-   "options": "Development Project"
-  },
-  {
-   "fieldname": "task_name",
-   "fieldtype": "Data",
+   "in_preview": 1,
    "in_standard_filter": 1,
-   "label": "Task Name",
-   "reqd": 1
-  },
-  {
-   "fieldname": "column_break_nciw",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "\u05e4\u05ea\u05d5\u05d7",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Status",
-   "options": "\u05e4\u05ea\u05d5\u05d7\n\u05d1\u05e2\u05d1\u05d5\u05d3\u05d4\n\u05d1\u05d5\u05e6\u05e2",
-   "reqd": 1
-  },
-  {
-   "fieldname": "section_break_oiyp",
-   "fieldtype": "Section Break"
+   "label": "Development Project",
+   "options": "Development Project",
+   "read_only": 1
   },
   {
    "fieldname": "estimated_cost",
    "fieldtype": "Currency",
-   "label": "Estimated Cost"
-  },
-  {
-   "fieldname": "column_break_mnio",
-   "fieldtype": "Column Break"
+   "in_list_view": 1,
+   "label": "Estimate Cost",
+   "read_only_depends_on": "eval:doc.is_group;"
   },
   {
    "fieldname": "actual_cost",
    "fieldtype": "Currency",
-   "label": "Actual Cost"
+   "in_list_view": 1,
+   "label": "Actual Cost",
+   "read_only_depends_on": "eval:doc.is_group;"
   },
   {
-   "fieldname": "sequence_number",
-   "fieldtype": "Float",
-   "label": "Sequence Number"
+   "fieldname": "column_break_ynka",
+   "fieldtype": "Column Break"
   },
   {
-   "fieldname": "notes",
-   "fieldtype": "Small Text",
-   "label": "Notes"
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
   },
   {
-   "fieldname": "section_break_yylr",
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\u05d0\u05d5\u05de\u05d3\u05df\n\u05d1\u05d9\u05e6\u05d5\u05e2\n\u05d4\u05e1\u05ea\u05d9\u05d9\u05dd\n\u05e9\u05d5\u05dc\u05dd"
+  },
+  {
+   "fieldname": "section_break_ctio",
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "column_break_pduh",
+   "fieldname": "column_break_nowe",
    "fieldtype": "Column Break"
   }
  ],
@@ -137,7 +131,7 @@
  "is_calendar_and_gantt": 1,
  "is_tree": 1,
  "links": [],
- "modified": "2025-07-29 15:33:36.676639",
+ "modified": "2025-07-31 12:24:48.739781",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Development Task",
@@ -158,6 +152,7 @@
    "write": 1
   }
  ],
+ "quick_entry": 1,
  "row_format": "Dynamic",
  "show_title_field_in_link": 1,
  "sort_field": "modified",
