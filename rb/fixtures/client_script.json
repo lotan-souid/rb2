@@ -4,6 +4,39 @@
   "doctype": "Client Script",
   "dt": "Development Project",
   "enabled": 1,
+  "modified": "2025-08-24 23:00:19.803468",
+  "module": "Development",
+  "name": "Calculate Cost Per Lot - Average Lot Size Based",
+  "script": "frappe.ui.form.on('Development Project', {\n    estimated_total_cost: function(frm) {\n        calculate_cost_per_lot(frm);\n    },\n    residential_area_sqm: function(frm) {\n        calculate_cost_per_lot(frm);\n    },\n    residential_lots: function(frm) {\n        calculate_cost_per_lot(frm);\n    },\n    refresh: function(frm) {\n        // חישוב ראשוני כשהטופס נטען\n        calculate_cost_per_lot(frm);\n    }\n});\n\nfunction calculate_cost_per_lot(frm) {\n    let total_cost = frm.doc.estimated_total_cost || 0;\n    let area_sqm = frm.doc.residential_area_sqm || 0;\n    let lots = frm.doc.residential_lots || 0;\n    \n    if (lots > 0 && area_sqm > 0 && total_cost > 0) {\n        // חישוב גודל מגרש ממוצע\n        let avg_lot_size = area_sqm / lots;\n        \n        // חישוב עלות למ\"ר\n        let cost_per_sqm = total_cost / area_sqm;\n        \n        // חישוב עלות למגרש ממוצע = עלות למ\"ר × גודל מגרש ממוצע\n        let cost_per_lot = cost_per_sqm * avg_lot_size;\n        \n        // עדכון השדה\n        frm.set_value('cost_per_lot', cost_per_lot);\n        \n        console.log('Cost Per Lot Calculation (Fixed):', {\n            total_cost: total_cost,\n            area_sqm: area_sqm,\n            lots: lots,\n            avg_lot_size: avg_lot_size.toFixed(2),\n            cost_per_sqm: cost_per_sqm.toFixed(2),\n            cost_per_lot: cost_per_lot.toFixed(2)\n        });\n    } else {\n        frm.set_value('cost_per_lot', 0);\n    }\n}",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Arrangement File",
+  "enabled": 1,
+  "modified": "2025-08-24 23:00:12.600634",
+  "module": "Arrangement",
+  "name": "arrangement_file_calculations",
+  "script": "frappe.ui.form.on('Arrangement File', {\n    assigned_lot: function(frm) {\n        if (frm.doc.assigned_lot) {\n            // שליפת נתוני המגרש\n            frappe.db.get_doc('Lot', frm.doc.assigned_lot).then(lot => {\n                if (lot.area_sqm && lot.cost_per_sqm) {\n                    // חישוב מחיר המגרש\n                    let lot_price = lot.area_sqm * lot.cost_per_sqm;\n                    frm.set_value('lot_price', lot_price);\n                    \n                    // עדכון סטטוס הפיתוח\n                    if (lot.development_status) {\n                        frm.set_value('lot_development_status', lot.development_status);\n                    }\n                }\n            });\n        } else {\n            // ניקוי שדות כאשר לא נבחר מגרש\n            frm.set_value('lot_price', 0);\n            frm.set_value('lot_development_status', '');\n        }\n    },\n    \n    // חישוב מחדש כאשר נטענת הטופס\n    refresh: function(frm) {\n        if (frm.doc.assigned_lot) {\n            // הפעלת החישוב מחדש\n            frm.trigger('assigned_lot');\n        }\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Lot",
+  "enabled": 1,
+  "modified": "2025-08-24 23:00:04.210005",
+  "module": "Planning",
+  "name": "lot_development_sync",
+  "script": "frappe.ui.form.on('Lot', {\n    related_project: function(frm) {\n        if (frm.doc.related_project) {\n            // שליפת נתוני פרויקט הפיתוח\n            frappe.db.get_doc('Development Project', frm.doc.related_project).then(project => {\n                // עדכון סטטוס הפיתוח\n                frm.set_value('development_status', project.status);\n                \n                // עדכון עלות למטר רבוע\n                if (project.estimated_cost_per_sqm) {\n                    frm.set_value('cost_per_sqm', project.estimated_cost_per_sqm);\n                }\n            }).catch(error => {\n                console.log('Error fetching development project:', error);\n            });\n        } else {\n            // ניקוי שדות כאשר לא נבחר פרויקט\n            frm.set_value('development_status', '');\n            frm.set_value('cost_per_sqm', 0);\n        }\n    },\n    \n    // עדכון כאשר נטענת הטופס\n    refresh: function(frm) {\n        if (frm.doc.related_project) {\n            frm.trigger('related_project');\n        }\n    },\n    \n    // עדכון כאשר נטענת התוכנית משדה Plan\n    plan: function(frm) {\n        if (frm.doc.plan) {\n            // שליפת פרויקט הפיתוח מהתוכנית\n            frappe.db.get_value('Plan', frm.doc.plan, 'development_project').then(response => {\n                if (response.message && response.message.development_project) {\n                    frm.set_value('related_project', response.message.development_project);\n                }\n            });\n        }\n    }\n});",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Development Project",
+  "enabled": 1,
   "modified": "2025-07-26 18:09:25.817117",
   "module": "Development",
   "name": "Filter Root Tasks in Main Tasks Table",
@@ -52,6 +85,17 @@
   "module": "Development",
   "name": "Filter Development Tasks by Development Project",
   "script": "frappe.ui.form.on('Development Project', {\n    refresh(frm) {\n        if (frm.doc.name) {\n            // כפתור לעבור לרשימת משימות מסוננת\n            frm.add_custom_button('📋 רשימת משימות לפרויקט', () => {\n                frappe.set_route(\"List\", \"Development Task\", {\n                    development_project: frm.doc.name\n                });\n            });\n\n            // כפתור לעץ משימות (Tree View) מסונן לפי פרויקט\n            frm.add_custom_button('🌳 עץ המשימות לפרויקט', () => {\n                frappe.set_route(\"Tree\", \"Development Task\", {\n                    development_project: frm.doc.name\n                });\n            });\n        }\n    }\n});\n",
+  "view": "Form"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Client Script",
+  "dt": "Plan",
+  "enabled": 1,
+  "modified": "2025-08-24 22:59:53.982400",
+  "module": "Planning",
+  "name": "Plan Lots Summary Refresh Button",
+  "script": "frappe.ui.form.on('Plan', {\n    refresh: function(frm) {\n        // Add custom button to refresh lots summary\n        if (!frm.is_new()) {\n            // Add button to the main toolbar (more visible)\n            frm.add_custom_button(__('🔄 Refresh Lots Summary'), function() {\n                // Show loading indicator\n                frappe.show_alert({\n                    message: __('Calculating lots summary...'),\n                    indicator: 'blue'\n                });\n                \n                frappe.call({\n                    method: 'frappe.client.get_list',\n                    args: {\n                        doctype: 'Lot',\n                        filters: {'plan': frm.doc.name},\n                        fields: ['area_sqm']\n                    },\n                    callback: function(r) {\n                        if (r.message) {\n                            let lots = r.message;\n                            let total_lots = lots.length;\n                            let total_area = lots.reduce((sum, lot) => sum + (lot.area_sqm || 0), 0);\n                            let residential_lots = lots.filter(lot => (lot.area_sqm || 0) > 0).length;\n                            let residential_area = lots.filter(lot => (lot.area_sqm || 0) > 0).reduce((sum, lot) => sum + lot.area_sqm, 0);\n                            \n                            // Update form fields\n                            frm.set_value('total_lots', total_lots);\n                            frm.set_value('total_area_sqm', total_area);\n                            frm.set_value('residential_lots', residential_lots);\n                            frm.set_value('residential_area_sqm', residential_area);\n                            \n                            // Save the document to persist changes\n                            frm.save().then(() => {\n                                frappe.show_alert({\n                                    message: __('Lots summary updated: {0} lots, {1} sqm total', [total_lots, total_area]),\n                                    indicator: 'green'\n                                });\n                            });\n                        }\n                    },\n                    error: function(r) {\n                        frappe.show_alert({\n                            message: __('Failed to refresh lots summary: ' + (r.message || 'Unknown error')),\n                            indicator: 'red'\n                        });\n                    }\n                });\n            }).addClass('btn-warning'); // Make button more visible with warning color\n        }\n    }\n});",
   "view": "Form"
  }
 ]

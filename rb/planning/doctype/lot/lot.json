@@ -2,6 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "format:Lot-{YYYY}{######}",
  "creation": "2025-07-23 08:25:57.343170",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -11,9 +12,10 @@
   "lot_id",
   "area_sqm",
   "assigned_arrangement_file",
-  "lot_arrangement_stage",
   "related_project",
   "column_break_tlmt",
+  "development_status",
+  "cost_per_sqm",
   "location",
   "section_break_tkvd",
   "notes",
@@ -46,22 +48,15 @@
   {
    "fieldname": "assigned_arrangement_file",
    "fieldtype": "Link",
-   "label": "Assigned\u00a0Arrangement File",
+   "label": "Assigned Arrangement File",
    "options": "Arrangement File",
-   "read_only": 1
-  },
-  {
-   "fetch_from": "related_project.development_stage",
-   "fieldname": "lot_arrangement_stage",
-   "fieldtype": "Data",
-   "label": "Lot Arrangement Stage",
    "read_only": 1
   },
   {
    "fetch_from": "plan.development_project",
    "fieldname": "related_project",
    "fieldtype": "Link",
-   "label": "Related Project",
+   "label": "Related Development Project",
    "options": "Development Project",
    "read_only": 1
   },
@@ -95,15 +90,28 @@
    "fieldtype": "Read Only",
    "is_virtual": 1,
    "label": "Plan Number"
+  },
+  {
+   "fieldname": "development_status",
+   "fieldtype": "Data",
+   "label": "Development Status",
+   "read_only": 1
+  },
+  {
+   "fieldname": "cost_per_sqm",
+   "fieldtype": "Currency",
+   "label": "Development Cost per SQM",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-30 12:20:40.663547",
+ "modified": "2025-08-24 17:27:46.888766",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Lot",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

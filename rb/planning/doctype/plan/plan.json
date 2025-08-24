@@ -2,6 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "format:pln-{YYYY}-{###}",
  "creation": "2025-07-23 08:23:52.196137",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -15,7 +16,13 @@
   "development_project",
   "notes",
   "column_break_cziq",
-  "geolocation_wguh"
+  "geolocation_wguh",
+  "section_break_lots",
+  "total_lots",
+  "total_area_sqm",
+  "column_break_lots",
+  "residential_lots",
+  "residential_area_sqm"
  ],
  "fields": [
   {
@@ -78,15 +85,58 @@
   {
    "fieldname": "column_break_cziq",
    "fieldtype": "Column Break"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_lots",
+   "fieldtype": "Section Break",
+   "label": "Lots Summary"
+  },
+  {
+   "default": "0",
+   "description": "Auto-calculated from linked Lots",
+   "fieldname": "total_lots",
+   "fieldtype": "Int",
+   "label": "Total Lots",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "description": "Auto-calculated sum of all lot areas",
+   "fieldname": "total_area_sqm",
+   "fieldtype": "Float",
+   "label": "Total Area (sqm)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_lots",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "Count of residential lots (lots with area > 0)",
+   "fieldname": "residential_lots",
+   "fieldtype": "Int",
+   "label": "Residential Lots",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "description": "Total area of residential lots",
+   "fieldname": "residential_area_sqm",
+   "fieldtype": "Float",
+   "label": "Residential Area (sqm)",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-29 14:56:21.229161",
+ "modified": "2025-08-24 17:46:13.603873",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Plan",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
