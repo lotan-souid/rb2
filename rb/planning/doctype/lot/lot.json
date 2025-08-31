@@ -12,7 +12,6 @@
   "area_sqm",
   "assigned_arrangement_file",
   "lot_arrangement_stage",
-  "related_project",
   "column_break_tlmt",
   "location",
   "section_break_tkvd",
@@ -58,14 +57,6 @@
    "read_only": 1
   },
   {
-   "fetch_from": "plan.development_project",
-   "fieldname": "related_project",
-   "fieldtype": "Link",
-   "label": "Related Project",
-   "options": "Development Project",
-   "read_only": 1
-  },
-  {
    "fieldname": "column_break_tlmt",
    "fieldtype": "Column Break"
   },
@@ -100,7 +91,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-30 12:20:40.663547",
+ "modified": "2025-08-25 23:26:02.044434",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Lot",
@@ -124,5 +115,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "lot_id"
+ "title_field": "lot_id",
+ "track_changes": 1
 }

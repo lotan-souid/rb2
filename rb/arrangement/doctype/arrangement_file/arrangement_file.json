@@ -27,7 +27,7 @@
   "assigned_lot_location",
   "section_break_otau",
   "total_fixture_compensation",
-  "fixture_compensation",
+  "link_fixtures",
   "tab_break_jsfp",
   "settlement_committee"
  ],
@@ -120,12 +120,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fieldname": "fixture_compensation",
-   "fieldtype": "Table",
-   "label": "Fixture Compensation",
-   "options": "Fixture Compensation"
-  },
-  {
    "fieldname": "total_fixture_compensation",
    "fieldtype": "Currency",
    "label": "Total Fixture Compensation\t"
@@ -162,12 +156,18 @@
    "fieldname": "lot_development_status",
    "fieldtype": "Data",
    "label": "Lot Development Status"
+  },
+  {
+   "fieldname": "link_fixtures",
+   "fieldtype": "Table",
+   "label": "Link Fixtures",
+   "options": "Link Fixtures"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-30 12:22:33.115332",
+ "modified": "2025-08-31 12:36:04.330055",
  "modified_by": "Administrator",
  "module": "Arrangement",
  "name": "Arrangement File",

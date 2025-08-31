@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestProjectApprovalCommittee(FrappeTestCase):
+class TestFixtureCompensation(FrappeTestCase):
 	pass

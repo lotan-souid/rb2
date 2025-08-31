@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/home/lot/frappe/sites/rb.localhost/workspace/frappe-bench/**)",
+      "Read(/home/**)",
+      "Read(/home/lot/frappe/sites/rb.localhost/workspace/frappe-bench/sites/rb.localhost/logs/**)",
+      "Read(/home/lot/frappe/sites/rb.localhost/workspace/frappe-bench/**)",
+      "Read(/home/lot/frappe/sites/rb.localhost/workspace/frappe-bench/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

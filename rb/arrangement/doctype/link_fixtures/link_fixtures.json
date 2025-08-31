@@ -1,0 +1,43 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-08-31 12:35:21.757167",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "link_fixture",
+  "compensation_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "link_fixture",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Link Fixture",
+   "options": "Fixture Compensation",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "link_fixture.compensation_amount",
+   "fieldname": "compensation_amount",
+   "fieldtype": "Currency",
+   "label": "Compensation Amount",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-08-31 12:38:19.361210",
+ "modified_by": "Administrator",
+ "module": "Arrangement",
+ "name": "Link Fixtures",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

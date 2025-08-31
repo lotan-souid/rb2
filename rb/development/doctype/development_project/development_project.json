@@ -1,145 +1,106 @@
 {
  "actions": [],
- "allow_import": 1,
  "allow_rename": 1,
- "creation": "2025-07-27 08:03:27.387987",
+ "creation": "2025-08-30 22:16:43.877793",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "project_name",
-  "related_plan",
-  "development_stage",
-  "project_code",
-  "project_manager",
-  "estimated_start_date",
-  "estimated_end_date",
-  "root_task",
-  "column_break_czac",
-  "project_approval_committee",
-  "committee_status",
-  "location",
-  "section_break_apoc",
-  "estimated_total_cost",
-  "column_break_jtgp",
-  "actual_total_cost",
-  "section_break_ffml",
-  "general_notes",
-  "attachments"
+  "plan",
+  "development_project_name",
+  "status",
+  "column_break_cfks",
+  "start_date",
+  "end_date",
+  "status_change",
+  "section_break_zkos",
+  "committee_approval",
+  "section_break_pnow",
+  "estimate_cost",
+  "column_break_aoaq",
+  "actual_cost",
+  "section_break_pjsf",
+  "table_dtxh"
  ],
  "fields": [
   {
-   "fieldname": "project_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Project Name",
-   "reqd": 1
-  },
-  {
-   "fieldname": "related_plan",
+   "fieldname": "plan",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Related Plan",
-   "options": "Plan",
-   "reqd": 1
+   "label": "Plan",
+   "options": "Plan"
   },
   {
-   "fieldname": "project_code",
+   "fieldname": "development_project_name",
    "fieldtype": "Data",
-   "label": "Project Code"
+   "label": "Development Project Name"
   },
   {
-   "fieldname": "column_break_czac",
+   "fieldname": "column_break_cfks",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "location",
-   "fieldtype": "Geolocation",
-   "label": "Location"
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
   },
   {
-   "fieldname": "development_stage",
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "status_change",
+   "fieldtype": "Date",
+   "label": "Status Change"
+  },
+  {
+   "fieldname": "status",
    "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Development Stage",
-   "options": "\u05d0\u05d5\u05de\u05d3\u05df\n\u05d1\u05d9\u05e6\u05d5\u05e2\n\u05d4\u05e1\u05ea\u05d9\u05d9\u05dd\n\u05e2\u05d3\u05db\u05d5\u05df",
-   "reqd": 1
+   "label": "Status",
+   "options": "\u05ea\u05db\u05e0\u05d5\u05df\n\u05dc\u05e4\u05e0\u05d9 \u05d5\u05e2\u05d3\u05d4\n\u05d0\u05d9\u05e9\u05d5\u05e8 \u05d5\u05e2\u05d3\u05d4\n\u05e9\u05dc\u05d1 \u05d0\n\u05e9\u05dc\u05d1 \u05d1\n\u05e9\u05dc\u05d1 \u05d2\u05de\u05e8\n\u05de\u05e1\u05d9\u05e8\u05d4\n\u05d1\u05d9\u05d8\u05d5\u05dc"
   },
   {
-   "fieldname": "project_manager",
-   "fieldtype": "Link",
-   "label": "Project Manager",
-   "options": "User"
-  },
-  {
-   "fieldname": "estimated_start_date",
-   "fieldtype": "Date",
-   "label": "Estimated Start Date"
-  },
-  {
-   "fieldname": "estimated_end_date",
-   "fieldtype": "Date",
-   "label": "Estimated End Date"
-  },
-  {
-   "fieldname": "section_break_apoc",
+   "fieldname": "section_break_pnow",
    "fieldtype": "Section Break"
   },
   {
-   "fetch_from": "root_task.estimated_cost",
-   "fieldname": "estimated_total_cost",
+   "fieldname": "estimate_cost",
    "fieldtype": "Currency",
-   "label": "Estimated Total Cost",
+   "label": "Estimate Cost",
    "read_only": 1
   },
   {
-   "fieldname": "section_break_ffml",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fetch_from": "root_task.actual_cost",
-   "fieldname": "actual_total_cost",
-   "fieldtype": "Currency",
-   "label": "Actual Total Cost",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_jtgp",
+   "fieldname": "column_break_aoaq",
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "general_notes",
-   "fieldtype": "Small Text",
-   "label": "General Notes"
+   "fieldname": "actual_cost",
+   "fieldtype": "Currency",
+   "label": "Actual Cost",
+   "read_only": 1
   },
   {
-   "fieldname": "attachments",
-   "fieldtype": "Attach",
-   "label": "Attachments"
+   "fieldname": "section_break_pjsf",
+   "fieldtype": "Section Break"
   },
   {
-   "fetch_from": "approval_committee.current_status",
-   "fieldname": "committee_status",
-   "fieldtype": "Read Only",
-   "label": "Committee Status"
+   "fieldname": "table_dtxh",
+   "fieldtype": "Table",
+   "options": "Development Items"
   },
   {
-   "fieldname": "project_approval_committee",
-   "fieldtype": "Link",
-   "label": "Project Approval Committee",
-   "options": "Project Approval Committee"
+   "fieldname": "section_break_zkos",
+   "fieldtype": "Section Break"
   },
   {
-   "fieldname": "root_task",
-   "fieldtype": "Link",
-   "label": "Root Task",
-   "options": "Development Task"
+   "fieldname": "committee_approval",
+   "fieldtype": "Data",
+   "label": "Committee Approval"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
- "is_calendar_and_gantt": 1,
  "links": [],
- "modified": "2025-07-31 10:44:30.817825",
+ "modified": "2025-08-31 11:05:30.647866",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Development Project",
@@ -159,9 +120,7 @@
   }
  ],
  "row_format": "Dynamic",
- "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
- "title_field": "project_name"
+ "states": []
 }

@@ -5,5 +5,5 @@
 from frappe.model.document import Document
 
 
-class CommitteeMeetingEntry(Document):
+class LinkFixtures(Document):
 	pass
