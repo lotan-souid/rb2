@@ -15,6 +15,7 @@ fixtures = [
 
 
 doc_events = {
+	# חישוב שטח וספירת מגרשים (Lot → Plan)
 	"Lot": {
 		"on_update": "rb.planning.doctype.lot.lot.on_update",
 		"after_delete": "rb.planning.doctype.lot.lot.after_delete"
