@@ -130,25 +130,53 @@ def run(plan_number: str = "RB-100", project_name: str = "RB-100 Dev", allocatab
     """
     frappe.flags.in_test = True  # reduce side-effects
 
-    # 1) Plan
-    plan_name = _ensure_plan(plan_number, plan_name=f"Plan {plan_number}")
+    # Temporarily disable Server Scripts that depend on Development Task
+    reenable = []
+    for s in frappe.get_all("Server Script", filters={"reference_doctype": ["in", ["Development Task", "Development Project"]]}, fields=["name", "disabled", "reference_doctype"]):
+        if not s.get("disabled"):
+            reenable.append(s["name"])
+            frappe.db.set_value("Server Script", s["name"], "disabled", 1)
 
-    # 2) Lots
-    for lot_no, area in (("L-01", 500.0), ("L-02", 750.0), ("L-03", 1250.0)):
-        _ensure_lot(plan_name, lot_no, area)
+    try:
+        # 1) Plan
+        plan_name = _ensure_plan(plan_number, plan_name=f"Plan {plan_number}")
 
-    # 3) Development Project with items
-    dp_name = _ensure_dev_project(plan_name, project_name, allocatable_total_cost)
+        # 2) Lots
+        for lot_no, area in (("L-01", 500.0), ("L-02", 750.0), ("L-03", 1250.0)):
+            _ensure_lot(plan_name, lot_no, area)
 
-    # 4) Committee Review (Approved)
-    _add_committee_review(dp_name, approved_allocatable_cost=allocatable_total_cost)
+        # 3) Development Project with items
+        dp_name = _ensure_dev_project(plan_name, project_name, allocatable_total_cost)
 
-    # 5) Recalculate cost allocations and reflect on Lot
-    _recalculate_allocations(dp_name)
+        # 4) Committee Review (Approved)
+        _add_committee_review(dp_name, approved_allocatable_cost=allocatable_total_cost)
 
-    return {
-        "plan": plan_name,
-        "project": dp_name,
-        "lots": frappe.get_all("Lot", filters={"plan": plan_name}, fields=["name", "area_sqm"], order_by="name asc"),
-        "price_per_sqm": frappe.db.get_value("Development Project", dp_name, "dev_price_per_sqm"),
-    }
+        # 5) Recalculate cost allocations and reflect on Lot
+        _recalculate_allocations(dp_name)
+
+        return {
+            "plan": plan_name,
+            "project": dp_name,
+            "lots": frappe.get_all("Lot", filters={"plan": plan_name}, fields=["name", "area_sqm"], order_by="name asc"),
+            "price_per_sqm": frappe.db.get_value("Development Project", dp_name, "dev_price_per_sqm"),
+        }
+    finally:
+        # Re-enable scripts we disabled
+        for name in reenable:
+            frappe.db.set_value("Server Script", name, "disabled", 0)
+
+
+def toggle_dev_task_scripts(disabled: int = 1):
+    """Enable/disable server scripts that reference Development Task/Project to avoid seed-time errors.
+
+    Usage:
+      bench --site <site> execute rb.demo.seed_development.toggle_dev_task_scripts --kwargs '{"disabled": 1}'
+    """
+    names = frappe.get_all(
+        "Server Script",
+        filters={"reference_doctype": ["in", ["Development Task", "Development Project"]]},
+        pluck="name",
+    )
+    for n in names:
+        frappe.db.set_value("Server Script", n, "disabled", 1 if int(disabled) else 0)
+    return {"updated": names, "disabled": int(disabled)}
