@@ -1,0 +1,42 @@
+[
+  {
+    "docstatus": 0,
+    "doctype": "Workflow State",
+    "name": "Draft",
+    "workflow_state_name": "Draft",
+    "icon": "edit",
+    "style": "Warning"
+  },
+  {
+    "docstatus": 0,
+    "doctype": "Workflow State",
+    "name": "Pending Mapping",
+    "workflow_state_name": "Pending Mapping",
+    "icon": "question-sign",
+    "style": "Info"
+  },
+  {
+    "docstatus": 0,
+    "doctype": "Workflow State",
+    "name": "Pending Finance",
+    "workflow_state_name": "Pending Finance",
+    "icon": "question-sign",
+    "style": "Primary"
+  },
+  {
+    "docstatus": 0,
+    "doctype": "Workflow State",
+    "name": "Approved",
+    "workflow_state_name": "Approved",
+    "icon": "ok-sign",
+    "style": "Success"
+  },
+  {
+    "docstatus": 0,
+    "doctype": "Workflow State",
+    "name": "Rejected",
+    "workflow_state_name": "Rejected",
+    "icon": "remove",
+    "style": "Danger"
+  }
+]

@@ -27,6 +27,8 @@
   "assigned_lot_location",
   "section_break_otau",
   "total_fixture_compensation",
+  "total_fixture_comp_approved",
+  "total_fixture_comp_pending",
   "link_fixtures",
   "tab_break_jsfp",
   "settlement_committee"
@@ -125,6 +127,18 @@
    "fieldname": "total_fixture_compensation",
    "fieldtype": "Currency",
    "label": "Total Fixture Compensation\t",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_fixture_comp_approved",
+   "fieldtype": "Currency",
+   "label": "Approved Fixture Total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_fixture_comp_pending",
+   "fieldtype": "Currency",
+   "label": "Pending Fixture Total",
    "read_only": 1
   },
   {

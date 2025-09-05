@@ -17,6 +17,7 @@
   "compensation_amount",
   "column_break_vinq",
   "shared_between_files",
+  "fixture_shares",
   "approval_status",
   "approved_by_mapping",
   "approved_by_finance",
@@ -30,6 +31,14 @@
    "in_list_view": 1,
    "label": "Fixture Type",
    "options": "\u05de\u05d1\u05e0\u05d4\n\u05e1\u05db\u05db\u05d4\n\u05e2\u05e5\n\u05d0\u05d7\u05e8"
+  },
+  {
+   "columns": 2,
+   "depends_on": "eval:doc.shared_between_files==1",
+   "fieldname": "fixture_shares",
+   "fieldtype": "Table",
+   "label": "Fixture Shares",
+   "options": "Fixture Shares"
   },
   {
    "fieldname": "description",

@@ -5,42 +5,76 @@
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
- "field_order": [
-  "item_name",
-  "item_description",
-  "estimate_cost",
-  "actual_cost",
-  "stage"
- ],
- "fields": [
-  {
-   "fieldname": "item_name",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "Item Name"
-  },
-  {
-   "fieldname": "item_description",
-   "fieldtype": "Small Text",
-   "label": "Item Description"
-  },
-  {
-   "fieldname": "estimate_cost",
-   "fieldtype": "Currency",
-   "label": "Estimate Cost"
-  },
-  {
-   "fieldname": "actual_cost",
-   "fieldtype": "Currency",
-   "label": "Actual Cost"
-  },
-  {
-   "fieldname": "stage",
-   "fieldtype": "Select",
-   "label": "Stage",
-   "options": "\u05e9\u05dc\u05d1 \u05d0\n\u05e9\u05dc\u05d1 \u05d1\n\u05d2\u05de\u05e8"
-  }
- ],
+  "field_order": [
+    "item_name",
+    "item_description",
+    "category",
+    "quantity",
+    "unit",
+    "unit_cost",
+    "planned_cost",
+    "actual_cost",
+    "item_status",
+    "stage"
+  ],
+  "fields": [
+    {
+     "fieldname": "item_name",
+     "fieldtype": "Data",
+     "in_list_view": 1,
+     "label": "Item Name"
+    },
+    {
+     "fieldname": "item_description",
+     "fieldtype": "Small Text",
+     "label": "Item Description"
+    },
+    {
+     "fieldname": "category",
+     "fieldtype": "Select",
+     "label": "Category",
+     "options": "Earthworks\nSewer\nWater\nElectricity\nRoads\nSidewalks\nLighting\nLandscaping\nPublicRealm\nOther"
+    },
+    {
+     "fieldname": "quantity",
+     "fieldtype": "Float",
+     "label": "Quantity"
+    },
+    {
+     "fieldname": "unit",
+     "fieldtype": "Select",
+     "label": "Unit",
+     "options": "m\nm2\nm3\nunit\nlot\nhour\nday"
+    },
+    {
+     "fieldname": "unit_cost",
+     "fieldtype": "Currency",
+     "label": "Unit Cost"
+    },
+    {
+     "fieldname": "planned_cost",
+     "fieldtype": "Currency",
+     "label": "Planned Cost",
+     "read_only": 1
+    },
+    {
+     "fieldname": "actual_cost",
+     "fieldtype": "Currency",
+     "label": "Actual Cost"
+    },
+    {
+     "fieldname": "item_status",
+     "fieldtype": "Select",
+     "label": "Item Status",
+     "options": "Planned\nInTender\nInExecution\nCompleted\nCanceled"
+    },
+    {
+     "fieldname": "stage",
+     "fieldtype": "Select",
+     "label": "Stage",
+     "options": "\u05e9\u05dc\u05d1 \u05d0\n\u05e9\u05dc\u05d1 \u05d1\n\u05d2\u05de\u05e8"
+    }
+  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,

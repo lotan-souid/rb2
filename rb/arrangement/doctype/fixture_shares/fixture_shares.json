@@ -1,0 +1,48 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-09-05 11:40:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "arrangement_file",
+  "share_percentage",
+  "shared_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "arrangement_file",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Arrangement File",
+   "options": "Arrangement File",
+   "reqd": 1
+  },
+  {
+   "fieldname": "share_percentage",
+   "fieldtype": "Float",
+   "label": "Share Percentage"
+  },
+  {
+   "fieldname": "shared_amount",
+   "fieldtype": "Currency",
+   "label": "Shared Amount",
+   "read_only": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-09-05 11:40:00.000000",
+ "modified_by": "Administrator",
+ "module": "Arrangement",
+ "name": "Fixture Shares",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

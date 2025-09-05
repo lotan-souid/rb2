@@ -10,7 +10,28 @@ fixtures = [
 	"Client Script",
 	"Server Script",
 	"Property Setter",
-	"Workspace"
+	"Workspace",
+	"Workflow",
+	"Workflow State",
+	{
+		"doctype": "Workflow Action Master",
+		"filters": {
+			"workflow_action_name": [
+				"in",
+				[
+					"Submit to Mapping",
+					"Approve Mapping",
+					"Approve Finance"
+				]
+			]
+		}
+	},
+	{
+		"doctype": "Role",
+		"filters": {
+			"name": ["in", ["Mapping", "Finance"]]
+		}
+	}
 ]
 
 

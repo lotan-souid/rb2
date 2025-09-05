@@ -1,0 +1,87 @@
+[
+  {
+    "docstatus": 0,
+    "doctype": "Workflow",
+    "document_type": "Fixture Compensation",
+    "is_active": 1,
+    "module": "Arrangement",
+    "name": "Fixture Compensation Approval",
+    "send_email_alert": 0,
+    "workflow_name": "Fixture Compensation Approval",
+    "workflow_state_field": "approval_status",
+    "states": [
+      {
+        "allow_edit": "System Manager",
+        "docstatus": 0,
+        "is_optional_state": 0,
+        "state": "Draft"
+      },
+      {
+        "allow_edit": "Mapping",
+        "docstatus": 0,
+        "is_optional_state": 0,
+        "state": "Pending Mapping"
+      },
+      {
+        "allow_edit": "Finance",
+        "docstatus": 0,
+        "is_optional_state": 0,
+        "state": "Pending Finance"
+      },
+      {
+        "allow_edit": "System Manager",
+        "docstatus": 1,
+        "is_optional_state": 0,
+        "state": "Approved"
+      },
+      {
+        "allow_edit": "System Manager",
+        "docstatus": 1,
+        "is_optional_state": 0,
+        "state": "Rejected"
+      }
+    ],
+    "transitions": [
+      {
+        "action": "Submit to Mapping",
+        "allowed": "System Manager",
+        "allow_self_approval": 0,
+        "condition": null,
+        "next_state": "Pending Mapping",
+        "state": "Draft"
+      },
+      {
+        "action": "Approve Mapping",
+        "allowed": "Mapping",
+        "allow_self_approval": 0,
+        "condition": null,
+        "next_state": "Pending Finance",
+        "state": "Pending Mapping"
+      },
+      {
+        "action": "Reject",
+        "allowed": "Mapping",
+        "allow_self_approval": 0,
+        "condition": null,
+        "next_state": "Rejected",
+        "state": "Pending Mapping"
+      },
+      {
+        "action": "Approve Finance",
+        "allowed": "Finance",
+        "allow_self_approval": 0,
+        "condition": null,
+        "next_state": "Approved",
+        "state": "Pending Finance"
+      },
+      {
+        "action": "Reject",
+        "allowed": "Finance",
+        "allow_self_approval": 0,
+        "condition": null,
+        "next_state": "Rejected",
+        "state": "Pending Finance"
+      }
+    ]
+  }
+]

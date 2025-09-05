@@ -5,15 +5,19 @@
  "creation": "2025-07-23 08:25:57.343170",
  "doctype": "DocType",
  "engine": "InnoDB",
- "field_order": [
-  "lot_number",
-  "plan",
-  "lot_id",
-  "area_sqm",
-  "assigned_arrangement_file",
-  "lot_arrangement_stage",
-  "column_break_tlmt",
-  "location",
+  "field_order": [
+    "lot_number",
+    "plan",
+    "lot_id",
+    "area_sqm",
+    "related_project",
+    "lot_development_status",
+    "dev_price_per_sqm",
+    "allocated_dev_cost",
+    "assigned_arrangement_file",
+    "lot_arrangement_stage",
+    "column_break_tlmt",
+    "location",
   "section_break_tkvd",
   "notes",
   "assistant_section",
@@ -41,6 +45,32 @@
    "fieldname": "area_sqm",
    "fieldtype": "Float",
    "label": "Area (sqm)"
+  },
+  {
+   "fieldname": "related_project",
+   "fieldtype": "Link",
+   "label": "Related Development Project",
+   "options": "Development Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "lot_development_status",
+   "fieldtype": "Select",
+   "label": "Development Status",
+   "options": "NotStarted\nInProgress\nCompleted",
+   "read_only": 1
+  },
+  {
+   "fieldname": "dev_price_per_sqm",
+   "fieldtype": "Currency",
+   "label": "Dev Price per sqm",
+   "read_only": 1
+  },
+  {
+   "fieldname": "allocated_dev_cost",
+   "fieldtype": "Currency",
+   "label": "Allocated Dev Cost",
+   "read_only": 1
   },
   {
    "fieldname": "assigned_arrangement_file",

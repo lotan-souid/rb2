@@ -1,0 +1,13 @@
+{
+ "doctype": "Report",
+ "is_standard": "Yes",
+ "json": "{}",
+ "module": "Arrangement",
+ "name": "Fixture Distribution by File",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Arrangement File",
+ "report_name": "Fixture Distribution by File",
+ "report_type": "Script Report",
+ "disabled": 0
+}

@@ -4,23 +4,28 @@
  "creation": "2025-08-30 22:16:43.877793",
  "doctype": "DocType",
  "engine": "InnoDB",
- "field_order": [
-  "plan",
-  "development_project_name",
-  "status",
-  "column_break_cfks",
-  "start_date",
-  "end_date",
-  "status_change",
-  "section_break_zkos",
-  "committee_approval",
-  "section_break_pnow",
-  "estimate_cost",
-  "column_break_aoaq",
-  "actual_cost",
-  "section_break_pjsf",
-  "table_dtxh"
- ],
+  "field_order": [
+    "plan",
+    "development_project_name",
+    "status",
+    "column_break_cfks",
+    "start_date",
+    "end_date",
+    "status_change",
+    "section_break_zkos",
+    "committee_status",
+    "committee_approval",
+    "section_break_pnow",
+    "estimate_cost",
+    "column_break_aoaq",
+    "actual_cost",
+    "section_break_pjsf",
+    "table_dtxh",
+    "section_break_costing",
+    "allocatable_total_cost",
+    "dev_price_per_sqm",
+    "calculation_source"
+  ],
  "fields": [
   {
    "fieldname": "plan",
@@ -92,9 +97,39 @@
    "fieldtype": "Section Break"
   },
   {
+   "fieldname": "committee_status",
+   "fieldtype": "Select",
+   "label": "Committee Status",
+   "options": "Pending\nApproved\nRejected\nRevisionsRequired"
+  },
+  {
    "fieldname": "committee_approval",
    "fieldtype": "Data",
    "label": "Committee Approval"
+  },
+  {
+   "fieldname": "section_break_costing",
+   "fieldtype": "Section Break",
+   "label": "Cost Allocation"
+  },
+  {
+   "fieldname": "allocatable_total_cost",
+   "fieldtype": "Currency",
+   "label": "Allocatable Total Cost",
+   "read_only": 0
+  },
+  {
+   "fieldname": "dev_price_per_sqm",
+   "fieldtype": "Currency",
+   "label": "Dev Price per sqm",
+   "read_only": 1
+  },
+  {
+   "fieldname": "calculation_source",
+   "fieldtype": "Select",
+   "label": "Calculation Source",
+   "options": "Planned\nApproved\nActual\nManualAdjustment",
+   "default": "Approved"
   }
  ],
  "grid_page_length": 50,
