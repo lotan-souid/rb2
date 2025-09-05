@@ -7,7 +7,9 @@
  "engine": "InnoDB",
  "field_order": [
   "link_fixture",
-  "compensation_amount"
+  "compensation_amount",
+  "share_percentage",
+  "shared_amount"
  ],
  "fields": [
   {
@@ -24,13 +26,23 @@
    "fieldtype": "Currency",
    "label": "Compensation Amount",
    "read_only": 1
+  },
+  {
+   "fieldname": "share_percentage",
+   "fieldtype": "Float",
+   "label": "Share Percentage"
+  },
+  {
+   "fieldname": "shared_amount",
+   "fieldtype": "Currency",
+   "label": "Shared Amount"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-08-31 12:38:19.361210",
+ "modified": "2025-09-05 11:24:06.872229",
  "modified_by": "Administrator",
  "module": "Arrangement",
  "name": "Link Fixtures",

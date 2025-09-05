@@ -15,6 +15,11 @@
   "existed_before_2000",
   "eligible_for_compensation",
   "compensation_amount",
+  "column_break_vinq",
+  "shared_between_files",
+  "approval_status",
+  "approved_by_mapping",
+  "approved_by_finance",
   "section_break_nmzc",
   "notes"
  ],
@@ -72,12 +77,41 @@
   {
    "fieldname": "section_break_nmzc",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_vinq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "shared_between_files",
+   "fieldtype": "Check",
+   "label": "Shared Between Files"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "approval_status",
+   "fieldtype": "Select",
+   "label": "Approval Status",
+   "options": "Draft\nPending Mapping\nPending Finance\nApproved\nRejected"
+  },
+  {
+   "default": "0",
+   "fieldname": "approved_by_mapping",
+   "fieldtype": "Check",
+   "label": "Approved by Mapping"
+  },
+  {
+   "default": "0",
+   "fieldname": "approved_by_finance",
+   "fieldtype": "Check",
+   "label": "Approved by Finance"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-31 12:40:40.741334",
+ "modified": "2025-09-05 11:20:33.756375",
  "modified_by": "Administrator",
  "module": "Arrangement",
  "name": "Fixture Compensation",

@@ -89,6 +89,8 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "evacuee_a.phone",
+   "fetch_if_empty": 1,
    "fieldname": "main_phone",
    "fieldtype": "Data",
    "label": "Main Phone"
@@ -171,7 +173,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-01 22:02:51.352680",
+ "modified": "2025-09-02 10:00:39.391916",
  "modified_by": "Administrator",
  "module": "Arrangement",
  "name": "Arrangement File",
