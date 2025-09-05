@@ -28,6 +28,11 @@ Pre-commit is configured to use the following tools for checking and formatting 
 - prettier
 - pyupgrade
 
+### Documentation
+
+- Development module implementation report: `rb/docs/development-implementation-report.md`
+- Changelog: `CHANGELOG.md`
+
 ### License
 
 mit
