@@ -40,17 +40,99 @@ class DevelopmentProject(Document):
 		elif alloc_source == "Actual":
 			allocatable = actual_total
 		# ManualAdjustment leaves value as-is
-		if allocatable is not None:
+		if allocatable is not None and not getattr(self, "price_locked", 0):
 			self._compute_price_per_sqm(allocatable)
+
+		# Ensure default stages exist (StageA, StageB, Final)
+		self._ensure_default_stages()
+
+		# Update stage totals
+		self._update_stage_totals()
+
+	def _ensure_default_stages(self):
+		if not self.name:
+			return
+		existing = frappe.get_all("Development Stage", filters={"development_project": self.name}, fields=["name", "stage_name"])
+		if existing:
+			return
+		for s in ("StageA", "StageB", "Final"):
+			stage = frappe.get_doc({
+				"doctype": "Development Stage",
+				"development_project": self.name,
+				"stage_name": s,
+			})
+			stage.insert(ignore_permissions=True)
+
+	def _update_stage_totals(self):
+		stages = frappe.get_all("Development Stage", filters={"development_project": self.name}, fields=["name"]) 
+		for st in stages:
+			try:
+				stage = frappe.get_doc("Development Stage", st.get("name"))
+				stage.update_totals_from_items()
+				stage.save(ignore_permissions=True)
+			except Exception:
+				pass
 
 	def _compute_price_per_sqm(self, allocatable_total_cost: float):
 		# Sum chargeable areas from all lots in this plan
 		if not self.plan:
 			return
-		lots = frappe.get_all("Lot", filters={"plan": self.plan}, fields=["name", "area_sqm"])
+		lots = frappe.get_all("Lot", filters={"plan": self.plan, "chargeable": 1}, fields=["name", "area_sqm"])
 		total_area = sum((lot.get("area_sqm") or 0) for lot in lots)
 		if total_area and hasattr(self, "dev_price_per_sqm"):
 			self.dev_price_per_sqm = allocatable_total_cost / total_area
+
+	def _append_price_history_if_changed(self, prev_price):
+		cur_price = getattr(self, "dev_price_per_sqm", None)
+		if cur_price is None:
+			return
+		if prev_price is None or float(prev_price) != float(cur_price):
+			row = {
+				"change_date": nowdate(),
+				"price_per_sqm": cur_price,
+				"calculation_source": getattr(self, "calculation_source", None),
+				"locked": getattr(self, "price_locked", 0),
+				"note": "Auto entry on save",
+			}
+			try:
+				self.append("price_history", row)
+			except Exception:
+				pass
+
+	@frappe.whitelist()
+	def lock_price_per_sqm(self, reason: str | None = None):
+		self.check_permission("write")
+		if not getattr(self, "dev_price_per_sqm", None):
+			raise frappe.ValidationError("Cannot lock. Price per sqm is empty.")
+		self.price_locked = 1
+		self.price_lock_date = nowdate()
+		if reason:
+			self.price_lock_reason = reason
+		# Add history
+		self.append("price_history", {
+			"change_date": nowdate(),
+			"price_per_sqm": self.dev_price_per_sqm,
+			"calculation_source": getattr(self, "calculation_source", None),
+			"locked": 1,
+			"note": reason or "Locked",
+		})
+		self.save()
+		return {"locked": True, "price": self.dev_price_per_sqm}
+
+	@frappe.whitelist()
+	def unlock_price_per_sqm(self, reason: str | None = None):
+		self.check_permission("write")
+		self.price_locked = 0
+		# Log history
+		self.append("price_history", {
+			"change_date": nowdate(),
+			"price_per_sqm": self.dev_price_per_sqm,
+			"calculation_source": getattr(self, "calculation_source", None),
+			"locked": 0,
+			"note": reason or "Unlocked",
+		})
+		self.save()
+		return {"locked": False}
 
 	@frappe.whitelist()
 	def recalculate_cost_allocation(self):
@@ -61,7 +143,7 @@ class DevelopmentProject(Document):
 		price_per_sqm = getattr(self, "dev_price_per_sqm", None)
 		if not price_per_sqm:
 			raise frappe.ValidationError("Dev Price per sqm is not set. Save the document first.")
-		lots = frappe.get_all("Lot", filters={"plan": self.plan}, fields=["name", "area_sqm"])
+		lots = frappe.get_all("Lot", filters={"plan": self.plan, "chargeable": 1}, fields=["name", "area_sqm"])
 		for lot in lots:
 			area = lot.get("area_sqm") or 0
 			allocated = (area or 0) * price_per_sqm
@@ -111,3 +193,17 @@ class DevelopmentProject(Document):
 			"updated_lots": len(lots),
 			"price_per_sqm": price_per_sqm,
 		}
+
+	def before_save(self):
+		# If price is locked, avoid recomputing it (keep as is)
+		prev_price = None
+		if not self.is_new():
+			prev_price = frappe.db.get_value("Development Project", self.name, "dev_price_per_sqm")
+		if getattr(self, "price_locked", 0):
+			# Skip recompute of price, but still update totals
+			pass
+		else:
+			# Allow validate() to compute dev_price_per_sqm; nothing to do here
+			pass
+		# Append to history if changed
+		self._append_price_history_if_changed(prev_price)

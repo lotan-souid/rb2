@@ -12,6 +12,34 @@ frappe.ui.form.on("Development Project", {
                     });
                 });
             }, __('Actions'));
+
+            if (!frm.doc.price_locked) {
+                frm.add_custom_button(__('Lock Price'), () => {
+                    frappe.prompt([
+                        {
+                            fieldname: 'reason',
+                            label: __('Reason'),
+                            fieldtype: 'Small Text',
+                            reqd: 0
+                        }
+                    ], (values) => {
+                        frm.call('lock_price_per_sqm', {reason: values.reason}).then(() => frm.reload_doc());
+                    }, __('Lock Price'));
+                }, __('Actions'));
+            } else {
+                frm.add_custom_button(__('Unlock Price'), () => {
+                    frappe.prompt([
+                        {
+                            fieldname: 'reason',
+                            label: __('Reason'),
+                            fieldtype: 'Small Text',
+                            reqd: 0
+                        }
+                    ], (values) => {
+                        frm.call('unlock_price_per_sqm', {reason: values.reason}).then(() => frm.reload_doc());
+                    }, __('Unlock Price'));
+                }, __('Actions'));
+            }
         }
     }
 });

@@ -2,85 +2,70 @@
   {
     "docstatus": 0,
     "doctype": "Workflow",
-    "document_type": "Fixture Compensation",
+    "name": "Development Committee Review Workflow",
+    "document_type": "Development Committee Review",
     "is_active": 1,
-    "module": "Arrangement",
-    "name": "Fixture Compensation Approval",
-    "send_email_alert": 0,
-    "workflow_name": "Fixture Compensation Approval",
-    "workflow_state_field": "approval_status",
+    "workflow_name": "Development Committee Review Workflow",
+    "workflow_state_field": "committee_status",
     "states": [
       {
-        "allow_edit": "System Manager",
-        "docstatus": 0,
-        "is_optional_state": 0,
-        "state": "Draft"
+        "doctype": "Workflow Document State",
+        "state": "Pending",
+        "doc_status": 0,
+        "allow_edit": "System Manager"
       },
       {
-        "allow_edit": "Mapping",
-        "docstatus": 0,
-        "is_optional_state": 0,
-        "state": "Pending Mapping"
+        "doctype": "Workflow Document State",
+        "state": "Approved",
+        "doc_status": 1,
+        "allow_edit": "System Manager"
       },
       {
-        "allow_edit": "Finance",
-        "docstatus": 0,
-        "is_optional_state": 0,
-        "state": "Pending Finance"
+        "doctype": "Workflow Document State",
+        "state": "Rejected",
+        "doc_status": 1,
+        "allow_edit": "System Manager"
       },
       {
-        "allow_edit": "System Manager",
-        "docstatus": 1,
-        "is_optional_state": 0,
-        "state": "Approved"
-      },
-      {
-        "allow_edit": "System Manager",
-        "docstatus": 1,
-        "is_optional_state": 0,
-        "state": "Rejected"
+        "doctype": "Workflow Document State",
+        "state": "RevisionsRequired",
+        "doc_status": 0,
+        "allow_edit": "System Manager"
       }
     ],
     "transitions": [
       {
-        "action": "Submit to Mapping",
-        "allowed": "System Manager",
-        "allow_self_approval": 0,
-        "condition": null,
-        "next_state": "Pending Mapping",
-        "state": "Draft"
-      },
-      {
-        "action": "Approve Mapping",
-        "allowed": "Mapping",
-        "allow_self_approval": 0,
-        "condition": null,
-        "next_state": "Pending Finance",
-        "state": "Pending Mapping"
-      },
-      {
-        "action": "Reject",
-        "allowed": "Mapping",
-        "allow_self_approval": 0,
-        "condition": null,
-        "next_state": "Rejected",
-        "state": "Pending Mapping"
-      },
-      {
-        "action": "Approve Finance",
-        "allowed": "Finance",
-        "allow_self_approval": 0,
-        "condition": null,
+        "doctype": "Workflow Transition",
+        "state": "Pending",
+        "action": "Approve",
         "next_state": "Approved",
-        "state": "Pending Finance"
+        "allow_self_approval": 1,
+        "allowed": "System Manager",
+        "condition": "doc.approved_allocatable_cost and doc.approved_allocatable_cost > 0"
       },
       {
+        "doctype": "Workflow Transition",
+        "state": "Pending",
         "action": "Reject",
-        "allowed": "Finance",
-        "allow_self_approval": 0,
-        "condition": null,
         "next_state": "Rejected",
-        "state": "Pending Finance"
+        "allow_self_approval": 1,
+        "allowed": "System Manager"
+      },
+      {
+        "doctype": "Workflow Transition",
+        "state": "Pending",
+        "action": "Request Revisions",
+        "next_state": "RevisionsRequired",
+        "allow_self_approval": 1,
+        "allowed": "System Manager"
+      },
+      {
+        "doctype": "Workflow Transition",
+        "state": "RevisionsRequired",
+        "action": "Resubmit",
+        "next_state": "Pending",
+        "allow_self_approval": 1,
+        "allowed": "System Manager"
       }
     ]
   }

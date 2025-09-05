@@ -5,19 +5,22 @@
  "creation": "2025-07-23 08:25:57.343170",
  "doctype": "DocType",
  "engine": "InnoDB",
-  "field_order": [
-    "lot_number",
-    "plan",
-    "lot_id",
-    "area_sqm",
-    "related_project",
-    "lot_development_status",
-    "dev_price_per_sqm",
-    "allocated_dev_cost",
-    "assigned_arrangement_file",
-    "lot_arrangement_stage",
-    "column_break_tlmt",
-    "location",
+ "field_order": [
+  "lot_number",
+  "plan",
+  "lot_id",
+  "area_sqm",
+  "column_break_tlmt",
+  "location",
+  "section_break_bfnk",
+  "chargeable",
+  "related_project",
+  "lot_development_status",
+  "allocated_dev_cost",
+  "dev_price_per_sqm",
+  "column_break_zyoh",
+  "assigned_arrangement_file",
+  "lot_arrangement_stage",
   "section_break_tkvd",
   "notes",
   "assistant_section",
@@ -45,6 +48,12 @@
    "fieldname": "area_sqm",
    "fieldtype": "Float",
    "label": "Area (sqm)"
+  },
+  {
+   "default": "1",
+   "fieldname": "chargeable",
+   "fieldtype": "Check",
+   "label": "Chargeable"
   },
   {
    "fieldname": "related_project",
@@ -116,12 +125,20 @@
    "fieldtype": "Read Only",
    "is_virtual": 1,
    "label": "Plan Number"
+  },
+  {
+   "fieldname": "section_break_bfnk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_zyoh",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-25 23:26:02.044434",
+ "modified": "2025-09-05 17:39:42.883026",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Lot",

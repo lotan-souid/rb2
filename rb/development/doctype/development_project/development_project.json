@@ -24,7 +24,12 @@
     "section_break_costing",
     "allocatable_total_cost",
     "dev_price_per_sqm",
-    "calculation_source"
+    "calculation_source",
+    "column_break_lock",
+    "price_locked",
+    "price_lock_date",
+    "price_lock_reason",
+    "price_history"
   ],
  "fields": [
   {
@@ -130,6 +135,33 @@
    "label": "Calculation Source",
    "options": "Planned\nApproved\nActual\nManualAdjustment",
    "default": "Approved"
+  },
+  {
+   "fieldname": "column_break_lock",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "price_locked",
+   "fieldtype": "Check",
+   "label": "Price Locked"
+  },
+  {
+   "fieldname": "price_lock_date",
+   "fieldtype": "Date",
+   "label": "Price Lock Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "price_lock_reason",
+   "fieldtype": "Small Text",
+   "label": "Price Lock Reason"
+  },
+  {
+   "fieldname": "price_history",
+   "fieldtype": "Table",
+   "label": "Price History",
+   "options": "Development Price History"
   }
  ],
  "grid_page_length": 50,
