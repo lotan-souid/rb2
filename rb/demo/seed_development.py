@@ -1,15 +1,37 @@
 import frappe
 from frappe.utils import nowdate
+from frappe.model.workflow import apply_workflow
+import random
+import re
 
 
-def _ensure_plan(plan_number: str, plan_name: str | None = None) -> str:
+def _generate_plan_number() -> str:
+    """Generate plan number in format ###-####### (e.g., 123-4567890)."""
+    left = random.randint(100, 999)
+    right = random.randint(1_000_000, 9_999_999)
+    return f"{left}-{right}"
+
+
+def _ensure_plan(plan_number: str | None, plan_name: str | None = None) -> str:
+    # normalize/generate plan number to ###-#######
+    pat = re.compile(r"^\d{3}-\d{7}$")
+    if not plan_number or not pat.match(plan_number):
+        plan_number = _generate_plan_number()
     existing = frappe.get_all("Plan", filters={"plan_number": plan_number}, fields=["name"], limit=1)
     if existing:
         return existing[0]["name"]
+    # default Hebrew names if not provided
+    plan_name = plan_name or random.choice([
+        "הרחבת שכונה ה",
+        "רובע צפון",
+        "קריית הדרום",
+        "שכונת הגנים",
+        "מרכז העסקים החדש",
+    ])
     plan = frappe.get_doc({
         "doctype": "Plan",
         "plan_number": plan_number,
-        "plan_name": plan_name or plan_number,
+        "plan_name": plan_name,
     })
     plan.insert(ignore_permissions=True)
     return plan.name
@@ -63,15 +85,21 @@ def _ensure_dev_project(plan: str, name: str, allocatable_total_cost: float) -> 
 
 
 def _add_committee_review(dp_name: str, approved_allocatable_cost: float) -> str:
+    # Create in Pending, then transition via workflow to Approved
     cr = frappe.get_doc({
         "doctype": "Development Committee Review",
         "development_project": dp_name,
-        "committee_status": "Approved",
+        "committee_status": "Pending",
         "review_date": nowdate(),
         "approved_allocatable_cost": approved_allocatable_cost,
         "decisions": "Approved budget for allocation.",
     })
     cr.insert(ignore_permissions=True)
+    try:
+        apply_workflow(cr, "Approve")
+    except Exception:
+        # Fallback: set field directly if workflow action unavailable
+        frappe.db.set_value("Development Committee Review", cr.name, "committee_status", "Approved")
     return cr.name
 
 
@@ -122,7 +150,15 @@ def _recalculate_allocations(dp_name: str):
             })
 
 
-def run(plan_number: str = "RB-100", project_name: str = "RB-100 Dev", allocatable_total_cost: float = 5_000_000):
+def run(
+    plan_number: str | None = None,
+    plan_name: str | None = None,
+    project_name: str | None = None,
+    allocatable_total_cost: float = 5_000_000,
+    num_lots: int = 3,
+    lot_area_min: int = 500,
+    lot_area_max: int = 1500,
+) -> dict:
     """Seed demo data for Development workflow.
 
     Usage:
@@ -136,17 +172,26 @@ def run(plan_number: str = "RB-100", project_name: str = "RB-100 Dev", allocatab
         if not s.get("disabled"):
             reenable.append(s["name"])
             frappe.db.set_value("Server Script", s["name"], "disabled", 1)
+    # ensure framework reloads disabled scripts
+    frappe.clear_cache()
 
     try:
-        # 1) Plan
-        plan_name = _ensure_plan(plan_number, plan_name=f"Plan {plan_number}")
+        # 1) Plan (plan_number auto-generated to ###-####### if not provided)
+        plan_docname = _ensure_plan(plan_number, plan_name=plan_name)
 
-        # 2) Lots
-        for lot_no, area in (("L-01", 500.0), ("L-02", 750.0), ("L-03", 1250.0)):
-            _ensure_lot(plan_name, lot_no, area)
+        # 2) Lots (numeric lot_number; area in [min,max])
+        created_lots = []
+        # start lot numbers from 101, 102, ...
+        base_no = random.randint(100, 199)
+        for i in range(num_lots):
+            lot_no = str(base_no + i)
+            area = float(random.randint(int(lot_area_min), int(lot_area_max)))
+            name = _ensure_lot(plan_docname, lot_no, area)
+            created_lots.append({"name": name, "lot_number": lot_no, "area_sqm": area})
 
         # 3) Development Project with items
-        dp_name = _ensure_dev_project(plan_name, project_name, allocatable_total_cost)
+        effective_project_name = project_name or f"פרויקט פיתוח {plan_docname}"
+        dp_name = _ensure_dev_project(plan_docname, effective_project_name, allocatable_total_cost)
 
         # 4) Committee Review (Approved)
         _add_committee_review(dp_name, approved_allocatable_cost=allocatable_total_cost)
@@ -155,15 +200,16 @@ def run(plan_number: str = "RB-100", project_name: str = "RB-100 Dev", allocatab
         _recalculate_allocations(dp_name)
 
         return {
-            "plan": plan_name,
+            "plan": plan_docname,
             "project": dp_name,
-            "lots": frappe.get_all("Lot", filters={"plan": plan_name}, fields=["name", "area_sqm"], order_by="name asc"),
+            "lots": created_lots,
             "price_per_sqm": frappe.db.get_value("Development Project", dp_name, "dev_price_per_sqm"),
         }
     finally:
         # Re-enable scripts we disabled
         for name in reenable:
             frappe.db.set_value("Server Script", name, "disabled", 0)
+        frappe.clear_cache()
 
 
 def toggle_dev_task_scripts(disabled: int = 1):
@@ -180,3 +226,152 @@ def toggle_dev_task_scripts(disabled: int = 1):
     for n in names:
         frappe.db.set_value("Server Script", n, "disabled", 1 if int(disabled) else 0)
     return {"updated": names, "disabled": int(disabled)}
+
+
+def apply_actuals_for_project(
+    project_name: str,
+    stage_a_items: tuple[str, ...] = ("Earthworks", "Access Roads"),
+    stage_b_items: tuple[str, ...] = ("Water Network", "Sewer Network"),
+) -> dict:
+    """Populate actual_cost and stage assignment for an existing Development Project.
+
+    - Assigns items by name to StageA/StageB
+    - Sets actual_cost = planned_cost and item_status = Completed for those
+    - Recomputes stage totals and keeps stage statuses
+
+    Usage:
+      bench --site <site> execute rb.demo.seed_development.apply_actuals_for_project --kwargs '{"project_name":"<DP_NAME>"}'
+    """
+    # Disable interfering server scripts
+    reenable = []
+    for s in frappe.get_all(
+        "Server Script",
+        filters={"reference_doctype": ["in", ["Development Task", "Development Project"]]},
+        fields=["name", "disabled"],
+    ):
+        if not s.get("disabled"):
+            reenable.append(s["name"])
+            frappe.db.set_value("Server Script", s["name"], "disabled", 1)
+    frappe.clear_cache()
+
+    try:
+        dp = frappe.get_doc("Development Project", project_name)
+        # Fetch Stage docnames
+        stages = {
+            s.get("stage_name"): s.get("name")
+            for s in frappe.get_all(
+                "Development Stage",
+                filters={"development_project": dp.name},
+                fields=["name", "stage_name"],
+            )
+        }
+        stage_a = stages.get("StageA")
+        stage_b = stages.get("StageB")
+
+        changed = 0
+        for row in (dp.get("table_dtxh") or []):
+            name = (getattr(row, "item_name", "") or "").strip()
+            if name in stage_a_items and stage_a:
+                row.stage = stage_a
+                row.actual_cost = row.planned_cost or 0
+                row.item_status = "Completed"
+                changed += 1
+            elif name in stage_b_items and stage_b:
+                row.stage = stage_b
+                row.actual_cost = row.planned_cost or 0
+                row.item_status = "Completed"
+                changed += 1
+
+        if changed:
+            dp.save(ignore_permissions=True)
+
+        # Recompute stage totals explicitly
+        for key in ("StageA", "StageB", "Final"):
+            if key in stages:
+                st = frappe.get_doc("Development Stage", stages[key])
+                st.update_totals_from_items()
+                st.save(ignore_permissions=True)
+
+        return {"project": dp.name, "items_updated": changed}
+    finally:
+        for name in reenable:
+            frappe.db.set_value("Server Script", name, "disabled", 0)
+        frappe.clear_cache()
+
+
+def seed_stage_b_completed(
+    plan_number: str | None = None,
+    plan_name: str | None = None,
+    project_name: str | None = None,
+    allocatable_total_cost: float = 6_000_000,
+    num_lots: int = 4,
+    lot_area_min: int = 500,
+    lot_area_max: int = 1500,
+) -> dict:
+    """Seed a Development Project for a new Plan where development started and Stage B is completed.
+
+    - Project status set to "שלב ב" (in progress at stage B)
+    - Stage A: Completed, Stage B: Completed, Final: NotStarted
+
+    Usage:
+      bench --site <site> execute rb.demo.seed_development.seed_stage_b_completed
+    """
+    # Disable interfering server scripts
+    reenable = []
+    for s in frappe.get_all(
+        "Server Script", filters={"reference_doctype": ["in", ["Development Task", "Development Project"]]}, fields=["name", "disabled"]
+    ):
+        if not s.get("disabled"):
+            reenable.append(s["name"])
+            frappe.db.set_value("Server Script", s["name"], "disabled", 1)
+    frappe.clear_cache()
+
+    try:
+        # Create base data via run()
+        base = run(
+            plan_number=plan_number,
+            plan_name=plan_name,
+            project_name=project_name,
+            allocatable_total_cost=allocatable_total_cost,
+            num_lots=num_lots,
+            lot_area_min=lot_area_min,
+            lot_area_max=lot_area_max,
+        )
+
+        dp_name = base["project"]
+
+        # Update stages
+        stages = frappe.get_all(
+            "Development Stage",
+            filters={"development_project": dp_name},
+            fields=["name", "stage_name", "stage_status"],
+        )
+        status_map = {"StageA": "Completed", "StageB": "Completed", "Final": "NotStarted"}
+        for st in stages:
+            new_status = status_map.get(st.get("stage_name"))
+            if new_status and new_status != st.get("stage_status"):
+                frappe.db.set_value("Development Stage", st.get("name"), {
+                    "stage_status": new_status,
+                    "start_date": nowdate() if new_status != "NotStarted" else None,
+                    "end_date": nowdate() if new_status == "Completed" else None,
+                })
+
+        # Set project status to "שלב ב" and reflect committee_status Approved on the project
+        frappe.db.set_value("Development Project", dp_name, {
+            "status": "שלב ב",
+            "status_change": nowdate(),
+            "committee_status": "Approved",
+        })
+
+        # Return summary
+        updated = frappe.get_all(
+            "Development Stage",
+            filters={"development_project": dp_name},
+            fields=["stage_name", "stage_status", "start_date", "end_date"],
+            order_by="stage_name asc",
+        )
+        return {"plan": base["plan"], "project": dp_name, "stages": updated}
+    finally:
+        for name in reenable:
+            frappe.db.set_value("Server Script", name, "disabled", 0)
+        frappe.clear_cache()

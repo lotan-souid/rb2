@@ -35,6 +35,10 @@ fixtures = [
 ]
 
 
+# Ensure data sanity after migrations (e.g., required Workflow States)
+after_migrate = "rb.install.after_migrate"
+
+
 doc_events = {
 	# חישוב שטח וספירת מגרשים (Lot → Plan)
 	"Lot": {

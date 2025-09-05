@@ -1,36 +1,37 @@
 {
  "actions": [],
  "allow_rename": 1,
+ "autoname": "format:dvp-{YYYY}-{###}",
  "creation": "2025-08-30 22:16:43.877793",
  "doctype": "DocType",
  "engine": "InnoDB",
-  "field_order": [
-    "plan",
-    "development_project_name",
-    "status",
-    "column_break_cfks",
-    "start_date",
-    "end_date",
-    "status_change",
-    "section_break_zkos",
-    "committee_status",
-    "committee_approval",
-    "section_break_pnow",
-    "estimate_cost",
-    "column_break_aoaq",
-    "actual_cost",
-    "section_break_pjsf",
-    "table_dtxh",
-    "section_break_costing",
-    "allocatable_total_cost",
-    "dev_price_per_sqm",
-    "calculation_source",
-    "column_break_lock",
-    "price_locked",
-    "price_lock_date",
-    "price_lock_reason",
-    "price_history"
-  ],
+ "field_order": [
+  "plan",
+  "development_project_name",
+  "status",
+  "column_break_cfks",
+  "start_date",
+  "end_date",
+  "status_change",
+  "section_break_zkos",
+  "committee_status",
+  "committee_approval",
+  "section_break_pnow",
+  "estimate_cost",
+  "column_break_aoaq",
+  "actual_cost",
+  "section_break_pjsf",
+  "table_dtxh",
+  "section_break_costing",
+  "allocatable_total_cost",
+  "dev_price_per_sqm",
+  "calculation_source",
+  "column_break_lock",
+  "price_locked",
+  "price_lock_date",
+  "price_lock_reason",
+  "price_history"
+ ],
  "fields": [
   {
    "fieldname": "plan",
@@ -93,6 +94,7 @@
    "fieldtype": "Section Break"
   },
   {
+   "columns": 5,
    "fieldname": "table_dtxh",
    "fieldtype": "Table",
    "options": "Development Items"
@@ -120,8 +122,7 @@
   {
    "fieldname": "allocatable_total_cost",
    "fieldtype": "Currency",
-   "label": "Allocatable Total Cost",
-   "read_only": 0
+   "label": "Allocatable Total Cost"
   },
   {
    "fieldname": "dev_price_per_sqm",
@@ -130,11 +131,11 @@
    "read_only": 1
   },
   {
+   "default": "Approved",
    "fieldname": "calculation_source",
    "fieldtype": "Select",
    "label": "Calculation Source",
-   "options": "Planned\nApproved\nActual\nManualAdjustment",
-   "default": "Approved"
+   "options": "Planned\nApproved\nActual\nManualAdjustment"
   },
   {
    "fieldname": "column_break_lock",
@@ -167,10 +168,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-31 11:05:30.647866",
+ "modified": "2025-09-05 22:12:42.691672",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Development Project",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {

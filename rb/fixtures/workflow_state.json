@@ -10,6 +10,14 @@
   {
     "docstatus": 0,
     "doctype": "Workflow State",
+    "name": "Pending",
+    "workflow_state_name": "Pending",
+    "icon": "question-sign",
+    "style": "Info"
+  },
+  {
+    "docstatus": 0,
+    "doctype": "Workflow State",
     "name": "Pending Mapping",
     "workflow_state_name": "Pending Mapping",
     "icon": "question-sign",
@@ -38,5 +46,13 @@
     "workflow_state_name": "Rejected",
     "icon": "remove",
     "style": "Danger"
+  },
+  {
+    "docstatus": 0,
+    "doctype": "Workflow State",
+    "name": "RevisionsRequired",
+    "workflow_state_name": "RevisionsRequired",
+    "icon": "edit",
+    "style": "Warning"
   }
 ]

@@ -2,6 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "allow_rename": 1,
+ "autoname": "format:lot{#######}",
  "creation": "2025-07-23 08:25:57.343170",
  "doctype": "DocType",
  "engine": "InnoDB",
@@ -89,7 +90,7 @@
    "read_only": 1
   },
   {
-   "fetch_from": "related_project.development_stage",
+   "fetch_from": "related_project.status",
    "fieldname": "lot_arrangement_stage",
    "fieldtype": "Data",
    "label": "Lot Arrangement Stage",
@@ -138,10 +139,11 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-05 17:39:42.883026",
+ "modified": "2025-09-05 22:25:41.544320",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Lot",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
