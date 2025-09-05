@@ -44,13 +44,13 @@ class DevelopmentProject(Document):
 			self._compute_price_per_sqm(allocatable)
 
 		# Ensure default stages exist (StageA, StageB, Final)
-		self._ensure_default_stages()
+		# moved to after_insert to avoid link validation before project exists
+		pass
 
-		# Update stage totals
-		self._update_stage_totals()
+		# Update stage totals will run after insert/update
 
 	def _ensure_default_stages(self):
-		if not self.name:
+		if not self.name or not frappe.db.exists("Development Project", self.name):
 			return
 		existing = frappe.get_all("Development Stage", filters={"development_project": self.name}, fields=["name", "stage_name"])
 		if existing:
@@ -207,3 +207,12 @@ class DevelopmentProject(Document):
 			pass
 		# Append to history if changed
 		self._append_price_history_if_changed(prev_price)
+
+	def after_insert(self):
+		# Create default stages only after the project exists in DB
+		self._ensure_default_stages()
+		self._update_stage_totals()
+
+	def on_update(self):
+		# Keep stage totals in sync on updates
+		self._update_stage_totals()
