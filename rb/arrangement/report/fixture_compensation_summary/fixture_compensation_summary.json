@@ -1,0 +1,14 @@
+{
+ "doctype": "Report",
+ "is_standard": "Yes",
+ "json": "{}",
+ "module": "Arrangement",
+ "name": "Fixture Compensation Summary",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Fixture Compensation",
+ "report_name": "Fixture Compensation Summary",
+ "report_type": "Script Report",
+ "disabled": 0
+}
+

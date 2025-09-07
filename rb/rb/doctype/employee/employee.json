@@ -99,7 +99,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-28 09:39:49.992736",
+ "modified": "2025-09-06 21:02:09.256601",
  "modified_by": "Administrator",
  "module": "rb",
  "name": "Employee",
@@ -119,7 +119,9 @@
   }
  ],
  "row_format": "Dynamic",
+ "show_title_field_in_link": 1,
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "employee_name"
 }

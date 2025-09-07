@@ -1,0 +1,14 @@
+{
+ "doctype": "Report",
+ "is_standard": "Yes",
+ "json": "{}",
+ "module": "Arrangement",
+ "name": "Arrangement Pipeline",
+ "owner": "Administrator",
+ "prepared_report": 0,
+ "ref_doctype": "Arrangement File",
+ "report_name": "Arrangement Pipeline",
+ "report_type": "Script Report",
+ "disabled": 0
+}
+

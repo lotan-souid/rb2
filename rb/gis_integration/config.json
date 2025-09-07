@@ -1,0 +1,28 @@
+{
+  "_comments": [
+    "pg_featureserv_url: כתובת שרת pg_featureserv (כולל פרוטוקול ופורט)",
+    "pg_featureserv_timeout: זמן קצוב (בשניות) לבקשות HTTP מהשרת",
+    "collections: מיפוי בין DocTypeים ב-Frappe לבין שכבות/Collections ב-pg_featureserv",
+    "site_config.json תחת המפתח 'gis_integration' יכול לעקוף את הערכים כאן לסביבות שונות"
+  ],
+  "pg_featureserv_url": "http://192.168.0.101:9000",
+  "pg_featureserv_timeout": 30,
+  "collections": {
+    "Lot": {
+      "_comments": [
+        "collection: שם ה-collection ב-pg_featureserv ממנו נמשוך ישויות",
+        "id_field: שם השדה בדוק-טייפ Lot שמכיל את מזהה הישות לחיפוש",
+        "geometry_target_field: שם השדה ב-Lot אליו תישמר הגיאומטריה (GeoJSON)",
+        "fetch_mode: 'by_property' (חיפוש לפי תכונה) או 'by_id' (קריאה ל-items/{id})",
+        "property_name: שם התכונה בצד ה-GIS (כאשר fetch_mode='by_property')",
+        "fallback_properties: רשימת שדות חלופיים מהטופס לנסות במקרה ולא נמצאה התאמה"
+      ],
+      "collection": "rb_layers.lots",
+      "id_field": "lot_id",
+      "geometry_target_field": "location",
+      "fetch_mode": "by_property",
+      "property_name": "lotId",
+      "fallback_properties": ["lot_number"]
+    }
+  }
+}

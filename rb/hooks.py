@@ -46,3 +46,8 @@ doc_events = {
 		"after_delete": "rb.planning.doctype.lot.lot.after_delete"
 	}
 }
+
+# Client scripts
+doctype_js = {
+	"Lot": "public/js/lot_form.js",
+}
