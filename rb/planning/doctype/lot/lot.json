@@ -9,6 +9,7 @@
  "field_order": [
   "lot_number",
   "plan",
+  "plan_status",
   "lot_id",
   "area_sqm",
   "column_break_tlmt",
@@ -140,12 +141,19 @@
   {
    "fieldname": "column_break_bwen",
    "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "plan.status",
+   "fieldname": "plan_status",
+   "fieldtype": "Data",
+   "label": "Plan Status",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-08 08:39:34.670348",
+ "modified": "2025-09-12 10:42:11.399342",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Lot",

@@ -6,6 +6,15 @@ frappe.ui.form.on('Arrangement File', {
         // חישוב סכום בהתחלה כשפותחים טופס
         update_total_fixture_compensation(frm);
 
+        // סינון בחירת מגרש לפי סטטוס התב"ע: רק מגרשים שבתוכנית הסטטוס שלה "אישור ומתן תוקף"
+        frm.set_query('assigned_lot', function() {
+            return {
+                filters: {
+                    plan_status: 'אישור ומתן תוקף'
+                }
+            };
+        });
+
         // הוספת כפתור למחיקת Fixture Compensation (השורה הראשונה כדוגמה)
         if (frm.doc.link_fixtures && frm.doc.link_fixtures.length > 0) {
             frm.add_custom_button(__('Delete Fixture Compensation'), function() {
