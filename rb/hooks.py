@@ -50,4 +50,5 @@ doc_events = {
 # Client scripts
 doctype_js = {
 	"Lot": "public/js/lot_form.js",
+	"Cluster": "public/js/cluster_form.js",
 }

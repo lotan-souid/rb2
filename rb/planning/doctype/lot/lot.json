@@ -14,14 +14,15 @@
   "column_break_tlmt",
   "location",
   "section_break_bfnk",
+  "column_break_zyoh",
+  "assigned_arrangement_file",
+  "lot_arrangement_stage",
+  "column_break_bwen",
   "chargeable",
   "related_project",
   "lot_development_status",
   "allocated_dev_cost",
   "dev_price_per_sqm",
-  "column_break_zyoh",
-  "assigned_arrangement_file",
-  "lot_arrangement_stage",
   "section_break_tkvd",
   "notes",
   "assistant_section",
@@ -64,10 +65,10 @@
    "read_only": 1
   },
   {
+   "fetch_from": "related_project.status",
    "fieldname": "lot_development_status",
-   "fieldtype": "Select",
+   "fieldtype": "Data",
    "label": "Development Status",
-   "options": "NotStarted\nInProgress\nCompleted",
    "read_only": 1
   },
   {
@@ -90,7 +91,7 @@
    "read_only": 1
   },
   {
-   "fetch_from": "related_project.status",
+   "fetch_from": "assigned_arrangement_file.arrangement_status",
    "fieldname": "lot_arrangement_stage",
    "fieldtype": "Data",
    "label": "Lot Arrangement Stage",
@@ -135,12 +136,16 @@
   {
    "fieldname": "column_break_zyoh",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_bwen",
+   "fieldtype": "Column Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-07 23:02:44.865249",
+ "modified": "2025-09-08 08:39:34.670348",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Lot",

@@ -23,6 +23,21 @@
       "fetch_mode": "by_property",
       "property_name": "lotId",
       "fallback_properties": ["lot_number"]
+    },
+    "Cluster": {
+      "_comments": [
+        "Mapping for Cluster DocType to GIS layer",
+        "collection: pg_featureserv collection (schema.table)",
+        "id_field: DocType field used to match GIS features",
+        "geometry_target_field: DocType field to store simplified GeoJSON",
+        "fetch_mode: use property filter to match by field",
+        "property_name: GIS-side attribute to match (e.g., clusterName)"
+      ],
+      "collection": "rb_layers.clusters",
+      "id_field": "cluster_name",
+      "geometry_target_field": "location",
+      "fetch_mode": "by_property",
+      "property_name": "clusterName"
     }
   }
 }

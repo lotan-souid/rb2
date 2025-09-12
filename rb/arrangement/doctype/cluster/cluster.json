@@ -26,7 +26,8 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Cluster Name\t",
-   "reqd": 1
+   "reqd": 1,
+   "unique": 1
   },
   {
    "fieldname": "sector",
@@ -70,7 +71,8 @@
   {
    "fieldname": "location",
    "fieldtype": "Geolocation",
-   "label": "Location"
+   "label": "Location",
+   "read_only": 1
   },
   {
    "fieldname": "tribe",
@@ -102,7 +104,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-07-29 14:55:58.374808",
+ "modified": "2025-09-12 09:22:20.727875",
  "modified_by": "Administrator",
  "module": "Arrangement",
  "name": "Cluster",

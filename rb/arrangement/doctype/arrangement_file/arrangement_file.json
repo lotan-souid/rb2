@@ -171,6 +171,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "fetch_from": "assigned_lot.lot_development_status",
    "fieldname": "lot_development_status",
    "fieldtype": "Data",
    "label": "Lot Development Status",
@@ -187,7 +188,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-02 10:00:39.391916",
+ "modified": "2025-09-08 08:34:26.284399",
  "modified_by": "Administrator",
  "module": "Arrangement",
  "name": "Arrangement File",

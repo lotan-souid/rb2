@@ -86,6 +86,75 @@ def fetch_lot_geometry(lot_name: str) -> Optional[str]:
 
 
 @frappe.whitelist()
+def fetch_cluster_geometry(cluster_name: str) -> Optional[str]:
+    """Fetch geometry from GIS for a Cluster document based on config and persist it.
+    cluster_name is the DocType name (doc.name), not the cluster_name field value.
+    """
+    doc = frappe.get_doc("Cluster", cluster_name)
+    cfg = get_doctype_config("Cluster") or {}
+    collection = cfg.get("collection", "rb_layers.clusters")
+    id_field = cfg.get("id_field", "cluster_name")
+    target_field = cfg.get("geometry_target_field", "location")
+    fetch_mode = cfg.get("fetch_mode")  # "by_id" or "by_property"
+    property_name = cfg.get("property_name")
+    fallback_props = cfg.get("fallback_properties") or []
+
+    feature_id = doc.get(id_field)
+    if not feature_id:
+        frappe.msgprint(_(f"No {id_field} found on this Cluster"))
+        return None
+
+    conn = PGFeatureServConnector()
+    feature = None
+    if fetch_mode == "by_property" or property_name:
+        property_name = property_name or id_field
+        fc = conn.get_features_by_property(collection, property_name, feature_id, limit=1)
+        if fc and fc.get("features"):
+            feature = fc["features"][0]
+    else:
+        feature = conn.get_feature_by_id(collection, feature_id)
+
+    if not feature and fallback_props:
+        for fp in fallback_props:
+            val = doc.get(fp)
+            if not val:
+                continue
+            fc = conn.get_features_by_property(collection, fp, val, limit=1)
+            if fc and fc.get("features"):
+                feature = fc["features"][0]
+                break
+
+    if not feature:
+        msg = _(
+            "No geometry found in GIS for {0} using {1}{2}"
+        ).format(
+            feature_id,
+            f"id_field={id_field}",
+            f", fallbacks={','.join(fallback_props)}" if fallback_props else "",
+        )
+        frappe.msgprint(msg, indicator="orange")
+        return None
+
+    geojson_full = convert_to_fc(feature)
+    if not conn.validate_geojson(geojson_full):
+        frappe.throw(_("Invalid GeoJSON data received from GIS"))
+
+    geojson_simple = geometry_only_fc(geojson_full)
+    data = json.dumps(geojson_simple, ensure_ascii=False)
+    if len(data.encode("utf-8")) > MAX_GEOJSON_BYTES:
+        frappe.msgprint(
+            _("Geometry too large; consider simplifying or reducing precision"),
+            indicator="orange",
+        )
+
+    try:
+        doc.db_set(target_field, data)
+    except Exception:
+        pass
+
+    return data
+
+@frappe.whitelist()
 def fetch_geometry_by_property(
     doctype: str,
     docname: str,
@@ -162,6 +231,54 @@ def sync_all_lot_geometries(collection: Optional[str] = None) -> Dict[str, Any]:
     return {"success": ok, "errors": errs, "error_details": details[:10]}
 
 
+@frappe.whitelist()
+def sync_all_cluster_geometries(collection: Optional[str] = None) -> Dict[str, Any]:
+    """Bulk sync for Clusters that have an id_field value configured (default cluster_name)."""
+    clusters = frappe.get_all(
+        "Cluster",
+        filters={"cluster_name": ["!=", ""]},
+        fields=["name", "cluster_name"],
+    )
+    cfg = get_doctype_config("Cluster") or {}
+    collection = cfg.get("collection", "rb_layers.clusters")
+    id_field = cfg.get("id_field", "cluster_name")
+    target_field = cfg.get("geometry_target_field", "location")
+    fetch_mode = cfg.get("fetch_mode")
+    property_name = cfg.get("property_name")
+
+    conn = PGFeatureServConnector()
+    ok, errs, details = 0, 0, []
+
+    for cl in clusters:
+        coll = collection
+        try:
+            feature = None
+            feature_id = cl.get(id_field) or cl.get("cluster_name")
+            if fetch_mode == "by_property" or property_name:
+                pn = property_name or id_field
+                fc = conn.get_features_by_property(coll, pn, feature_id, limit=1)
+                if fc and fc.get("features"):
+                    feature = fc["features"][0]
+            else:
+                feature = conn.get_feature_by_id(coll, feature_id)
+            if feature:
+                fc_full = convert_to_fc(feature)
+                fc_simple = geometry_only_fc(fc_full)
+                try:
+                    frappe.db.set_value("Cluster", cl.name, target_field, json.dumps(fc_simple, ensure_ascii=False))
+                except Exception:
+                    pass
+                ok += 1
+            else:
+                errs += 1
+                details.append(f"No geometry for Cluster {cl['name']}")
+        except Exception as e:
+            errs += 1
+            details.append(f"Error updating {cl['name']}: {e}")
+
+    return {"success": ok, "errors": errs, "error_details": details[:10]}
+
+
 def convert_to_fc(data: Dict[str, Any]) -> Dict[str, Any]:
     t = data.get("type")
     if t == "FeatureCollection":
@@ -224,4 +341,3 @@ def gis_reload_config() -> Dict[str, Any]:
     clear_gis_config_cache()
     cfg = load_gis_config()
     return {"reloaded": True, "config": cfg}
-
