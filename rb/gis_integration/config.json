@@ -7,6 +7,30 @@
   ],
   "pg_featureserv_url": "http://192.168.0.101:9000",
   "pg_featureserv_timeout": 30,
+  "basemaps": {
+    "default": {
+      "url": "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "options": {
+        "maxZoom": 19,
+        "attribution": "&copy; OpenStreetMap contributors"
+      }
+    },
+    "A": {
+      "url": "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/%7Bz%7D/%7By%7D/%7Bx%7D",
+      "options": {
+        "attribution": "Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community"
+      }
+    },
+    "B": {
+      "url": "https://tiles.arcgis.com/tiles/utNNrmXb4IZOLXXs/arcgis/rest/services/Orthophoto2022/MapServer/tile/{z}/{y}/{x}",
+      "options": {
+        "minZoom": 0,
+        "maxZoom": 20,
+        "attribution": "Orthophoto 2022 © Survey of Israel / Esri",
+        "tileSize": 256
+      }
+    }
+  },
   "collections": {
     "Lot": {
       "_comments": [
@@ -22,7 +46,13 @@
       "geometry_target_field": "location",
       "fetch_mode": "by_property",
       "property_name": "lotId",
-      "fallback_properties": ["lot_number"]
+      "fallback_properties": ["lot_number"],
+      "map": {
+        "geolocation_field": "location",
+        "default_basemap": "default",
+        "default_zoom": 12,
+        "available_basemaps": ["default", "A", "B"]
+      }
     },
     "Cluster": {
       "_comments": [
@@ -37,7 +67,36 @@
       "id_field": "cluster_name",
       "geometry_target_field": "location",
       "fetch_mode": "by_property",
-      "property_name": "clusterName"
+      "property_name": "clusterName",
+      "map": {
+        "geolocation_field": "location",
+        "default_basemap": "default",
+        "default_zoom": 10,
+        "available_basemaps": ["default", "A", "B"],
+        "fit_to_geometry": false
+      }
+    },
+    "Fixture Compensation": {
+      "_comments": [
+        "Mapping for Fixture Compensation DocType to GIS layer",
+        "collection: pg_featureserv collection (schema.table) containing fixtures",
+        "id_field: DocType field storing the unique FXC-* identifier (defaults to name)",
+        "geometry_target_field: destination Geolocation field on the DocType",
+        "fetch_mode: when omitted defaults to by_id which calls items/{id}",
+        "map: client-side Geolocation widget defaults"
+      ],
+      "collection": "rb_layers.fixture_compensation",
+      "id_field": "name",
+      "geometry_target_field": "location",
+      "fetch_mode": "by_property",
+      "property_name": "fixture_id",
+      "map": {
+        "geolocation_field": "location",
+        "default_basemap": "default",
+        "default_zoom": 13,
+        "available_basemaps": ["default", "A", "B"],
+        "fit_to_geometry": true
+      }
     }
   }
 }

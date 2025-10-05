@@ -7,6 +7,7 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
+  "section_break_mqbj",
   "column_break_cbpg",
   "fixture_type",
   "description",
@@ -21,14 +22,18 @@
   "approval_status",
   "approved_by_mapping",
   "approved_by_finance",
+  "section_break_ebob",
+  "location",
   "section_break_nmzc",
   "notes"
  ],
  "fields": [
   {
+   "bold": 1,
    "fieldname": "fixture_type",
    "fieldtype": "Select",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Fixture Type",
    "options": "\u05de\u05d1\u05e0\u05d4\n\u05e1\u05db\u05db\u05d4\n\u05e2\u05e5\n\u05d0\u05d7\u05e8"
   },
@@ -115,12 +120,26 @@
    "fieldname": "approved_by_finance",
    "fieldtype": "Check",
    "label": "Approved by Finance"
+  },
+  {
+   "fieldname": "section_break_ebob",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Geolocation",
+   "label": "Location",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_mqbj",
+   "fieldtype": "Section Break"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-05 11:20:33.756375",
+ "modified": "2025-10-05 14:45:16.955407",
  "modified_by": "Administrator",
  "module": "Arrangement",
  "name": "Fixture Compensation",

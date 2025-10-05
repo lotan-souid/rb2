@@ -7,23 +7,28 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "statutory_data_section",
   "lot_number",
   "plan",
   "plan_status",
   "lot_id",
   "area_sqm",
+  "land_designation",
+  "main_land_designation",
   "column_break_tlmt",
   "location",
   "section_break_bfnk",
   "column_break_zyoh",
   "assigned_arrangement_file",
+  "column_break_lvhz",
   "lot_arrangement_stage",
-  "column_break_bwen",
+  "financial_data_section",
   "chargeable",
   "related_project",
-  "lot_development_status",
-  "allocated_dev_cost",
   "dev_price_per_sqm",
+  "column_break_xfqm",
+  "allocated_dev_cost",
+  "lot_development_status",
   "section_break_tkvd",
   "notes",
   "assistant_section",
@@ -132,14 +137,11 @@
   },
   {
    "fieldname": "section_break_bfnk",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "Arrangement Data"
   },
   {
    "fieldname": "column_break_zyoh",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "column_break_bwen",
    "fieldtype": "Column Break"
   },
   {
@@ -148,12 +150,44 @@
    "fieldtype": "Data",
    "label": "Plan Status",
    "read_only": 1
+  },
+  {
+   "fieldname": "statutory_data_section",
+   "fieldtype": "Section Break",
+   "label": "Statutory data"
+  },
+  {
+   "fieldname": "financial_data_section",
+   "fieldtype": "Section Break",
+   "label": "Financial Data"
+  },
+  {
+   "fieldname": "column_break_lvhz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_xfqm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "land_designation",
+   "fieldtype": "Link",
+   "label": "Land Designation",
+   "options": "Land Designation"
+  },
+  {
+   "fetch_from": "land_designation.main_land_designation",
+   "fieldname": "main_land_designation",
+   "fieldtype": "Link",
+   "label": "Main Land Designation",
+   "options": "Main Land Designation",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-12 10:42:11.399342",
+ "modified": "2025-09-30 10:44:55.758084",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Lot",

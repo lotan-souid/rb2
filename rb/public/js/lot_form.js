@@ -1,3 +1,15 @@
+// Basemap definitions — minimal fallback only (all real basemaps live in config.json)
+const LOT_BASEMAPS = {
+  default: {
+    url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    options: { maxZoom: 19, attribution: '&copy; OpenStreetMap contributors' }
+  }
+};
+// Dynamic basemaps from server config
+let __lot_basemaps = null; // populated from rb.gis_integration.api.gis_get_client_config
+let __lot_map_cfg = null;  // per-DocType map config (default_zoom, center, etc.)
+let __lot_bg_key = 'default';
+
 frappe.ui.form.on('Lot', {
   refresh(frm) {
     if (frm.doc.lot_id) {
@@ -9,8 +21,12 @@ frappe.ui.form.on('Lot', {
       }
       frm.add_custom_button(__('Open Map (tileserv)'), () => open_tiles_map(frm), __('GIS Actions'));
       frm.add_custom_button(__('Test GIS Connection'), () => test_gis_connection(frm), __('GIS Actions'));
+      frm.add_custom_button(__('Cahnge To Background A'), () => toggle_lot_background(frm, 'A'), __('GIS Actions'));
+      frm.add_custom_button(__('Cahnge To Background B'), () => set_lot_background(frm, 'B'), __('GIS Actions'));
       // Try to render on refresh (non-blocking)
       if (!__lot_geo_layer && !frm.doc.location) { setTimeout(() => fetch_geometry_from_gis(frm), 200); }
+      // Load basemaps from server config and apply to Geolocation field
+      ensure_lot_client_cfg(() => setTimeout(() => set_geolocation_basemap(frm, 'location', __lot_bg_key), 300));
     }
     if (frappe.user.has_role('System Manager')) {
       frm.add_custom_button(__('Sync All Geometries'), () => sync_all_geometries(frm), __('GIS Actions'));
@@ -73,6 +89,7 @@ function open_tiles_map(frm) {
 let __lot_map;
 let __lot_geo_layer;
 let __leaflet_loading;
+let __lot_base_layer;
 
 function ensure_map(frm) {
   ensure_leaflet(() => {});
@@ -91,7 +108,7 @@ function ensure_map(frm) {
     const el = document.getElementById(id);
     if (el && window.L) {
       __lot_map = L.map(id);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(__lot_map);
+      ensure_lot_client_cfg(() => { set_map_basemap(__lot_map, __lot_bg_key); apply_default_view(__lot_map); });
     }
   }
   return __lot_map;
@@ -105,7 +122,13 @@ function render_geometry_on_form(frm, featureCollection) {
     __lot_geo_layer = null;
   }
   __lot_geo_layer = L.geoJSON(featureCollection, { style: { color: '#D35400', weight: 2, fillOpacity: 0.15 } }).addTo(map);
-  try { map.fitBounds(__lot_geo_layer.getBounds(), { padding: [10, 10] }); } catch(e) {}
+  try {
+    if (should_fit_geometry()) {
+      map.fitBounds(__lot_geo_layer.getBounds(), { padding: [10, 10] });
+    } else {
+      apply_default_view(map);
+    }
+  } catch(e) {}
 }
 
 function ensure_leaflet(cb) {
@@ -155,3 +178,125 @@ function test_gis_connection(frm) {
   });
 }
 
+// --- Basemap override for the Geolocation field itself ---
+// Attempt to swap the tile layer used by the built-in Geolocation control (field `location`).
+function set_geolocation_basemap(frm, fieldname, which) {
+  const field = frm.get_field(fieldname);
+  if (!field) return;
+  const bm = get_lot_basemap(which);
+  const swap = () => {
+    // Try common property names used by ControlGeolocation across Frappe versions
+    const map = field.map || field.leaflet_map || field._map;
+    const old = field.tile_layer || field._tile_layer;
+    if (!map || !window.L) return setTimeout(swap, 200);
+    try {
+      if (old && map.hasLayer && map.hasLayer(old)) {
+        map.removeLayer(old);
+      }
+      const tile = L.tileLayer(bm.url, bm.options || { maxZoom: 19 }).addTo(map);
+      field.tile_layer = tile;
+      field._tile_layer = tile;
+      try {
+        const v = frm.doc[fieldname];
+        if (!v) { apply_default_view(map); }
+      } catch(e) {}
+    } catch (e) {
+      // Try again once if map not fully ready
+      setTimeout(swap, 300);
+    }
+  };
+  swap();
+}
+
+function set_map_basemap(map, which) {
+  const bm = get_lot_basemap(which);
+  try {
+    if (__lot_base_layer && map.hasLayer && map.hasLayer(__lot_base_layer)) {
+      map.removeLayer(__lot_base_layer);
+    }
+  } catch (e) {}
+  __lot_base_layer = L.tileLayer(bm.url, bm.options || { maxZoom: 19 }).addTo(map);
+}
+
+function toggle_lot_background(frm, key) {
+  const target = normalize_bg_key(key || 'A');
+  __lot_bg_key = (__lot_bg_key === target) ? 'default' : target;
+  const map = ensure_map(frm);
+  if (map && window.L) {
+    set_map_basemap(map, __lot_bg_key);
+  }
+  set_geolocation_basemap(frm, 'location', __lot_bg_key);
+}
+
+function set_lot_background(frm, which) {
+  const norm = normalize_bg_key(which);
+  __lot_bg_key = norm;
+  const map = ensure_map(frm);
+  if (map && window.L) {
+    set_map_basemap(map, norm);
+  }
+  set_geolocation_basemap(frm, 'location', norm);
+}
+
+function ensure_lot_client_cfg(cb) {
+  if (__lot_basemaps) return cb && cb();
+  // Reload server config, then fetch basemaps + Lot map settings
+  frappe.call({ method: 'rb.gis_integration.api.gis_reload_config' })
+    .always(() => {
+      frappe.call({
+        method: 'rb.gis_integration.api.gis_get_client_config',
+        args: { doctype: 'Lot' },
+        callback: (r) => {
+          const msg = r.message || {};
+          __lot_basemaps = msg.basemaps || null;
+          __lot_map_cfg = msg.map || {};
+          __lot_bg_key = normalize_bg_key((__lot_map_cfg && __lot_map_cfg.default_basemap) || 'default');
+          cb && cb();
+        },
+        error: () => { __lot_basemaps = null; __lot_bg_key = 'default'; cb && cb(); }
+      });
+    });
+}
+
+function normalize_bg_key(which) {
+  if (!which) return 'default';
+  const w = String(which).trim();
+  if (w === 'alt') return 'A';
+  if (w.toLowerCase() === 'b') return 'B';
+  return w;
+}
+
+function get_lot_basemap(which) {
+  const key = normalize_bg_key(which);
+  // Prefer server-provided basemaps if available
+  if (__lot_basemaps && __lot_basemaps[key]) return __lot_basemaps[key];
+  if (__lot_basemaps && __lot_basemaps.default) return __lot_basemaps.default;
+  // Fallbacks (local definitions with aliases)
+  return LOT_BASEMAPS[key] || LOT_BASEMAPS.default;
+}
+
+function apply_default_view(map) {
+  try {
+    const cfg = __lot_map_cfg || {};
+    const z = parseInt(cfg.default_zoom);
+    if (!isNaN(z)) {
+      let latlng = null;
+      if (Array.isArray(cfg.default_center) && cfg.default_center.length === 2) {
+        const lon = Number(cfg.default_center[0]);
+        const lat = Number(cfg.default_center[1]);
+        if (isFinite(lat) && isFinite(lon)) latlng = [lat, lon];
+      }
+      if (latlng) map.setView(latlng, z); else map.setZoom(z);
+    }
+  } catch (e) {}
+}
+
+function should_fit_geometry() {
+  // Honor central config if provided; default to false per request
+  try {
+    if (__lot_map_cfg && typeof __lot_map_cfg.fit_to_geometry === 'boolean') {
+      return __lot_map_cfg.fit_to_geometry;
+    }
+  } catch (e) {}
+  return false;
+}

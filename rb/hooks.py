@@ -51,4 +51,9 @@ doc_events = {
 doctype_js = {
 	"Lot": "public/js/lot_form.js",
 	"Cluster": "public/js/cluster_form.js",
+	"Fixture Compensation": "public/js/fixture_compensation_form.js",
+}
+
+doctype_list_js = {
+	"Fixture Compensation": "public/js/fixture_compensation_list.js",
 }

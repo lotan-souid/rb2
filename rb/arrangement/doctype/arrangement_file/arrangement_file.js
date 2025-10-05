@@ -18,7 +18,7 @@ frappe.ui.form.on('Arrangement File', {
         // הוספת כפתור למחיקת Fixture Compensation (השורה הראשונה כדוגמה)
         if (frm.doc.link_fixtures && frm.doc.link_fixtures.length > 0) {
             frm.add_custom_button(__('Delete Fixture Compensation'), function() {
-                let row = frm.doc.link_fixtures[0]; 
+                let row = frm.doc.link_fixtures[0];
                 if (!row.link_fixture) {
                     frappe.msgprint(__('No linked Fixture Compensation found.'));
                     return;

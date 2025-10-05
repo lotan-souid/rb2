@@ -1,5 +1,5 @@
 import json
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 import frappe
 from frappe import _
@@ -102,6 +102,78 @@ def fetch_cluster_geometry(cluster_name: str) -> Optional[str]:
     feature_id = doc.get(id_field)
     if not feature_id:
         frappe.msgprint(_(f"No {id_field} found on this Cluster"))
+        return None
+
+    conn = PGFeatureServConnector()
+    feature = None
+    if fetch_mode == "by_property" or property_name:
+        property_name = property_name or id_field
+        fc = conn.get_features_by_property(collection, property_name, feature_id, limit=1)
+        if fc and fc.get("features"):
+            feature = fc["features"][0]
+    else:
+        feature = conn.get_feature_by_id(collection, feature_id)
+
+    if not feature and fallback_props:
+        for fp in fallback_props:
+            val = doc.get(fp)
+            if not val:
+                continue
+            fc = conn.get_features_by_property(collection, fp, val, limit=1)
+            if fc and fc.get("features"):
+                feature = fc["features"][0]
+                break
+
+    if not feature:
+        msg = _(
+            "No geometry found in GIS for {0} using {1}{2}"
+        ).format(
+            feature_id,
+            f"id_field={id_field}",
+            f", fallbacks={','.join(fallback_props)}" if fallback_props else "",
+        )
+        frappe.msgprint(msg, indicator="orange")
+        return None
+
+    geojson_full = convert_to_fc(feature)
+    if not conn.validate_geojson(geojson_full):
+        frappe.throw(_("Invalid GeoJSON data received from GIS"))
+
+    geojson_simple = geometry_only_fc(geojson_full)
+    data = json.dumps(geojson_simple, ensure_ascii=False)
+    if len(data.encode("utf-8")) > MAX_GEOJSON_BYTES:
+        frappe.msgprint(
+            _("Geometry too large; consider simplifying or reducing precision"),
+            indicator="orange",
+        )
+
+    try:
+        doc.db_set(target_field, data)
+    except Exception:
+        pass
+
+    return data
+
+
+@frappe.whitelist()
+def fetch_fixture_compensation_geometry(fixture_name: str) -> Optional[str]:
+    """Fetch geometry for Fixture Compensation based on GIS config and persist it."""
+    doc = frappe.get_doc("Fixture Compensation", fixture_name)
+    cfg = get_doctype_config("Fixture Compensation") or {}
+    collection = cfg.get("collection", "rb_layers.fixture_compensation")
+    id_field = cfg.get("id_field", "name")
+    target_field = cfg.get("geometry_target_field", "location")
+    fetch_mode = cfg.get("fetch_mode")
+    property_name = cfg.get("property_name")
+    fallback_props = cfg.get("fallback_properties") or []
+
+    feature_id = doc.get(id_field) if id_field != "name" else doc.name
+    if not feature_id:
+        # As a last resort, use the document name which carries the FXC-* autoname
+        feature_id = doc.name
+
+    if not feature_id:
+        frappe.msgprint(_(f"No {id_field} found on this Fixture Compensation"))
         return None
 
     conn = PGFeatureServConnector()
@@ -279,6 +351,56 @@ def sync_all_cluster_geometries(collection: Optional[str] = None) -> Dict[str, A
     return {"success": ok, "errors": errs, "error_details": details[:10]}
 
 
+@frappe.whitelist()
+def sync_all_fixture_compensation_geometries() -> Dict[str, Any]:
+    """Bulk sync for Fixture Compensation records based on configured GIS mapping."""
+    fixtures = frappe.get_all("Fixture Compensation", pluck="name")
+    ok, errs, details = 0, 0, []
+
+    for fx_name in fixtures:
+        try:
+            data = fetch_fixture_compensation_geometry(fx_name)
+            if data:
+                ok += 1
+            else:
+                errs += 1
+                details.append(f"No geometry for Fixture Compensation {fx_name}")
+        except Exception as e:
+            errs += 1
+            details.append(f"Error updating {fx_name}: {e}")
+
+    return {"success": ok, "errors": errs, "error_details": details[:10]}
+
+
+@frappe.whitelist()
+def get_fixture_compensation_coords(
+    doctype: str,
+    filters: Optional[List[Dict[str, Any]]] = None,
+    type: Optional[str] = None,
+) -> Dict[str, Any]:
+    """Return GeoJSON features for Fixture Compensation Map View."""
+    from frappe.geo import utils as geo_utils
+
+    filters_sql = geo_utils.get_coords_conditions(doctype, filters)[4:]
+
+    if filters_sql:
+        rows = frappe.db.sql(
+            f"""SELECT name, location FROM `tab{doctype}` WHERE {filters_sql}""",
+            as_dict=True,
+        )
+    else:
+        rows = frappe.get_all(doctype, fields=["name", "location"])
+
+    coords = []
+    for row in rows:
+        location = row.get("location")
+        if not location:
+            continue
+        coords.append({"name": row["name"], "location": location})
+
+    return geo_utils.convert_to_geojson("location_field", coords)
+
+
 def convert_to_fc(data: Dict[str, Any]) -> Dict[str, Any]:
     t = data.get("type")
     if t == "FeatureCollection":
@@ -341,3 +463,12 @@ def gis_reload_config() -> Dict[str, Any]:
     clear_gis_config_cache()
     cfg = load_gis_config()
     return {"reloaded": True, "config": cfg}
+
+@frappe.whitelist()
+def gis_get_client_config(doctype: str) -> Dict[str, Any]:
+    cfg = load_gis_config() or {}
+    dt_cfg = get_doctype_config(doctype) or {}
+    return {
+        "basemaps": cfg.get("basemaps") or {},
+        "map": (dt_cfg.get("map") if isinstance(dt_cfg, dict) else None) or {},
+    }
