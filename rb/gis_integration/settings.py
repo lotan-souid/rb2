@@ -37,11 +37,7 @@ def load_gis_config() -> Dict[str, Any]:
         candidates.append(frappe.get_app_path("rb", "rb", "gis_integration", "config.json"))
     except Exception:
         pass
-    try:
-        mod_path = frappe.get_module_path("rb.gis_integration")
-        candidates.append(os.path.join(mod_path, "config.json"))
-    except Exception:
-        pass
+    # Fallbacks for legacy/alternate paths
     try:
         candidates.append(os.path.join(frappe.get_app_path("rb"), "rb", "gis_integration", "config.json"))
     except Exception:
