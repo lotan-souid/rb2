@@ -24,7 +24,7 @@
   "column_break_mxuj",
   "lot_development_status",
   "section_break_waqn",
-  "assigned_lot_location",
+  "location",
   "section_break_otau",
   "total_fixture_compensation",
   "total_fixture_comp_approved",
@@ -113,13 +113,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fetch_from": "assigned_lot.location",
-   "fieldname": "assigned_lot_location",
-   "fieldtype": "Geolocation",
-   "label": "Assigned Lot Location",
-   "read_only": 1
-  },
-  {
    "fieldname": "section_break_otau",
    "fieldtype": "Section Break"
   },
@@ -183,12 +176,19 @@
    "fieldtype": "Table",
    "label": "Link Fixtures",
    "options": "Link Fixtures"
+  },
+  {
+   "fetch_from": "assigned_lot.location",
+   "fieldname": "location",
+   "fieldtype": "Geolocation",
+   "label": "Location",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-08 08:34:26.284399",
+ "modified": "2025-10-08 15:51:26.445305",
  "modified_by": "Administrator",
  "module": "Arrangement",
  "name": "Arrangement File",

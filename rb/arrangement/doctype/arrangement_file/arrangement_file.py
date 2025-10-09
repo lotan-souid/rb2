@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 from frappe.model.document import Document
 from frappe.utils import flt
 
@@ -14,7 +15,31 @@ class ArrangementFile(Document):
 		- מסכמים את כל ה-shared_amount לשדה total_fixture_compensation
 		- מסכמים לפי סטטוס אישור של ה-Fixture: Approved ו-Pending (Mapping/Finance)
 		"""
+		self.validate_assigned_lot_uniqueness()
 		self.update_totals_with_shares_and_approval()
+
+	def validate_assigned_lot_uniqueness(self):
+		assigned_lot = getattr(self, "assigned_lot", None)
+		if not assigned_lot:
+			return
+
+		conflicts = get_assigned_lot_conflicts(assigned_lot, self.name)
+		conflict = conflicts.get("conflict")
+		if conflict:
+			frappe.throw(
+				_("Lot {0} is already assigned to Arrangement File {1}.").format(assigned_lot, conflict),
+				frappe.ValidationError,
+			)
+
+		cancelled = conflicts.get("cancelled") or []
+		if cancelled:
+			frappe.msgprint(
+				_("Lot {0} was previously assigned to cancelled Arrangement File(s): {1}.").format(
+					assigned_lot, ", ".join(cancelled)
+				),
+				indicator="orange",
+				alert=True,
+			)
 
 	def update_totals_with_shares_and_approval(self):
 		total_all = 0.0
@@ -80,3 +105,34 @@ def recompute_total_fixture_compensation(name: str) -> float:
 		},
 	)
 	return total_all
+
+
+def get_assigned_lot_conflicts(assigned_lot, current_name=None):
+	if not assigned_lot:
+		return {"conflict": None, "cancelled": []}
+
+	conflict_filters = {
+		"assigned_lot": assigned_lot,
+		"docstatus": ["!=", 2],
+	}
+	if current_name:
+		conflict_filters["name"] = ["!=", current_name]
+
+	conflict = frappe.db.get_value("Arrangement File", conflict_filters, "name")
+
+	cancelled_filters = {
+		"assigned_lot": assigned_lot,
+		"docstatus": 2,
+	}
+	if current_name:
+		cancelled_filters["name"] = ["!=", current_name]
+
+	cancelled = frappe.get_all("Arrangement File", filters=cancelled_filters, pluck="name")
+	return {"conflict": conflict, "cancelled": cancelled}
+
+
+@frappe.whitelist()
+def check_assigned_lot_conflicts(assigned_lot=None, docname=None):
+	if not docname or (isinstance(docname, str) and docname.lower() == "null"):
+		docname = None
+	return get_assigned_lot_conflicts(assigned_lot, docname)

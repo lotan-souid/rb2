@@ -50,6 +50,40 @@ frappe.ui.form.on('Arrangement File', {
                 );
             }, __("Actions"));
         }
+    },
+    assigned_lot: function(frm) {
+        const lot = frm.doc.assigned_lot;
+        if (!lot) {
+            return;
+        }
+
+        frappe.call({
+            method: 'rb.arrangement.doctype.arrangement_file.arrangement_file.check_assigned_lot_conflicts',
+            args: {
+                assigned_lot: lot,
+                docname: frm.is_new() ? null : frm.doc.name
+            },
+            callback: function({ message }) {
+                const data = message || {};
+                if (data.conflict) {
+                    const conflictDoc = data.conflict;
+                    frm.set_value('assigned_lot', null);
+                    frappe.msgprint({
+                        message: __('Lot {0} is already assigned to Arrangement File {1}.', [lot, conflictDoc]),
+                        indicator: 'red'
+                    });
+                    return;
+                }
+
+                const cancelled = Array.isArray(data.cancelled) ? data.cancelled : [];
+                if (cancelled.length) {
+                    frappe.msgprint({
+                        message: __('Lot {0} was previously assigned to cancelled Arrangement File(s): {1}.', [lot, cancelled.join(', ')]),
+                        indicator: 'orange'
+                    });
+                }
+            }
+        });
     }
 });
 
