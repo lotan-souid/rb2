@@ -86,6 +86,73 @@ def fetch_lot_geometry(lot_name: str) -> Optional[str]:
 
 
 @frappe.whitelist()
+def fetch_plan_geometry(plan_name: str) -> Optional[str]:
+    doc = frappe.get_doc("Plan", plan_name)
+    cfg = get_doctype_config("Plan") or {}
+    collection = cfg.get("collection", "rb_layers.plans")
+    id_field = cfg.get("id_field", "plan_number")
+    target_field = cfg.get("geometry_target_field", "location")
+    fetch_mode = cfg.get("fetch_mode")
+    property_name = cfg.get("property_name")
+    fallback_props = cfg.get("fallback_properties") or []
+
+    feature_id = doc.get(id_field)
+    if not feature_id:
+        frappe.msgprint(_(f"No {id_field} found on this Plan"))
+        return None
+
+    conn = PGFeatureServConnector()
+    feature = None
+    if fetch_mode == "by_property" or property_name:
+        property_name = property_name or id_field
+        fc = conn.get_features_by_property(collection, property_name, feature_id, limit=1)
+        if fc and fc.get("features"):
+            feature = fc["features"][0]
+    else:
+        feature = conn.get_feature_by_id(collection, feature_id)
+
+    if not feature and fallback_props:
+        for fp in fallback_props:
+            val = doc.get(fp)
+            if not val:
+                continue
+            fc = conn.get_features_by_property(collection, fp, val, limit=1)
+            if fc and fc.get("features"):
+                feature = fc["features"][0]
+                break
+
+    if not feature:
+        msg = _(
+            "No geometry found in GIS for {0} using {1}{2}"
+        ).format(
+            feature_id,
+            f"id_field={id_field}",
+            f", fallbacks={','.join(fallback_props)}" if fallback_props else "",
+        )
+        frappe.msgprint(msg, indicator="orange")
+        return None
+
+    geojson_full = convert_to_fc(feature)
+    if not conn.validate_geojson(geojson_full):
+        frappe.throw(_("Invalid GeoJSON data received from GIS"))
+
+    geojson_simple = geometry_only_fc(geojson_full)
+    data = json.dumps(geojson_simple, ensure_ascii=False)
+    if len(data.encode("utf-8")) > MAX_GEOJSON_BYTES:
+        frappe.msgprint(
+            _("Geometry too large; consider simplifying or reducing precision"),
+            indicator="orange",
+        )
+
+    try:
+        doc.db_set(target_field, data)
+    except Exception:
+        pass
+
+    return data
+
+
+@frappe.whitelist()
 def fetch_cluster_geometry(cluster_name: str) -> Optional[str]:
     """Fetch geometry from GIS for a Cluster document based on config and persist it.
     cluster_name is the DocType name (doc.name), not the cluster_name field value.
@@ -299,6 +366,66 @@ def sync_all_lot_geometries(collection: Optional[str] = None) -> Dict[str, Any]:
         except Exception as e:
             errs += 1
             details.append(f"Error updating {lot['name']}: {e}")
+
+    return {"success": ok, "errors": errs, "error_details": details[:10]}
+
+
+@frappe.whitelist()
+def sync_all_plan_geometries() -> Dict[str, Any]:
+    plans = frappe.get_all(
+        "Plan",
+        filters={"plan_number": ["!=", ""]},
+        fields=["name", "plan_number"],
+    )
+    cfg = get_doctype_config("Plan") or {}
+    collection = cfg.get("collection", "rb_layers.plans")
+    id_field = cfg.get("id_field", "plan_number")
+    target_field = cfg.get("geometry_target_field", "location")
+    fetch_mode = cfg.get("fetch_mode")
+    property_name = cfg.get("property_name")
+    fallback_props = cfg.get("fallback_properties") or []
+
+    conn = PGFeatureServConnector()
+    ok, errs, details = 0, 0, []
+
+    for plan in plans:
+        try:
+            feature = None
+            feature_id = plan.get(id_field) or plan.get("plan_number")
+            if fetch_mode == "by_property" or property_name:
+                pn = property_name or id_field
+                if feature_id:
+                    fc = conn.get_features_by_property(collection, pn, feature_id, limit=1)
+                    if fc and fc.get("features"):
+                        feature = fc["features"][0]
+            else:
+                feature = conn.get_feature_by_id(collection, feature_id)
+
+            if not feature and fallback_props:
+                values = frappe.db.get_value("Plan", plan.name, fallback_props, as_dict=True) if fallback_props else {}
+                for fp in fallback_props:
+                    val = (values or {}).get(fp)
+                    if not val:
+                        continue
+                    fc = conn.get_features_by_property(collection, fp, val, limit=1)
+                    if fc and fc.get("features"):
+                        feature = fc["features"][0]
+                        break
+
+            if feature:
+                fc_full = convert_to_fc(feature)
+                fc_simple = geometry_only_fc(fc_full)
+                try:
+                    frappe.db.set_value("Plan", plan.name, target_field, json.dumps(fc_simple, ensure_ascii=False))
+                except Exception:
+                    pass
+                ok += 1
+            else:
+                errs += 1
+                details.append(f"No geometry for Plan {plan['name']}")
+        except Exception as e:
+            errs += 1
+            details.append(f"Error updating {plan['name']}: {e}")
 
     return {"success": ok, "errors": errs, "error_details": details[:10]}
 

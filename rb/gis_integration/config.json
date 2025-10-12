@@ -54,6 +54,27 @@
         "available_basemaps": ["default", "A", "B"]
       }
     },
+    "Plan": {
+      "_comments": [
+        "Mapping for Plan DocType to GIS layer",
+        "collection: pg_featureserv collection (schema.table) containing plans",
+        "id_field: DocType field used to match GIS features",
+        "geometry_target_field: DocType field to store simplified GeoJSON",
+        "property_name: GIS-side attribute to match Plan numbers"
+      ],
+      "collection": "rb_layers.plans",
+      "id_field": "plan_number",
+      "geometry_target_field": "location",
+      "fetch_mode": "by_property",
+      "property_name": "plan",
+      "map": {
+        "geolocation_field": "location",
+        "default_basemap": "default",
+        "default_zoom": 11,
+        "available_basemaps": ["default", "A", "B"],
+        "fit_to_geometry": true
+      }
+    },
     "Cluster": {
       "_comments": [
         "Mapping for Cluster DocType to GIS layer",

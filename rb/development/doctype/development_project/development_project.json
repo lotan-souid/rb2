@@ -20,8 +20,6 @@
   "estimate_cost",
   "column_break_aoaq",
   "actual_cost",
-  "section_break_pjsf",
-  "table_dtxh",
   "section_break_costing",
   "allocatable_total_cost",
   "dev_price_per_sqm",
@@ -30,7 +28,11 @@
   "price_locked",
   "price_lock_date",
   "price_lock_reason",
-  "price_history"
+  "price_history",
+  "section_break_pjsf",
+  "table_dtxh",
+  "section_break_kijm",
+  "location"
  ],
  "fields": [
   {
@@ -163,12 +165,22 @@
    "fieldtype": "Table",
    "label": "Price History",
    "options": "Development Price History"
+  },
+  {
+   "fieldname": "section_break_kijm",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "plan.location",
+   "fieldname": "location",
+   "fieldtype": "Geolocation",
+   "label": "Location"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-09-05 22:12:42.691672",
+ "modified": "2025-10-12 13:34:01.103276",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Development Project",

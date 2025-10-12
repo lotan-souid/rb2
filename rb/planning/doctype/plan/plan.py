@@ -5,7 +5,38 @@ import frappe
 from frappe.model.document import Document
 
 class Plan(Document):
-	pass
+    def validate(self):
+        try:
+            if getattr(self, "plan_number", None) and not getattr(self, "location", None) and not self.is_new():
+                from rb.gis_integration.api import fetch_plan_geometry
+                fetch_plan_geometry(self.name)
+        except Exception as e:
+            frappe.msgprint(f"Could not fetch plan geometry automatically: {e}", indicator="orange")
+
+    def after_insert(self):
+        self._enqueue_geometry_fetch()
+
+    def on_update(self):
+        if getattr(self.flags, "in_insert", False):
+            return
+        try:
+            if self.has_value_changed("plan_number") or (self.plan_number and not self.location):
+                self._enqueue_geometry_fetch()
+        except Exception as e:
+            frappe.log_error(f"GIS enqueue error for Plan {self.name}: {e}", "GIS Plan on_update")
+
+    def _enqueue_geometry_fetch(self):
+        try:
+            if not getattr(self, "plan_number", None):
+                return
+            frappe.enqueue(
+                "rb.gis_integration.api.fetch_plan_geometry",
+                plan_name=self.name,
+                queue="short",
+                timeout=30,
+            )
+        except Exception as e:
+            frappe.log_error(f"GIS enqueue scheduling failed for Plan {self.name}: {e}", "GIS Plan enqueue")
 
 @frappe.whitelist()
 def update_total_area(plan_name):

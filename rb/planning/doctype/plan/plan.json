@@ -14,7 +14,7 @@
   "approval_date",
   "notes",
   "column_break_cziq",
-  "geolocation_wguh",
+  "location",
   "lots_summary_section",
   "total_lots",
   "total_area_sqm",
@@ -58,11 +58,6 @@
    "label": "Notes"
   },
   {
-   "fieldname": "geolocation_wguh",
-   "fieldtype": "Geolocation",
-   "label": "location"
-  },
-  {
    "fieldname": "plan_number",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -95,12 +90,18 @@
   {
    "fieldname": "column_break_pcdp",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Geolocation",
+   "label": "Location",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-08-30 21:20:55.893140",
+ "modified": "2025-10-12 12:34:40.163870",
  "modified_by": "Administrator",
  "module": "Planning",
  "name": "Plan",
