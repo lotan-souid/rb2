@@ -174,13 +174,14 @@
    "fetch_from": "plan.location",
    "fieldname": "location",
    "fieldtype": "Geolocation",
-   "label": "Location"
+   "label": "Location",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-10-12 13:34:01.103276",
+ "modified": "2025-10-12 13:51:56.489800",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Development Project",
