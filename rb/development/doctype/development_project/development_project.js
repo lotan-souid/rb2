@@ -2,6 +2,26 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Development Project", {
+    setup(frm) {
+        frm.set_query("contractor_contact", () => {
+            if (!frm.doc.contractor) {
+                return {};
+            }
+
+            return {
+                filters: {
+                    contractor_company: frm.doc.contractor
+                }
+            };
+        });
+    },
+    contractor(frm) {
+        if (!frm.doc.contractor_contact) {
+            return;
+        }
+
+        frm.set_value("contractor_contact", null);
+    },
     refresh(frm) {
         if (!frm.is_new()) {
             frm.add_custom_button(__('Recalculate Allocation'), () => {
