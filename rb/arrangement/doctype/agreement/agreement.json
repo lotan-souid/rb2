@@ -1,0 +1,195 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "format:AGR-{#####}",
+ "creation": "2025-10-24 10:15:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "arrangement_file",
+  "agreement_title",
+  "agreement_stage",
+  "current_version",
+  "section_break_document",
+  "primary_document",
+  "effective_date",
+  "legal_owner",
+  "status_notes",
+  "column_break_plrv",
+  "signature_date",
+  "section_break_versions",
+  "versions",
+  "section_break_milestones",
+  "milestones"
+ ],
+ "fields": [
+  {
+   "fieldname": "arrangement_file",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Arrangement File",
+   "options": "Arrangement File",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "agreement_title",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Agreement Title",
+   "reqd": 1
+  },
+  {
+   "default": "\u05e0\u05d9\u05e1\u05d5\u05d7",
+   "fieldname": "agreement_stage",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Agreement Stage",
+   "options": "\u05e0\u05d9\u05e1\u05d5\u05d7\n\u05d1\u05d3\u05d9\u05e7\u05d4 \u05de\u05e9\u05e4\u05d8\u05d9\u05ea\n\u05d1\u05d4\u05db\u05e0\u05d4 \u05dc\u05d7\u05ea\u05d9\u05de\u05d4\n\u05d7\u05ea\u05d5\u05dd\n\u05d1\u05de\u05d9\u05de\u05d5\u05e9\n\u05d4\u05d5\u05e9\u05dc\u05dd",
+   "reqd": 1
+  },
+  {
+   "fetch_if_empty": 1,
+   "fieldname": "current_version",
+   "fieldtype": "Data",
+   "label": "Current Version",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_document",
+   "fieldtype": "Section Break",
+   "label": "Document Details"
+  },
+  {
+   "fieldname": "primary_document",
+   "fieldtype": "Attach",
+   "label": "Current Agreement Document",
+   "read_only": 1
+  },
+  {
+   "fieldname": "signature_date",
+   "fieldtype": "Date",
+   "label": "Signature Date"
+  },
+  {
+   "fieldname": "effective_date",
+   "fieldtype": "Date",
+   "label": "Effective Date"
+  },
+  {
+   "fieldname": "legal_owner",
+   "fieldtype": "Link",
+   "label": "Legal Owner",
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "status_notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "section_break_versions",
+   "fieldtype": "Section Break",
+   "label": "Version History"
+  },
+  {
+   "columns": 2,
+   "fieldname": "versions",
+   "fieldtype": "Table",
+   "label": "Versions",
+   "options": "Agreement Version"
+  },
+  {
+   "fieldname": "section_break_milestones",
+   "fieldtype": "Section Break",
+   "label": "Implementation Milestones"
+  },
+  {
+   "columns": 2,
+   "fieldname": "milestones",
+   "fieldtype": "Table",
+   "label": "Milestones",
+   "options": "Agreement Milestone"
+  },
+  {
+   "fieldname": "column_break_plrv",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-10-24 11:18:57.527167",
+ "modified_by": "Administrator",
+ "module": "Arrangement",
+ "name": "Agreement",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "match": "department",
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Arrangement Editor",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "match": "department",
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Negotiation Coordinator",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "match": "department",
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Area Manager"
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "match": "department",
+   "read": 1,
+   "report": 1,
+   "role": "Management Viewer"
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "agreement_title, arrangement_file",
+ "show_title_field_in_link": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "agreement_title",
+ "track_changes": 1
+}

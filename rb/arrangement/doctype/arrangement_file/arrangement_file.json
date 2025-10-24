@@ -11,6 +11,7 @@
   "arrangement_file_type",
   "arrangement_stage",
   "arrangement_status",
+  "agreement",
   "reason_for_opening",
   "reason_for_opening_note",
   "column_break_ifwh",
@@ -59,6 +60,13 @@
    "label": "Arrangement Status",
    "options": "\u05d1\u05d8\u05d9\u05e4\u05d5\u05dc\n\u05e4\u05ea\u05d5\u05d7\n\u05e0\u05d7\u05ea\u05dd",
    "reqd": 1
+  },
+  {
+   "fieldname": "agreement",
+   "fieldtype": "Link",
+   "label": "Agreement",
+   "options": "Agreement",
+   "read_only": 1
   },
   {
    "fieldname": "reason_for_opening",

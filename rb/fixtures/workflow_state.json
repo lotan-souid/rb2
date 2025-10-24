@@ -1,58 +1,65 @@
 [
-  {
-    "docstatus": 0,
-    "doctype": "Workflow State",
-    "name": "Draft",
-    "workflow_state_name": "Draft",
-    "icon": "edit",
-    "style": "Warning"
-  },
-  {
-    "docstatus": 0,
-    "doctype": "Workflow State",
-    "name": "Pending",
-    "workflow_state_name": "Pending",
-    "icon": "question-sign",
-    "style": "Info"
-  },
-  {
-    "docstatus": 0,
-    "doctype": "Workflow State",
-    "name": "Pending Mapping",
-    "workflow_state_name": "Pending Mapping",
-    "icon": "question-sign",
-    "style": "Info"
-  },
-  {
-    "docstatus": 0,
-    "doctype": "Workflow State",
-    "name": "Pending Finance",
-    "workflow_state_name": "Pending Finance",
-    "icon": "question-sign",
-    "style": "Primary"
-  },
-  {
-    "docstatus": 0,
-    "doctype": "Workflow State",
-    "name": "Approved",
-    "workflow_state_name": "Approved",
-    "icon": "ok-sign",
-    "style": "Success"
-  },
-  {
-    "docstatus": 0,
-    "doctype": "Workflow State",
-    "name": "Rejected",
-    "workflow_state_name": "Rejected",
-    "icon": "remove",
-    "style": "Danger"
-  },
-  {
-    "docstatus": 0,
-    "doctype": "Workflow State",
-    "name": "RevisionsRequired",
-    "workflow_state_name": "RevisionsRequired",
-    "icon": "edit",
-    "style": "Warning"
-  }
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "edit",
+  "modified": "2025-10-24 11:14:28.895553",
+  "name": "Draft",
+  "style": "Warning",
+  "workflow_state_name": "Draft"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "question-sign",
+  "modified": "2025-10-24 11:14:28.901901",
+  "name": "Pending",
+  "style": "Info",
+  "workflow_state_name": "Pending"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "question-sign",
+  "modified": "2025-10-24 11:14:28.907241",
+  "name": "Pending Mapping",
+  "style": "Info",
+  "workflow_state_name": "Pending Mapping"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "question-sign",
+  "modified": "2025-10-24 11:14:28.912578",
+  "name": "Pending Finance",
+  "style": "Primary",
+  "workflow_state_name": "Pending Finance"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "ok-sign",
+  "modified": "2025-10-24 11:14:28.918507",
+  "name": "Approved",
+  "style": "Success",
+  "workflow_state_name": "Approved"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "remove",
+  "modified": "2025-10-24 11:14:28.923965",
+  "name": "Rejected",
+  "style": "Danger",
+  "workflow_state_name": "Rejected"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow State",
+  "icon": "edit",
+  "modified": "2025-10-24 11:14:28.929345",
+  "name": "RevisionsRequired",
+  "style": "Warning",
+  "workflow_state_name": "RevisionsRequired"
+ }
 ]

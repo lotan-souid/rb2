@@ -1,72 +1,297 @@
 [
-  {
-    "docstatus": 0,
-    "doctype": "Workflow",
-    "name": "Development Committee Review Workflow",
-    "document_type": "Development Committee Review",
-    "is_active": 1,
-    "workflow_name": "Development Committee Review Workflow",
-    "workflow_state_field": "committee_status",
-    "states": [
-      {
-        "doctype": "Workflow Document State",
-        "state": "Pending",
-        "doc_status": 0,
-        "allow_edit": "System Manager"
-      },
-      {
-        "doctype": "Workflow Document State",
-        "state": "Approved",
-        "doc_status": 1,
-        "allow_edit": "System Manager"
-      },
-      {
-        "doctype": "Workflow Document State",
-        "state": "Rejected",
-        "doc_status": 1,
-        "allow_edit": "System Manager"
-      },
-      {
-        "doctype": "Workflow Document State",
-        "state": "RevisionsRequired",
-        "doc_status": 0,
-        "allow_edit": "System Manager"
-      }
-    ],
-    "transitions": [
-      {
-        "doctype": "Workflow Transition",
-        "state": "Pending",
-        "action": "Approve",
-        "next_state": "Approved",
-        "allow_self_approval": 1,
-        "allowed": "System Manager",
-        "condition": "doc.approved_allocatable_cost and doc.approved_allocatable_cost > 0"
-      },
-      {
-        "doctype": "Workflow Transition",
-        "state": "Pending",
-        "action": "Reject",
-        "next_state": "Rejected",
-        "allow_self_approval": 1,
-        "allowed": "System Manager"
-      },
-      {
-        "doctype": "Workflow Transition",
-        "state": "Pending",
-        "action": "Request Revisions",
-        "next_state": "RevisionsRequired",
-        "allow_self_approval": 1,
-        "allowed": "System Manager"
-      },
-      {
-        "doctype": "Workflow Transition",
-        "state": "RevisionsRequired",
-        "action": "Resubmit",
-        "next_state": "Pending",
-        "allow_self_approval": 1,
-        "allowed": "System Manager"
-      }
-    ]
-  }
+ {
+  "docstatus": 0,
+  "doctype": "Workflow",
+  "document_type": "Fixture Compensation",
+  "is_active": 1,
+  "modified": "2025-09-05 11:51:01.968619",
+  "name": "Fixture Compensation Approval",
+  "override_status": 0,
+  "send_email_alert": 0,
+  "states": [
+   {
+    "allow_edit": "System Manager",
+    "avoid_status_override": 0,
+    "doc_status": null,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "send_email": 0,
+    "state": "Draft",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "Mapping",
+    "avoid_status_override": 0,
+    "doc_status": null,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "send_email": 0,
+    "state": "Pending Mapping",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "Finance",
+    "avoid_status_override": 0,
+    "doc_status": null,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "send_email": 0,
+    "state": "Pending Finance",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "System Manager",
+    "avoid_status_override": 0,
+    "doc_status": null,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "send_email": 0,
+    "state": "Approved",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "System Manager",
+    "avoid_status_override": 0,
+    "doc_status": null,
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "send_email": 0,
+    "state": "Rejected",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   }
+  ],
+  "transitions": [
+   {
+    "action": "Submit to Mapping",
+    "allow_self_approval": 0,
+    "allowed": "System Manager",
+    "condition": null,
+    "next_state": "Pending Mapping",
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "send_email_to_creator": 0,
+    "state": "Draft",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Approve Mapping",
+    "allow_self_approval": 0,
+    "allowed": "Mapping",
+    "condition": null,
+    "next_state": "Pending Finance",
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "send_email_to_creator": 0,
+    "state": "Pending Mapping",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Reject",
+    "allow_self_approval": 0,
+    "allowed": "Mapping",
+    "condition": null,
+    "next_state": "Rejected",
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "send_email_to_creator": 0,
+    "state": "Pending Mapping",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Approve Finance",
+    "allow_self_approval": 0,
+    "allowed": "Finance",
+    "condition": null,
+    "next_state": "Approved",
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "send_email_to_creator": 0,
+    "state": "Pending Finance",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Reject",
+    "allow_self_approval": 0,
+    "allowed": "Finance",
+    "condition": null,
+    "next_state": "Rejected",
+    "parent": "Fixture Compensation Approval",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "send_email_to_creator": 0,
+    "state": "Pending Finance",
+    "workflow_builder_id": null
+   }
+  ],
+  "workflow_data": null,
+  "workflow_name": "Fixture Compensation Approval",
+  "workflow_state_field": "approval_status"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow",
+  "document_type": "Development Committee Review",
+  "is_active": 1,
+  "modified": "2025-10-24 11:14:28.980320",
+  "name": "Development Committee Review Workflow",
+  "override_status": 0,
+  "send_email_alert": 0,
+  "states": [
+   {
+    "allow_edit": "System Manager",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Development Committee Review Workflow",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "send_email": 0,
+    "state": "Pending",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "System Manager",
+    "avoid_status_override": 0,
+    "doc_status": "1",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Development Committee Review Workflow",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "send_email": 0,
+    "state": "Approved",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "System Manager",
+    "avoid_status_override": 0,
+    "doc_status": "1",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Development Committee Review Workflow",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "send_email": 0,
+    "state": "Rejected",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   },
+   {
+    "allow_edit": "System Manager",
+    "avoid_status_override": 0,
+    "doc_status": "0",
+    "is_optional_state": 0,
+    "message": null,
+    "next_action_email_template": null,
+    "parent": "Development Committee Review Workflow",
+    "parentfield": "states",
+    "parenttype": "Workflow",
+    "send_email": 0,
+    "state": "RevisionsRequired",
+    "update_field": null,
+    "update_value": null,
+    "workflow_builder_id": null
+   }
+  ],
+  "transitions": [
+   {
+    "action": "Approve",
+    "allow_self_approval": 1,
+    "allowed": "System Manager",
+    "condition": "doc.approved_allocatable_cost and doc.approved_allocatable_cost > 0",
+    "next_state": "Approved",
+    "parent": "Development Committee Review Workflow",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "send_email_to_creator": 0,
+    "state": "Pending",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Reject",
+    "allow_self_approval": 1,
+    "allowed": "System Manager",
+    "condition": null,
+    "next_state": "Rejected",
+    "parent": "Development Committee Review Workflow",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "send_email_to_creator": 0,
+    "state": "Pending",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Request Revisions",
+    "allow_self_approval": 1,
+    "allowed": "System Manager",
+    "condition": null,
+    "next_state": "RevisionsRequired",
+    "parent": "Development Committee Review Workflow",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "send_email_to_creator": 0,
+    "state": "Pending",
+    "workflow_builder_id": null
+   },
+   {
+    "action": "Resubmit",
+    "allow_self_approval": 1,
+    "allowed": "System Manager",
+    "condition": null,
+    "next_state": "Pending",
+    "parent": "Development Committee Review Workflow",
+    "parentfield": "transitions",
+    "parenttype": "Workflow",
+    "send_email_to_creator": 0,
+    "state": "RevisionsRequired",
+    "workflow_builder_id": null
+   }
+  ],
+  "workflow_data": null,
+  "workflow_name": "Development Committee Review Workflow",
+  "workflow_state_field": "committee_status"
+ }
 ]
