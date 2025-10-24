@@ -1,0 +1,49 @@
+{
+ "actions": [],
+ "creation": "2024-01-01 00:00:00.000000",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "structure_identifier",
+  "structure_name",
+  "arrangement_file",
+  "notes"
+ ],
+ "fields": [
+  {
+   "fieldname": "structure_identifier",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Structure Identifier"
+  },
+  {
+   "fieldname": "structure_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Structure Name"
+  },
+  {
+   "fieldname": "arrangement_file",
+   "fieldtype": "Link",
+   "label": "Arrangement File",
+   "options": "Arrangement File"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Small Text",
+   "label": "Notes"
+  }
+ ],
+ "grid_page_length": 20,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-01-01 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Arrangement",
+ "name": "Enforcement Order Structure",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}

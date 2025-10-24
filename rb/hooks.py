@@ -53,6 +53,7 @@ doctype_js = {
 	"Cluster": "public/js/cluster_form.js",
 	"Plan": "public/js/plan_form.js",
 	"Fixture Compensation": "public/js/fixture_compensation_form.js",
+	"Enforcement Order": "public/js/enforcement_order_form.js",
 }
 
 doctype_list_js = {
