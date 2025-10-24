@@ -118,6 +118,27 @@
         "available_basemaps": ["default", "A", "B"],
         "fit_to_geometry": true
       }
+    },
+    "Enforcement Order": {
+      "_comments": [
+        "Mapping for Enforcement Order DocType to GIS layer",
+        "collection: pg_featureserv collection containing enforcement order polygons",
+        "id_field: DocType field storing the order identifier to match GIS features",
+        "geometry_target_field: DocType field to store simplified GeoJSON",
+        "property_name: GIS attribute used to match order_id values"
+      ],
+      "collection": "rb_layers.enforcement_order",
+      "id_field": "order_id",
+      "geometry_target_field": "location",
+      "fetch_mode": "by_property",
+      "property_name": "order_id",
+      "map": {
+        "geolocation_field": "location",
+        "default_basemap": "default",
+        "default_zoom": 15,
+        "available_basemaps": ["default", "A", "B"],
+        "fit_to_geometry": true
+      }
     }
   }
 }
