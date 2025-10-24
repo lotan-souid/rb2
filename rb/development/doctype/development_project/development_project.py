@@ -2,8 +2,9 @@
 # For license information, please see license.txt
 
 # import frappe
-from frappe.model.document import Document
 import frappe
+from frappe import _
+from frappe.model.document import Document
 from frappe.utils import nowdate
 
 
@@ -42,6 +43,24 @@ class DevelopmentProject(Document):
         # ManualAdjustment leaves value as-is
         if allocatable is not None and not getattr(self, "price_locked", 0):
             self._compute_price_per_sqm(allocatable)
+
+        # Ensure selected contractor contact matches contractor
+        if getattr(self, "contractor_contact", None):
+            if not getattr(self, "contractor", None):
+                frappe.throw(
+                    _("Select a contractor before choosing a contractor contact."),
+                    frappe.ValidationError,
+                )
+            contact_company = frappe.db.get_value(
+                "Contractor Contact",
+                self.contractor_contact,
+                "contractor_company",
+            )
+            if contact_company and contact_company != self.contractor:
+                frappe.throw(
+                    _("Contractor Contact must belong to the selected contractor."),
+                    frappe.ValidationError,
+                )
 
         # Ensure default stages exist (StageA, StageB, Final)
         # moved to after_insert to avoid link validation before project exists

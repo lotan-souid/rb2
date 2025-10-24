@@ -8,6 +8,8 @@
  "field_order": [
   "plan",
   "development_project_name",
+  "contractor",
+  "contractor_contact",
   "status",
   "column_break_cfks",
   "start_date",
@@ -45,6 +47,19 @@
    "fieldname": "development_project_name",
    "fieldtype": "Data",
    "label": "Development Project Name"
+  },
+  {
+   "fieldname": "contractor",
+   "fieldtype": "Link",
+   "label": "Contractor",
+   "options": "Contractor"
+  },
+  {
+   "depends_on": "eval:doc.contractor",
+   "fieldname": "contractor_contact",
+   "fieldtype": "Link",
+   "label": "Contractor Contact",
+   "options": "Contractor Contact"
   },
   {
    "fieldname": "column_break_cfks",
