@@ -1,23 +1,23 @@
 [
-  {
-    "docstatus": 0,
-    "doctype": "Workflow Action Master",
-    "name": "Submit to Mapping",
-    "workflow_action_name": "Submit to Mapping",
-    "is_custom": 1
-  },
-  {
-    "docstatus": 0,
-    "doctype": "Workflow Action Master",
-    "name": "Approve Mapping",
-    "workflow_action_name": "Approve Mapping",
-    "is_custom": 1
-  },
-  {
-    "docstatus": 0,
-    "doctype": "Workflow Action Master",
-    "name": "Approve Finance",
-    "workflow_action_name": "Approve Finance",
-    "is_custom": 1
-  }
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2025-10-24 11:14:29.017870",
+  "name": "Submit to Mapping",
+  "workflow_action_name": "Submit to Mapping"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2025-10-24 11:14:29.024686",
+  "name": "Approve Mapping",
+  "workflow_action_name": "Approve Mapping"
+ },
+ {
+  "docstatus": 0,
+  "doctype": "Workflow Action Master",
+  "modified": "2025-10-24 11:14:29.030850",
+  "name": "Approve Finance",
+  "workflow_action_name": "Approve Finance"
+ }
 ]
