@@ -1,294 +1,47 @@
-English,Hebrew
-About,אודות
-Actual,בפועל
-Actual Cost,עלות בפועל
-Actual Expense,הוצאה בפועל
-Affected Structures,מבנים מושפעים
-Age,גיל
-Agreement,הסכם
-Agreement Milestone,אבן דרך בהסכם
-Agreement Stage,שלב הסכם
-Agreement Title,כותרת הסכם
-Agreement Type,סוג הסכם
-Agreement Version,גרסת הסכם
-Agreement {0} already exists for Arrangement File {1}.,הסכם {0} כבר קיים עבור תיק הסדרה {1}.
-Allocatable Total Cost,עלות כוללת ניתנת להקצאה
-Allocated Cost,עלות מוקצית
-Allocated Dev Cost,עלות פיתוח מוקצית
-Allocation updated. Price/m²: {0},הקצאה עודכנה. מחיר למ"ר: {0}
-Approval Date,תאריך אישור
-Approve,אישור
-Approve Finance,אישור פיננסי
-Approve Mapping,אישור מיפוי
-Approved Allocatable Cost,עלות מוקצית מאושרת
-Approved Fixture Total,סה"כ מתקן מאושר
-Approved by Finance,מאושר על ידי כספים
-Approved by Mapping,מאושר על ידי מיפוי
-Apps,אפליקציות
-Are you sure you want to delete Fixture Compensation {0}?,האם אתה בטוח שברצונך למחוק פיצוי מתקן {0}?
-Area (sqm),שטח (מ"ר)
-Area Manager,מנהל אזור
-Arrangement,הסדרה
-Arrangement Data,נתוני הסדרה
-Arrangement Editor,עורך הסדרה
-Arrangement File,תיק הסדרה
-Arrangement File Number,מספר תיק הסדרה
-Arrangement File Type,סוג תיק הסדרה
-Arrangement File {0} status updated to Signed (נחתם) based on Agreement {1}.,סטטוס תיק הסדרה {0} עודכן לחתום (נחתם) על בסיס הסכם {1}.
-Arrangement Files Overview,סקירת תיקי הסדרה
-Arrangement Pipeline,פייפליין הסדרה
-Arrangement Stage,שלב הסדרה
-Arrangement Status,סטטוס הסדרה
-Assigned Lot,חלקה מוקצית
-Assigned Arrangement File,תיק הסדרה מוקצה
-Attached Order,צו מצורף
-Cahnge To Background A,החלפה לרקע א'
-Cahnge To Background B,החלפה לרקע ב'
-Calculation Date,תאריך חישוב
-Calculation Source,מקור חישוב
-Call failed,קריאה נכשלה
-Canceled,מבוטל
-Change Date,תאריך שינוי
-Change To Background A,החלפה לרקע א'
-Change To Background B,החלפה לרקע ב'
-Chargeable,ניתן לחיוב
-Chargeable Area (sqm),שטח חיובי (מ"ר)
-Cluster,מקבץ
-Cluster Name,שם מקבץ
-Cluster Name changed. Fetch the new geometry?,שם המקבץ השתנה. לטעון את הגיאומטריה החדשה?
-Cluster Priority,עדיפות מקבץ
-Cluster Status,סטטוס מקבץ
-Committee Approval,אישור ועדה
-Committee Name,שם ועדה
-Committee Status,סטטוס ועדה
-Company ID,ח.פ./ע.מ.
-Compensation Amount,סכום פיצוי
-Completion Date,תאריך השלמה
-Contact Name,שם איש קשר
-Contractor,קבלן
-Contractor Company,חברת קבלן
-Contractor Contact,איש קשר קבלן
-Contractor Contact must belong to the selected contractor.,איש קשר הקבלן חייב להשתייך לקבלן הנבחר.
-Contractor Type,סוג קבלן
-Coordinator,רכז
-Cost Allocation,הקצאת עלויות
-Costs,עלויות
-Current Agreement Document,מסמך הסכם נוכחי
-Current Version,גרסה נוכחית
-Date Of Birth,תאריך לידה
-Date of Birth,תאריך לידה
-Decisions,החלטות
-Delete Fixture Compensation,מחיקת פיצוי מתקן
-Department Name,שם מחלקה
-Designation Name,שם ייעוד
-Dev Price per sqm,מחיר פיתוח למ"ר
-Development,פיתוח
-Development Committee Review,בדיקת ועדת פיתוח
-Development Cost Allocation,הקצאת עלויות פיתוח
-Development Editor,עורך פיתוח
-Development Items,פריטי פיתוח
-Development Price History,היסטוריית מחירי פיתוח
-Development Project,פרויקט פיתוח
-Development Project Name,שם פרויקט פיתוח
-Development Stage,שלב פיתוח
-Development Status,סטטוס פיתוח
-Document Details,פרטי מסמך
-Document File,קובץ מסמך
-Earthworks,עבודות עפר
-Effective Date,תאריך תחילה
-Electricity,חשמל
-Eligible for Compensation,זכאי לפיצוי
-Employee,עובד
-Employee ID,מס' עובד
-Employee Name,שם עובד
-Enforcement Authority,רשות אכיפה
-Enforcement Order,צו אכיפה
-Enforcement Order Structure,מבנה צו אכיפה
-Enter Order ID before fetching geometry.,הזן מזהה צו לפני טעינת גיאומטריה.
-Errors:,שגיאות:
-Established Date,תאריך הקמה
-Estimate Cost,עלות משוערת
-Evacuee,מפונה
-Evacuee A,מפונה א'
-Evacuee B,מפונה ב'
-Evacuee Type,סוג מפונה
-Execution Date,תאריך ביצוע
-Existed Before 2000,היה קיים לפני 2000
-Failed to fetch geometry from GIS,נכשל בטעינת גיאומטריה ממערכת מידע גיאוגרפית
-Failed to fetch geometry from GIS.,נכשל בטעינת גיאומטריה ממערכת מידע גיאוגרפית.
-Family Status,מצב משפחתי
-Fetch Geometry from GIS,טעינת גיאומטריה ממערכת מידע גיאוגרפית
-Fetched geometry could not be rendered.,לא ניתן היה להציג את הגיאומטריה שנטענה.
-Fetching geometry from GIS...,טוען גיאומטריה ממערכת מידע גיאוגרפית...
-Final,סופי
-Finance Viewer,צופה כספים
-Financial Data,נתונים פיננסיים
-Fixture Compensation,פיצוי מתקן
-Fixture Compensation Summary,סיכום פיצוי מתקן
-Fixture Compensation {0} deleted.,פיצוי מתקן {0} נמחק.
-Fixture Distribution by File,חלוקת מתקנים לפי תיק
-Fixture Shares,חלקי מתקן
-Fixture Type,סוג מתקן
-Fixtures Pending Approval,מתקנים בהמתנה לאישור
-Frappe Support,תמיכת Frappe
-GIS Actions,פעולות מערכת מידע גיאוגרפית
-GIS Healthcheck,בדיקת תקינות מערכת מידע גיאוגרפית
-GIS Operator,מפעיל מערכת מידע גיאוגרפית
-Geometry too large; consider narrowing the filter or simplifying,גיאומטריה גדולה מדי; שקול לצמצם את המסנן או לפשט
-Geometry too large; consider simplifying or reducing precision,גיאומטריה גדולה מדי; שקול לפשט או להפחית דיוק
-Geometry updated.,גיאומטריה עודכנה.
-HR Manager,מנהל משאבי אנוש
-ID Number,מספר זהות
-Implementation Milestones,אבני דרך יישום
-InExecution,בביצוע
-InProgress,בעבודה
-InTender,במכרז
-Invalid GeoJSON data received from GIS,התקבלו נתוני GeoJSON לא תקינים ממערכת מידע גיאוגרפית
-Issue Date,תאריך הפקה
-Item Description,תיאור פריט
-Item Name,שם פריט
-Item Status,סטטוס פריט
-Land Designation,ייעוד קרקע
-Landline Phone,טלפון קווי
-Landscaping,עיצוב נוף
-Legal Owner,בעלים משפטי
-Lighting,תאורה
-Link Fixture,קישור מתקן
-Link Fixtures,קישור מתקנים
-Lock Price,נעילת מחיר
-Locked,נעול
-Log out,התנתקות
-Lot,חלקה
-Lot Arrangement Stage,שלב הסדרת חלקה
-Lot Development Status,סטטוס פיתוח חלקה
-Lot ID,מזהה חלקה
-Lot ID changed. Fetch the new geometry?,מזהה חלקה השתנה. לטעון את הגיאומטריה החדשה?
-Lot Number,מספר חלקה
-Lot Price,מחיר חלקה
-Lot {0} is already assigned to Arrangement File {1}.,חלקה {0} כבר מוקצית לתיק הסדרה {1}.
-Lot {0} was previously assigned to cancelled Arrangement File(s): {1}.,חלקה {0} הוקצתה בעבר לתיק/י הסדרה מבוטל/ים: {1}.
-Lots Summary,סיכום חלקות
-Main Email,אימייל ראשי
-Main Land Designation,ייעוד קרקע עיקרי
-Main Phone,טלפון ראשי
-Management Viewer,צופה ניהול
-ManualAdjustment,התאמה ידנית
-Milestones,אבני דרך
-Mobile Phone,טלפון נייד
-My Profile,הפרופיל שלי
-My Settings,ההגדרות שלי
-Negotiation Coordinator,רכז משא ומתן
-No geometry found for {0}={1},לא נמצאה גיאומטריה עבור {0}={1}
-No geometry found in GIS for {0} using {1}{2},לא נמצאה גיאומטריה במערכת מידע גיאוגרפית עבור {0} באמצעות {1}{2}
-No geometry loaded. Click "Fetch Geometry from GIS" to load.,לא נטענה גיאומטריה. לחץ על "טעינת גיאומטריה ממערכת מידע גיאוגרפית" לטעינה.
-No linked Fixture Compensation found.,לא נמצא פיצוי מתקן מקושר.
-NotStarted,לא התחיל
-Notes,הערות
-OnHold,בהמתנה
-Open Map (tileserv),פתיחת מפה (tileserv)
-Order ID,מזהה צו
-Order ID is required,מזהה צו נדרש
-Pending Finance,בהמתנה לכספים
-Pending Fixture Total,סה"כ מתקן בהמתנה
-Pending Mapping,בהמתנה למיפוי
-Plan,תוכנית
-Plan Name,שם תוכנית
-Plan Number,מספר תוכנית
-Plan Number changed. Fetch the new geometry from GIS?,מספר תוכנית השתנה. לטעון את הגיאומטריה החדשה ממערכת מידע גיאוגרפית?
-Plan Number is required before fetching geometry.,מספר תוכנית נדרש לפני טעינת גיאומטריה.
-Plan Status,סטטוס תוכנית
-Planned,מתוכנן
-Planned Cost,עלות מתוכננת
-Planning,תכנון
-Planning Committee,ועדת תכנון
-Planning Editor,עורך תכנון
-Planning Zone,אזור תכנון
-Planning Zone Name,שם אזור תכנון
-Please save your changes before fetching geometry.,אנא שמור את השינויים לפני טעינת גיאומטריה.
-Price History,היסטוריית מחירים
-Price Lock Date,תאריך נעילת מחיר
-Price Lock Reason,סיבת נעילת מחיר
-Price Locked,מחיר נעול
-Price per sqm,מחיר למ"ר
-Primary Contact,איש קשר ראשי
-Primary Contact must belong to this contractor.,איש קשר ראשי חייב להשתייך לקבלן זה.
-Progress Percent,אחוז התקדמות
-PublicRealm,מרחב ציבורי
-Quantity,כמות
-Reason for Opening,סיבת פתיחה
-Reason for Opening Note,הערת סיבת פתיחה
-Recalculate Allocation,חישוב מחדש של הקצאה
-Region Manager,מנהל אזור
-Region Name,שם אזור
-Reject,דחייה
-Related Development Project,פרויקט פיתוח קשור
-Request Revisions,בקשת תיקונים
-Resubmit,הגשה מחדש
-Review Date,תאריך סקירה
-RevisionsRequired,נדרשים תיקונים
-Roads,כבישים
-Save the Plan before fetching geometry from GIS.,שמור את התוכנית לפני טעינת גיאומטריה ממערכת מידע גיאוגרפית.
-Save the document before fetching geometry.,שמור את המסמך לפני טעינת גיאומטריה.
-Save the document to enable GIS actions.,שמור את המסמך להפעלת פעולות מערכת מידע גיאוגרפית.
-Sector,מגזר
-Sector Name,שם מגזר
-Select a contractor before choosing a contractor contact.,בחר קבלן לפני בחירת איש קשר קבלן.
-Set Plan Number to enable GIS lookup.,הגדר מספר תוכנית להפעלת חיפוש במערכת מידע גיאוגרפית.
-Settlement Committee,ועדת פשרה
-Settlement Committee Details,פרטי ועדת פשרה
-Sewer,ביוב
-Share Percentage,אחוז חלק
-Shared Amount,סכום משותף
-Shared Between Files,משותף בין תיקים
-Sidewalks,מדרכות
-Signature Date,תאריך חתימה
-Stage,שלב
-Stage Name,שם שלב
-Stage Progress Update,עדכון התקדמות שלב
-Stage Status,סטטוס שלב
-StageA,שלב א'
-StageB,שלב ב'
-Status Change,שינוי סטטוס
-Statutory data,נתונים סטטוטוריים
-Structure Identifier,מזהה מבנה
-Structure Name,שם מבנה
-Structures,מבנים
-Submit to Mapping,הגשה למיפוי
-Sync All Geometries,סנכרון כל הגיאומטריות
-Sync Results,תוצאות סנכרון
-Sync completed. Success: {0}, Errors: {1},סנכרון הושלם. הצלחות: {0}, שגיאות: {1}
-Sync geometries for all Plans that have a Plan Number?,לסנכרן גיאומטריות לכל התוכניות שיש להן מספר תוכנית?
-Syncing Plan geometries...,מסנכרן גיאומטריות תוכנית...
-Syncing geometries...,מסנכרן גיאומטריות...
-Test GIS Connection,בדיקת חיבור מערכת מידע גיאוגרפית
-This action is irreversible. Delete {0}?,פעולה זו אינה הפיכה. למחוק {0}?
-This will sync geometries for all Enforcement Order records. Continue?,זה יסנכרן גיאומטריות לכל רשומות צווי האכיפה. להמשיך?
-This will sync geometries for all Fixture Compensation records. Continue?,זה יסנכרן גיאומטריות לכל רשומות פיצוי המתקן. להמשיך?
-This will sync geometries for all clusters with identifiers. Continue?,זה יסנכרן גיאומטריות לכל המקבצים עם מזהים. להמשיך?
-This will sync geometries for all lots with GIS Feature IDs. Continue?,זה יסנכרן גיאומטריות לכל החלקות עם מזהי Feature במערכת מידע גיאוגרפית. להמשיך?
-Toggle Full Width,החלפת רוחב מלא
-Toggle Theme,החלפת ערכת נושא
-Total Area (sqm),שטח כולל (מ"ר)
-Total Fixture Compensation,סה"כ פיצוי מתקן
-Total Lots,סה"כ חלקות
-Tribe,שבט
-Tribe Name,שם שבט
-Unit,יחידה
-Unit Cost,עלות יחידה
-Unit of Measure,יחידת מידה
-Unlock Price,שחרור נעילת מחיר
-User Account,חשבון משתמש
-Version History,היסטוריית גרסאות
-Version {0},גרסה {0}
-Versions,גרסאות
-Water,מים
-You don't have permission to update this document,אין לך הרשאה לעדכן מסמך זה
-assistant,עוזר
-day,יום
-hour,שעה
-lot,חלקה
-m,מ'
-m2,מ"ר
-m3,מ"ק
-rb,ר"ב
-unit,יחידה
+Actions,פעולות,
+Address,כתובת,
+Amended From,תוקן מ,
+Approval Status,סטטוס אישור,
+Approved,אושר,
+Cancelled,בוטל,
+Category,קָטֵגוֹרִיָה,
+Company Name,שם חברה,
+Completed,הושלם,
+Created By,נוצר על-ידי,
+Created On,נוצר ב,
+Date,תאריך,
+Department,מחלקה,
+Description,תיאור,
+Designation,ייעוד,
+Draft,טְיוּטָה,
+Due Date,תאריך יעד,
+Email,"דוא""ל",
+End Date,תאריך סיום,
+Error,שגיאה,
+Evacuee,מפונה,
+First Name,שם פרטים,
+Full Name,שם מלא,
+Gender,מין,
+In Progress,בתהליך,
+Keyboard Shortcuts,קיצורי דרך במקלדת,
+Last Name,שם משפחה,
+Location,מיקום,
+Milestone,אבן דרך,
+Note,הערה,
+Other,אחר,
+Owner,בעלים,
+Pending,ממתין ל,
+Phone,טלפון,
+Position,עמדה,
+Reason,סיבה,
+Region,אזור,
+Rejected,נדחה,
+Reload,רענן,
+Role,תפקיד,
+Session Defaults,ברירות מחדל של מושב,
+Start Date,תאריך ההתחלה,
+Status,סטטוס,
+Summary,סיכום,
+System Manager,מנהל מערכת,
+Version,גרסה,
+View Website,אתר צפה ב,
