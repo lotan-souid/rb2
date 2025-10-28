@@ -17,6 +17,8 @@
   "location",
   "lots_summary_section",
   "total_lots",
+  "residential_lots",
+  "housing_units",
   "total_area_sqm",
   "column_break_pcdp"
  ],
@@ -79,6 +81,18 @@
    "label": "Total Lots",
    "non_negative": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "residential_lots",
+   "fieldtype": "Int",
+   "label": "Residential Lots",
+   "non_negative": 1
+  },
+  {
+   "fieldname": "housing_units",
+   "fieldtype": "Int",
+   "label": "Housing Units",
+   "non_negative": 1
   },
   {
    "fieldname": "total_area_sqm",
