@@ -165,7 +165,7 @@ Lot Development Status,סטטוס פיתוח חלקה
 Lot ID,מזהה חלקה
 Lot ID changed. Fetch the new geometry?,מזהה חלקה השתנה. לטעון את הגיאומטריה החדשה?
 Lot Number,מספר חלקה
-Lot Price,מחיר חלקה
+Lot Price,עלות המגרש
 Lot {0} is already assigned to Arrangement File {1}.,חלקה {0} כבר מוקצית לתיק הסדרה {1}.
 Lot {0} was previously assigned to cancelled Arrangement File(s): {1}.,חלקה {0} הוקצתה בעבר לתיק/י הסדרה מבוטל/ים: {1}.
 Lots Summary,סיכום חלקות
@@ -213,6 +213,7 @@ Price Locked,מחיר נעול
 Price per sqm,מחיר למ"ר
 Primary Contact,איש קשר ראשי
 Primary Contact must belong to this contractor.,איש קשר ראשי חייב להשתייך לקבלן זה.
+Participating Plans,"תב""עות משתתפות"
 Progress Percent,אחוז התקדמות
 PublicRealm,מרחב ציבורי
 Quantity,כמות
@@ -271,6 +272,9 @@ This will sync geometries for all lots with GIS Feature IDs. Continue?,זה יס
 Toggle Full Width,החלפת רוחב מלא
 Toggle Theme,החלפת ערכת נושא
 Total Area (sqm),שטח כולל (מ"ר)
+Total Residential Area (sqm),סך שטחי מגרשי הדיור (מ"ר)
+Total Chargeable Area (sqm),סך שטחי מגרשים לחישוב עלות (מ"ר)
+Housing Units can be set only for lots with main land designation 'מגורים'.,ניתן להזין כמות יחידות דיור רק במגרשים עם ייעוד ראשי "מגורים".
 Total Fixture Compensation,סה"כ פיצוי מתקן
 Total Lots,סה"כ חלקות
 Tribe,שבט

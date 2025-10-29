@@ -19,6 +19,8 @@
   "total_lots",
   "residential_lots",
   "housing_units",
+  "total_residential_area_sqm",
+  "total_chargeable_area_sqm",
   "total_area_sqm",
   "column_break_pcdp"
  ],
@@ -86,13 +88,29 @@
    "fieldname": "residential_lots",
    "fieldtype": "Int",
    "label": "Residential Lots",
-   "non_negative": 1
+   "non_negative": 1,
+   "read_only": 1
   },
   {
    "fieldname": "housing_units",
    "fieldtype": "Int",
    "label": "Housing Units",
-   "non_negative": 1
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_residential_area_sqm",
+   "fieldtype": "Float",
+   "label": "Total Residential Area (sqm)",
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_chargeable_area_sqm",
+   "fieldtype": "Float",
+   "label": "Total Chargeable Area (sqm)",
+   "non_negative": 1,
+   "read_only": 1
   },
   {
    "fieldname": "total_area_sqm",

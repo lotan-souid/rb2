@@ -7,6 +7,9 @@
  "engine": "InnoDB",
  "field_order": [
   "plan",
+  "participating_plans",
+  "residential_lots",
+  "housing_units",
   "development_project_name",
   "contractor",
   "contractor_contact",
@@ -42,6 +45,26 @@
    "fieldtype": "Link",
    "label": "Plan",
    "options": "Plan"
+  },
+  {
+   "fieldname": "participating_plans",
+   "fieldtype": "Table",
+   "label": "Participating Plans",
+   "options": "Development Project Plan"
+  },
+  {
+   "fieldname": "residential_lots",
+   "fieldtype": "Int",
+   "label": "Residential Lots",
+   "non_negative": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "housing_units",
+   "fieldtype": "Int",
+   "label": "Housing Units",
+   "non_negative": 1,
+   "read_only": 1
   },
   {
    "fieldname": "development_project_name",
@@ -186,7 +209,6 @@
    "fieldtype": "Section Break"
   },
   {
-   "fetch_from": "plan.location",
    "fieldname": "location",
    "fieldtype": "Geolocation",
    "label": "Location",

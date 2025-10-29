@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+from frappe.utils import cint, flt
 
 class Plan(Document):
     def validate(self):
@@ -51,8 +52,10 @@ def update_total_area(plan_name):
         fields=["sum(area_sqm) as total"]
     )[0].total or 0
 
-    frappe.db.set_value("Plan", plan_name, "total_area_sqm", total)
-    return total
+    total_area = flt(total)
+
+    frappe.db.set_value("Plan", plan_name, "total_area_sqm", total_area)
+    return total_area
 
 @frappe.whitelist()
 def update_total_lots(plan_name):
@@ -63,3 +66,73 @@ def update_total_lots(plan_name):
 
     frappe.db.set_value("Plan", plan_name, "total_lots", total_lots)
     return total_lots
+
+@frappe.whitelist()
+def update_total_housing_units(plan_name):
+    if not frappe.db.exists("Plan", plan_name):
+        frappe.throw(f"Plan not found: {plan_name}")
+
+    total = frappe.db.get_all(
+        "Lot",
+        filters={"plan": plan_name},
+        fields=["sum(housing_units) as total"]
+    )[0].total
+
+    total_units = cint(total) if total is not None else 0
+
+    frappe.db.set_value("Plan", plan_name, "housing_units", total_units)
+    return total_units
+
+@frappe.whitelist()
+def update_total_residential_area(plan_name):
+    if not frappe.db.exists("Plan", plan_name):
+        frappe.throw(f"Plan not found: {plan_name}")
+
+    total = frappe.db.get_all(
+        "Lot",
+        filters={
+            "plan": plan_name,
+            "main_land_designation": "מגורים",
+        },
+        fields=["sum(area_sqm) as total"],
+    )[0].total or 0
+
+    total_area = flt(total)
+
+    frappe.db.set_value("Plan", plan_name, "total_residential_area_sqm", total_area)
+    return total_area
+
+@frappe.whitelist()
+def update_total_chargeable_area(plan_name):
+    if not frappe.db.exists("Plan", plan_name):
+        frappe.throw(f"Plan not found: {plan_name}")
+
+    total = frappe.db.get_all(
+        "Lot",
+        filters={
+            "plan": plan_name,
+            "chargeable": 1,
+        },
+        fields=["sum(area_sqm) as total"],
+    )[0].total or 0
+
+    total_area = flt(total)
+
+    frappe.db.set_value("Plan", plan_name, "total_chargeable_area_sqm", total_area)
+    return total_area
+
+@frappe.whitelist()
+def update_residential_lots(plan_name):
+    if not frappe.db.exists("Plan", plan_name):
+        frappe.throw(f"Plan not found: {plan_name}")
+
+    total = frappe.db.count(
+        "Lot",
+        filters={
+            "plan": plan_name,
+            "main_land_designation": "מגורים",
+        },
+    ) or 0
+
+    frappe.db.set_value("Plan", plan_name, "residential_lots", total)
+    return total

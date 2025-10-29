@@ -31,6 +31,9 @@ class DevelopmentProject(Document):
         if hasattr(self, "actual_cost"):
             self.actual_cost = actual_total
 
+        project_plans = self._get_project_plan_names()
+        self._update_plan_aggregates(project_plans)
+
         # Derive allocatable cost and dev price per sqm when possible
         alloc_source = (self.calculation_source or "Approved") if hasattr(self, "calculation_source") else "Approved"
         allocatable = None
@@ -42,7 +45,7 @@ class DevelopmentProject(Document):
             allocatable = actual_total
         # ManualAdjustment leaves value as-is
         if allocatable is not None and not getattr(self, "price_locked", 0):
-            self._compute_price_per_sqm(allocatable)
+            self._compute_price_per_sqm(allocatable, project_plans)
 
         # Ensure selected contractor contact matches contractor
         if getattr(self, "contractor_contact", None):
@@ -95,11 +98,60 @@ class DevelopmentProject(Document):
             except Exception:
                 pass
 
-    def _compute_price_per_sqm(self, allocatable_total_cost: float):
-        # Sum chargeable areas from all lots in this plan
-        if not self.plan:
+    def _get_project_plan_names(self) -> list[str]:
+        plan_names: list[str] = []
+        primary = getattr(self, "plan", None)
+        if primary:
+            plan_names.append(primary)
+        for row in (self.get("participating_plans") or []):
+            plan_name = getattr(row, "plan", None)
+            if plan_name and plan_name not in plan_names:
+                plan_names.append(plan_name)
+        return plan_names
+
+    def _update_plan_aggregates(self, plan_names: list[str]):
+        total_residential = 0
+        total_housing_units = 0
+        first_location = None
+
+        if plan_names:
+            try:
+                plan_rows = frappe.get_all(
+                    "Plan",
+                    filters=[["Plan", "name", "in", plan_names]],
+                    fields=["name", "residential_lots", "housing_units", "location"],
+                )
+            except Exception:
+                plan_rows = []
+            for row in plan_rows:
+                total_residential += int(row.get("residential_lots") or 0)
+                total_housing_units += int(row.get("housing_units") or 0)
+                if not first_location and row.get("location"):
+                    first_location = row.get("location")
+
+        if hasattr(self, "residential_lots"):
+            self.residential_lots = total_residential
+        if hasattr(self, "housing_units"):
+            self.housing_units = total_housing_units
+        if hasattr(self, "location"):
+            if first_location:
+                self.location = first_location
+            else:
+                self.location = None
+
+    def _compute_price_per_sqm(self, allocatable_total_cost: float, plan_names: list[str] | None = None):
+        # Sum chargeable areas from all lots in participating plans
+        plan_names = plan_names or self._get_project_plan_names()
+        if not plan_names:
             return
-        lots = frappe.get_all("Lot", filters={"plan": self.plan, "chargeable": 1}, fields=["name", "area_sqm"])
+        lots = frappe.get_all(
+            "Lot",
+            filters=[
+                ["Lot", "plan", "in", plan_names],
+                ["Lot", "chargeable", "=", 1],
+            ],
+            fields=["name", "area_sqm"],
+        )
         total_area = sum((lot.get("area_sqm") or 0) for lot in lots)
         if total_area and hasattr(self, "dev_price_per_sqm"):
             self.dev_price_per_sqm = allocatable_total_cost / total_area
@@ -175,14 +227,22 @@ class DevelopmentProject(Document):
 
     @frappe.whitelist()
     def recalculate_cost_allocation(self):
-        """Create or update Development Cost Allocation for all lots in the plan and update Lot fields."""
+        """Create or update Development Cost Allocation for all lots in participating plans and update Lot fields."""
         self.check_permission("write")
-        if not self.plan:
-            raise frappe.ValidationError("Plan is required on Development Project")
+        plan_names = self._get_project_plan_names()
+        if not plan_names:
+            raise frappe.ValidationError("At least one Plan is required on Development Project")
         price_per_sqm = getattr(self, "dev_price_per_sqm", None)
         if not price_per_sqm:
             raise frappe.ValidationError("Dev Price per sqm is not set. Save the document first.")
-        lots = frappe.get_all("Lot", filters={"plan": self.plan, "chargeable": 1}, fields=["name", "area_sqm"])
+        lots = frappe.get_all(
+            "Lot",
+            filters=[
+                ["Lot", "plan", "in", plan_names],
+                ["Lot", "chargeable", "=", 1],
+            ],
+            fields=["name", "area_sqm", "plan"],
+        )
         for lot in lots:
             area = lot.get("area_sqm") or 0
             allocated = (area or 0) * price_per_sqm
@@ -226,6 +286,7 @@ class DevelopmentProject(Document):
                 "related_project": self.name,
                 "dev_price_per_sqm": price_per_sqm,
                 "allocated_dev_cost": allocated,
+                "lot_price": allocated,
                 "lot_development_status": lot_status,
             })
         return {
