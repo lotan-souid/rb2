@@ -15,7 +15,6 @@
   - `Development Project Lot` – טבלת משנה שמחזיקה את המגרשים הרלוונטיים לפרויקט (כולל fetch לשדות plan/area וכו').
   - `Regional Infrastructure Project` + `Regional Infrastructure Project Link` – ישות על לקישור מספר פרויקטי פיתוח תחת פרויקט תשתיות על.
 - Development Project מורחב:
-  - שדה `regional_infrastructure_project` (Link).
   - טבלת `development_project_lots` עם אימות שמונע שיבוץ אותו מגרש בשני פרויקטים.
   - חישובי המחיר למ"ר והקצאות נשענים כעת על רשימת המגרשים בפועל, כולל ניקוי הקצאות ישנות והסנכרון לשדות `Lot`.
 - קוד הדמו/seed עודכן ליצירת רשומות בטבלת המגרשים החדשה ולהפעלה של הקצאות בהתאם (קבצים `rb/demo/seed_development.py` ו־`rb/demo/seed_dummy.py`).
@@ -33,7 +32,6 @@
   - היסטוריית מחיר: `price_history` (Table → Development Price History)
   - עלות להקצאה: `allocatable_total_cost` (Currency) – בסיס לחישוב המחיר למ"ר בעת מקור Approved/Manual
   - מגרשי פרויקט: `development_project_lots` (Table → Development Project Lot) – קובע את רשימת המגרשים לחיוב.
-  - שיוך לפרויקט תשתיות על: `regional_infrastructure_project` (Link → Regional Infrastructure Project, אופציונלי).
 
 ### Development Price History – היסטוריית מחיר למ"ר (טבלת משנה)
 - שדות:

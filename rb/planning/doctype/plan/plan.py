@@ -5,6 +5,10 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils import cint, flt
 
+from rb.development.doctype.development_project.development_project import (
+    refresh_development_project_plan_totals,
+)
+
 class Plan(Document):
     def validate(self):
         try:
@@ -81,6 +85,7 @@ def update_total_housing_units(plan_name):
     total_units = cint(total) if total is not None else 0
 
     frappe.db.set_value("Plan", plan_name, "housing_units", total_units)
+    refresh_development_project_plan_totals(plan_name)
     return total_units
 
 @frappe.whitelist()
@@ -135,4 +140,5 @@ def update_residential_lots(plan_name):
     ) or 0
 
     frappe.db.set_value("Plan", plan_name, "residential_lots", total)
+    refresh_development_project_plan_totals(plan_name)
     return total

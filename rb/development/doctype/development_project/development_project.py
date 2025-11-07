@@ -451,3 +451,58 @@ class DevelopmentProject(Document):
                 )
         for lot in to_set:
             frappe.db.set_value("Lot", lot, {"related_project": self.name})
+
+
+def refresh_development_project_plan_totals(plan_name: str):
+    """Update aggregated plan-driven totals on every Development Project referencing the given Plan."""
+    if not plan_name:
+        return
+
+    processed = frappe.flags.setdefault("_dp_plan_refresh", set())
+    if plan_name in processed:
+        return
+    processed.add(plan_name)
+
+    try:
+        linked_projects = set(
+            frappe.get_all("Development Project", filters={"plan": plan_name}, pluck="name") or []
+        )
+        participating_projects = frappe.get_all(
+            "Development Project Plan",
+            filters={
+                "plan": plan_name,
+                "parenttype": "Development Project",
+            },
+            fields=["parent"],
+        )
+        for row in participating_projects:
+            if row.get("parent"):
+                linked_projects.add(row.get("parent"))
+
+        if not linked_projects:
+            return
+
+        for project_name in linked_projects:
+            try:
+                project = frappe.get_doc("Development Project", project_name)
+                plan_names = project._get_project_plan_names()
+                project._update_plan_aggregates(plan_names)
+                frappe.db.set_value(
+                    "Development Project",
+                    project_name,
+                    {
+                        "residential_lots": getattr(project, "residential_lots", 0),
+                        "housing_units": getattr(project, "housing_units", 0),
+                        "location": getattr(project, "location", None),
+                    },
+                )
+            except Exception as err:
+                frappe.log_error(
+                    f"Could not refresh Development Project aggregates for {project_name}: {err}",
+                    "Development Project Aggregate Sync",
+                )
+    except Exception as outer_err:
+        frappe.log_error(
+            f"Failed gathering Development Projects for plan {plan_name}: {outer_err}",
+            "Development Project Aggregate Sync",
+        )

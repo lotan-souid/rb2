@@ -16,7 +16,6 @@
   "residential_lots",
   "housing_units",
   "development_project_name",
-  "regional_infrastructure_project",
   "contractor",
   "contractor_contact",
   "status",
@@ -94,12 +93,6 @@
    "fieldname": "development_project_name",
    "fieldtype": "Data",
    "label": "Development Project Name"
-  },
-  {
-   "fieldname": "regional_infrastructure_project",
-   "fieldtype": "Link",
-   "label": "Regional Infrastructure Project",
-   "options": "Regional Infrastructure Project"
   },
   {
    "fieldname": "contractor",
