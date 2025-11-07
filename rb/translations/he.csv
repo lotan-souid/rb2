@@ -2,6 +2,7 @@ English,Hebrew
 About,אודות
 Actual,בפועל
 Actual Cost,עלות בפועל
+Total Actual Cost,עלות בפועל כוללת
 Actual Expense,הוצאה בפועל
 Affected Structures,מבנים מושפעים
 Age,גיל
@@ -90,6 +91,7 @@ Development Items,פריטי פיתוח
 Development Price History,היסטוריית מחירי פיתוח
 Development Project,פרויקט פיתוח
 Development Project Name,שם פרויקט פיתוח
+Development Project Type,סוג פרויקט פיתוח
 Development Stage,שלב פיתוח
 Development Status,סטטוס פיתוח
 Document Details,פרטי מסמך
@@ -108,6 +110,7 @@ Enter Order ID before fetching geometry.,הזן מזהה צו לפני טעינ�
 Errors:,שגיאות:
 Established Date,תאריך הקמה
 Estimate Cost,עלות משוערת
+Total Estimate Cost,עלות משוערת כוללת
 Evacuee,מפונה
 Evacuee A,מפונה א'
 Evacuee B,מפונה ב'
@@ -174,6 +177,7 @@ Main Land Designation,ייעוד קרקע עיקרי
 Main Phone,טלפון ראשי
 Management Viewer,צופה ניהול
 ManualAdjustment,התאמה ידנית
+Multiple Plans,מרובה תוכניות
 Milestones,אבני דרך
 Mobile Phone,טלפון נייד
 My Profile,הפרופיל שלי
@@ -224,6 +228,21 @@ Region Manager,מנהל אזור
 Region Name,שם אזור
 Reject,דחייה
 Related Development Project,פרויקט פיתוח קשור
+Development Project Lot,מגרש פרויקט פיתוח
+Development Project Lots,מגרשי פרויקט פיתוח
+Project Lots,מגרשי פרויקט
+Regional Infrastructure Project,פרויקט תשתיות על
+Regional Infrastructure Project Link,קישור פרויקט תשתיות על
+Regional Infrastructure Development Items,פריטי פיתוח תשתיות על
+Infrastructure Project Name,שם פרויקט תשתיות על
+Project Scope,היקף פרויקט
+Funding Source,מקור מימון
+Financials,נתונים פיננסיים
+Linked Development Projects,פרויקטי פיתוח מקושרים
+Development Projects,פרויקטי פיתוח
+Budget Amount,סכום תקציב
+Project Status,סטטוס פרויקט
+UnderExecution,בביצוע
 Request Revisions,בקשת תיקונים
 Resubmit,הגשה מחדש
 Residential Lots,כמות מגרשים למגורים
@@ -245,6 +264,7 @@ Shared Amount,סכום משותף
 Shared Between Files,משותף בין תיקים
 Sidewalks,מדרכות
 Signature Date,תאריך חתימה
+Single Plan,תוכנית יחידה
 Stage,שלב
 Stage Name,שם שלב
 Stage Progress Update,עדכון התקדמות שלב

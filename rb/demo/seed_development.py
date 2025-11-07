@@ -55,7 +55,7 @@ def _ensure_lot(plan: str, lot_number: str, area_sqm: float) -> str:
     return lot.name
 
 
-def _ensure_dev_project(plan: str, name: str, allocatable_total_cost: float) -> str:
+def _ensure_dev_project(plan: str, name: str, allocatable_total_cost: float, project_lots: list[str] | None = None) -> str:
     existing = frappe.get_all(
         "Development Project",
         filters={"plan": plan, "development_project_name": name},
@@ -63,11 +63,16 @@ def _ensure_dev_project(plan: str, name: str, allocatable_total_cost: float) -> 
         limit=1,
     )
     if existing:
-        return existing[0]["name"]
+        dp_name = existing[0]["name"]
+        if project_lots:
+            dp = frappe.get_doc("Development Project", dp_name)
+            _sync_project_lots(dp, project_lots)
+        return dp_name
     dp = frappe.get_doc({
         "doctype": "Development Project",
         "plan": plan,
         "development_project_name": name,
+        "development_project_type": "Single Plan",
         "calculation_source": "Approved",
         "allocatable_total_cost": allocatable_total_cost,
     })
@@ -80,8 +85,25 @@ def _ensure_dev_project(plan: str, name: str, allocatable_total_cost: float) -> 
     ):
         dp.append("table_dtxh", row)
     dp.insert(ignore_permissions=True)
+    if project_lots:
+        _sync_project_lots(dp, project_lots)
     dp.save(ignore_permissions=True)
     return dp.name
+
+
+def _sync_project_lots(dp, project_lots: list[str]):
+    project_lots = [lot for lot in project_lots if lot]
+    if not project_lots:
+        return
+    existing = {row.get("lot") for row in (dp.get("development_project_lots") or []) if row.get("lot")}
+    changed = False
+    for lot in project_lots:
+        if lot in existing:
+            continue
+        dp.append("development_project_lots", {"lot": lot})
+        changed = True
+    if changed:
+        dp.save(ignore_permissions=True)
 
 
 def _add_committee_review(dp_name: str, approved_allocatable_cost: float) -> str:
@@ -110,7 +132,22 @@ def _recalculate_allocations(dp_name: str):
         dp.recalculate_cost_allocation()
     except Exception:
         # Fallback inline allocation if permission check blocks
-        lots = frappe.get_all("Lot", filters={"plan": dp.plan, "chargeable": 1}, fields=["name", "area_sqm"])
+        project_lots = [
+            row.get("lot")
+            for row in (dp.get("development_project_lots") or [])
+            if row.get("lot")
+        ]
+        if project_lots:
+            lots = frappe.get_all(
+                "Lot",
+                filters={
+                    "name": ["in", project_lots],
+                    "chargeable": 1,
+                },
+                fields=["name", "area_sqm"],
+            )
+        else:
+            lots = []
         price = dp.dev_price_per_sqm or 0
         for lot in lots:
             area = lot.get("area_sqm") or 0
@@ -191,7 +228,8 @@ def run(
 
         # 3) Development Project with items
         effective_project_name = project_name or f"פרויקט פיתוח {plan_docname}"
-        dp_name = _ensure_dev_project(plan_docname, effective_project_name, allocatable_total_cost)
+        project_lot_names = [lot["name"] for lot in created_lots if lot.get("name")]
+        dp_name = _ensure_dev_project(plan_docname, effective_project_name, allocatable_total_cost, project_lot_names)
 
         # 4) Committee Review (Approved)
         _add_committee_review(dp_name, approved_allocatable_cost=allocatable_total_cost)

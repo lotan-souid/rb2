@@ -5,6 +5,7 @@
  "autoname": "format:EO-{#####}",
  "creation": "2024-01-01 00:00:00.000000",
  "doctype": "DocType",
+ "is_submittable": 0,
  "engine": "InnoDB",
  "field_order": [
   "order_id",

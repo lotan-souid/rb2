@@ -1,11 +1,11 @@
 # Copyright (c) 2025, lotan souid and contributors
 # For license information, please see license.txt
 
-# import frappe
 import frappe
 from frappe import _
 from frappe.model.document import Document
 from frappe.utils import nowdate
+from typing import Any
 
 
 class DevelopmentProject(Document):
@@ -31,7 +31,39 @@ class DevelopmentProject(Document):
         if hasattr(self, "actual_cost"):
             self.actual_cost = actual_total
 
+        if not getattr(self, "development_project_type", None):
+            if self.get("participating_plans"):
+                self.development_project_type = "Multiple Plans"
+            else:
+                self.development_project_type = "Single Plan"
+
+        project_type = self.development_project_type or "Single Plan"
+        if project_type == "Single Plan":
+            if not getattr(self, "plan", None):
+                frappe.throw(
+                    _("Plan is required when Development Project Type is Single Plan."),
+                    frappe.ValidationError,
+                )
+            if self.get("participating_plans"):
+                frappe.throw(
+                    _("Participating Plans must be empty when Development Project Type is Single Plan."),
+                    frappe.ValidationError,
+                )
+        elif project_type == "Multiple Plans":
+            if not self.get("participating_plans"):
+                frappe.throw(
+                    _("Add at least one Participating Plan when Development Project Type is Multiple Plans."),
+                    frappe.ValidationError,
+                )
+            if getattr(self, "plan", None):
+                frappe.throw(
+                    _("Plan must be empty when Development Project Type is Multiple Plans."),
+                    frappe.ValidationError,
+                )
+
         project_plans = self._get_project_plan_names()
+        lot_details = self._get_project_lot_details()
+        self._validate_project_lots(project_plans, lot_details)
         self._update_plan_aggregates(project_plans)
 
         # Derive allocatable cost and dev price per sqm when possible
@@ -45,7 +77,7 @@ class DevelopmentProject(Document):
             allocatable = actual_total
         # ManualAdjustment leaves value as-is
         if allocatable is not None and not getattr(self, "price_locked", 0):
-            self._compute_price_per_sqm(allocatable, project_plans)
+            self._compute_price_per_sqm(allocatable, lot_details=lot_details)
 
         # Ensure selected contractor contact matches contractor
         if getattr(self, "contractor_contact", None):
@@ -139,20 +171,11 @@ class DevelopmentProject(Document):
             else:
                 self.location = None
 
-    def _compute_price_per_sqm(self, allocatable_total_cost: float, plan_names: list[str] | None = None):
-        # Sum chargeable areas from all lots in participating plans
-        plan_names = plan_names or self._get_project_plan_names()
-        if not plan_names:
+    def _compute_price_per_sqm(self, allocatable_total_cost: float, lot_details: list[dict[str, Any]] | None = None):
+        lot_details = lot_details or self._get_project_lot_details()
+        if not lot_details:
             return
-        lots = frappe.get_all(
-            "Lot",
-            filters=[
-                ["Lot", "plan", "in", plan_names],
-                ["Lot", "chargeable", "=", 1],
-            ],
-            fields=["name", "area_sqm"],
-        )
-        total_area = sum((lot.get("area_sqm") or 0) for lot in lots)
+        total_area = sum((lot.get("area_sqm") or 0) for lot in lot_details if int(lot.get("chargeable") or 0))
         if total_area and hasattr(self, "dev_price_per_sqm"):
             self.dev_price_per_sqm = allocatable_total_cost / total_area
 
@@ -227,36 +250,35 @@ class DevelopmentProject(Document):
 
     @frappe.whitelist()
     def recalculate_cost_allocation(self):
-        """Create or update Development Cost Allocation for all lots in participating plans and update Lot fields."""
+        """Create or update Development Cost Allocation for all linked project lots and update Lot fields."""
         self.check_permission("write")
-        plan_names = self._get_project_plan_names()
-        if not plan_names:
-            raise frappe.ValidationError("At least one Plan is required on Development Project")
+        lot_details = self._get_project_lot_details()
+        chargeable_lots = [lot for lot in lot_details if int(lot.get("chargeable") or 0)]
+        if not chargeable_lots:
+            raise frappe.ValidationError("Add at least one chargeable Lot under Development Project Lots before recalculation.")
         price_per_sqm = getattr(self, "dev_price_per_sqm", None)
         if not price_per_sqm:
             raise frappe.ValidationError("Dev Price per sqm is not set. Save the document first.")
-        lots = frappe.get_all(
-            "Lot",
-            filters=[
-                ["Lot", "plan", "in", plan_names],
-                ["Lot", "chargeable", "=", 1],
-            ],
-            fields=["name", "area_sqm", "plan"],
-        )
-        for lot in lots:
+        existing_allocs = {
+            row.get("lot"): row
+            for row in frappe.get_all(
+                "Development Cost Allocation",
+                filters={"development_project": self.name},
+                fields=["name", "lot", "locked"],
+                limit_page_length=1000,
+            )
+        }
+        current_lot_names = {lot.get("name") for lot in chargeable_lots}
+        self._sync_lot_assignments(list(current_lot_names))
+
+        for lot in chargeable_lots:
             area = lot.get("area_sqm") or 0
             allocated = (area or 0) * price_per_sqm
-            # Upsert allocation row
-            existing = frappe.get_all(
-                "Development Cost Allocation",
-                filters={"development_project": self.name, "lot": lot["name"]},
-                fields=["name", "locked"],
-                limit=1,
-            )
-            if existing and existing[0].get("locked"):
+            existing = existing_allocs.get(lot["name"])
+            if existing and existing.get("locked"):
                 continue
             if existing:
-                alloc = frappe.get_doc("Development Cost Allocation", existing[0].get("name"))
+                alloc = frappe.get_doc("Development Cost Allocation", existing.get("name"))
                 alloc.chargeable_area_sqm = area
                 alloc.price_per_sqm = price_per_sqm
                 alloc.allocated_cost = allocated
@@ -289,8 +311,16 @@ class DevelopmentProject(Document):
                 "lot_price": allocated,
                 "lot_development_status": lot_status,
             })
+        # Remove stale allocations for lots that are no longer linked (unless locked)
+        for lot_name, alloc in existing_allocs.items():
+            if lot_name in current_lot_names or alloc.get("locked"):
+                continue
+            try:
+                frappe.delete_doc("Development Cost Allocation", alloc.get("name"), ignore_permissions=True)
+            except Exception:
+                pass
         return {
-            "updated_lots": len(lots),
+            "updated_lots": len(chargeable_lots),
             "price_per_sqm": price_per_sqm,
         }
 
@@ -312,7 +342,112 @@ class DevelopmentProject(Document):
         # Create default stages only after the project exists in DB
         self._ensure_default_stages()
         self._update_stage_totals()
+        self._sync_lot_assignments()
 
     def on_update(self):
         # Keep stage totals in sync on updates
         self._update_stage_totals()
+        self._sync_lot_assignments()
+
+    def on_trash(self):
+        self._sync_lot_assignments(clear_all=True)
+
+    def _get_project_lot_names(self) -> list[str]:
+        lot_names: list[str] = []
+        for row in (self.get("development_project_lots") or []):
+            lot_name = getattr(row, "lot", None)
+            if lot_name and lot_name not in lot_names:
+                lot_names.append(lot_name)
+        return lot_names
+
+    def _get_project_lot_details(self) -> list[dict[str, Any]]:
+        lot_names = self._get_project_lot_names()
+        if not lot_names:
+            return []
+        lots = frappe.get_all(
+            "Lot",
+            filters={"name": ["in", lot_names]},
+            fields=["name", "plan", "area_sqm", "chargeable"],
+            limit_page_length=1000,
+        )
+        # Preserve child table order
+        by_name = {lot["name"]: lot for lot in lots}
+        ordered = [by_name[name] for name in lot_names if name in by_name]
+        return ordered
+
+    def _validate_project_lots(self, allowed_plans: list[str], lot_details: list[dict[str, Any]]):
+        if not (self.get("development_project_lots") or []):
+            return
+        seen: set[str] = set()
+        for row in self.get("development_project_lots") or []:
+            lot = getattr(row, "lot", None)
+            if not lot:
+                continue
+            if lot in seen:
+                frappe.throw(
+                    _("Lot {0} cannot be added more than once to the same Development Project.").format(frappe.bold(lot)),
+                    frappe.ValidationError,
+                )
+            seen.add(lot)
+        allowed = set(allowed_plans or [])
+        lookup = {lot["name"]: lot for lot in lot_details}
+        if not allowed and lot_details:
+            frappe.throw(
+                _("Set the Plan/Participating Plans before linking lots to the Development Project."),
+                frappe.ValidationError,
+            )
+        for lot in lot_details:
+            plan_name = lot.get("plan")
+            if allowed and plan_name not in allowed:
+                frappe.throw(
+                    _("Lot {0} belongs to Plan {1}, which is not part of this Development Project.").format(
+                        frappe.bold(lot.get("name")), frappe.bold(plan_name or "-")
+                    ),
+                    frappe.ValidationError,
+                )
+            if not int(lot.get("chargeable") or 0):
+                frappe.throw(
+                    _("Lot {0} is not marked as Chargeable and cannot participate in cost allocation.").format(
+                        frappe.bold(lot.get("name"))
+                    ),
+                    frappe.ValidationError,
+                )
+        other_refs = frappe.get_all(
+            "Development Project Lot",
+            filters={
+                "lot": ["in", list(lookup.keys())],
+                "parenttype": "Development Project",
+                "parent": ["!=", self.name],
+            },
+            fields=["lot", "parent"],
+            limit_page_length=1000,
+        )
+        if other_refs:
+            blocked = ", ".join(sorted({ref.get("lot") for ref in other_refs if ref.get("lot")}))
+            frappe.throw(
+                _("Each Lot can belong to a single Development Project. Already linked lots: {0}").format(blocked),
+                frappe.ValidationError,
+            )
+
+    def _sync_lot_assignments(self, lot_names: list[str] | None = None, clear_all: bool = False):
+        if not self.name:
+            return
+        target = set(lot_names or self._get_project_lot_names())
+        existing = set(frappe.get_all("Lot", filters={"related_project": self.name}, pluck="name") or [])
+        to_clear = existing if clear_all else existing - target
+        to_set = set() if clear_all else target - existing
+        if to_clear:
+            for lot in to_clear:
+                frappe.db.set_value(
+                    "Lot",
+                    lot,
+                    {
+                        "related_project": None,
+                        "dev_price_per_sqm": 0,
+                        "allocated_dev_cost": 0,
+                        "lot_price": 0,
+                        "lot_development_status": None,
+                    },
+                )
+        for lot in to_set:
+            frappe.db.set_value("Lot", lot, {"related_project": self.name})

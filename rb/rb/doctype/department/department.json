@@ -4,6 +4,7 @@
  "allow_rename": 1,
  "creation": "2025-07-23 14:58:11.653622",
  "doctype": "DocType",
+ "is_submittable": 0,
  "engine": "InnoDB",
  "field_order": [
   "department_name"

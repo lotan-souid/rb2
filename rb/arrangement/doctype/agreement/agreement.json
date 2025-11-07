@@ -5,6 +5,7 @@
  "autoname": "format:AGR-{#####}",
  "creation": "2025-10-24 10:15:00",
  "doctype": "DocType",
+ "is_submittable": 0,
  "engine": "InnoDB",
  "field_order": [
   "arrangement_file",

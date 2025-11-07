@@ -5,6 +5,7 @@
  "autoname": "field:contact_name",
  "creation": "2025-09-10 00:00:00.000000",
  "doctype": "DocType",
+ "is_submittable": 0,
  "engine": "InnoDB",
  "field_order": [
   "contact_name",

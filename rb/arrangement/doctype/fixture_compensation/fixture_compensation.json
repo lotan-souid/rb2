@@ -4,6 +4,7 @@
  "autoname": "format:FXC-{########}",
  "creation": "2025-07-29 11:37:00.566936",
  "doctype": "DocType",
+ "is_submittable": 0,
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [

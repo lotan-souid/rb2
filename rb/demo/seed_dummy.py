@@ -173,13 +173,29 @@ def seed_all():
         {"plan": "204-012345", "lot_number": "13", "area_sqm": 510,  "chargeable": 1},
         {"plan": "315-100200", "lot_number": "A1", "area_sqm": 1200, "chargeable": 1},
     ]
+    lot_name_map = {}
     for l in lots:
-        _ensure("Lot", l)
+        lot_name = _ensure("Lot", l)
+        if lot_name:
+            lot_name_map[(l["plan"], l["lot_number"])] = lot_name
 
     # Development Projects (auto-name). Keep a map by human title
     projects_def = [
-        {"plan": "101-000123", "development_project_name": "פיתוח כביש 90 צפון", "calculation_source": "Approved", "allocatable_total_cost": 3_500_000, "committee_status": "Pending"},
-        {"plan": "204-012345", "development_project_name": "תשתיות שכונת נווה צוף", "calculation_source": "Planned",  "committee_status": "Pending"},
+        {
+            "plan": "101-000123",
+            "development_project_name": "פיתוח כביש 90 צפון",
+            "development_project_type": "Single Plan",
+            "calculation_source": "Approved",
+            "allocatable_total_cost": 3_500_000,
+            "committee_status": "Pending",
+        },
+        {
+            "plan": "204-012345",
+            "development_project_name": "תשתיות שכונת נווה צוף",
+            "development_project_type": "Single Plan",
+            "calculation_source": "Planned",
+            "committee_status": "Pending",
+        },
     ]
     proj_name_map: Dict[str, str] = {}
     for pr in projects_def:
@@ -190,11 +206,35 @@ def seed_all():
 
     # Ensure default stages exist (controller creates them after insert)
     # Add Development Items and compute totals
+    project_lot_links = {
+        "פיתוח כביש 90 צפון": [("101-000123", "1"), ("101-000123", "2")],
+        "תשתיות שכונת נווה צוף": [("204-012345", "12"), ("204-012345", "13")],
+    }
+
     for human_title, dp_name in proj_name_map.items():
         try:
             project = frappe.get_doc("Development Project", dp_name)
         except Exception:
             continue
+        # Ensure project lots assigned
+        assigned_lots = []
+        for plan, lot_no in project_lot_links.get(human_title, []):
+            lot_docname = lot_name_map.get((plan, lot_no))
+            if lot_docname:
+                assigned_lots.append(lot_docname)
+        if assigned_lots:
+            current = {row.get("lot") for row in (project.get("development_project_lots") or []) if row.get("lot")}
+            changed = False
+            for lot_name in assigned_lots:
+                if lot_name in current:
+                    continue
+                project.append("development_project_lots", {"lot": lot_name})
+                changed = True
+            if changed:
+                try:
+                    project.save(ignore_permissions=True)
+                except Exception:
+                    pass
         # Refresh stages and build map: stage_name -> stage_docname
         stages = frappe.get_all("Development Stage", filters={"development_project": dp_name}, fields=["name", "stage_name"]) or []
         stage_by_name = {s.get("stage_name"): s.get("name") for s in stages}
@@ -246,4 +286,3 @@ def seed_all():
                 _ensure("Stage Progress Update", {"development_stage": s["name"], "update_date": "2025-09-18", "progress_percent": 10})
 
     return {"ok": True}
-

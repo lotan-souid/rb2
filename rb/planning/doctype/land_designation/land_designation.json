@@ -5,6 +5,7 @@
  "autoname": "field:land_designation",
  "creation": "2025-09-30 10:02:12.496517",
  "doctype": "DocType",
+ "is_submittable": 0,
  "engine": "InnoDB",
  "field_order": [
   "land_designation",

@@ -2112,7 +2112,7 @@
     "icon": null,
     "is_query_report": 0,
     "label": "Miscellaneous ",
-    "link_count": 6,
+    "link_count": 5,
     "link_to": null,
     "link_type": "DocType",
     "onboard": 0,
@@ -2122,24 +2122,6 @@
     "parenttype": "Workspace",
     "report_ref_doctype": null,
     "type": "Card Break"
-   },
-   {
-    "dependencies": null,
-    "description": null,
-    "hidden": 0,
-    "icon": null,
-    "is_query_report": 0,
-    "label": "Cluster",
-    "link_count": 0,
-    "link_to": "Cluster",
-    "link_type": "DocType",
-    "onboard": 0,
-    "only_for": null,
-    "parent": "Arrangement",
-    "parentfield": "links",
-    "parenttype": "Workspace",
-    "report_ref_doctype": null,
-    "type": "Link"
    },
    {
     "dependencies": null,
@@ -2232,7 +2214,7 @@
     "type": "Link"
    }
   ],
-  "modified": "2025-10-24 11:29:24.895580",
+  "modified": "2025-11-04 09:28:25.944087",
   "module": null,
   "name": "Arrangement",
   "number_cards": [],

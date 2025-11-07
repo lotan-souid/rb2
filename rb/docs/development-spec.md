@@ -15,16 +15,18 @@
 ## ישויות וקשרים (ER)
 
 - Plan (תב"ע) ← 1—N → Lot (מגרשים)
-- Plan ← 1—1 → DevelopmentProject (פרויקט פיתוח עבור אותה תב"ע)
+- Plan ↔ N—N ↔ DevelopmentProject (פרויקט יכול לכסות מספר תוכניות באמצעות Participating Plans)
 - DevelopmentProject ← 1—N → DevelopmentStage (שלבים: שלב א, שלב ב, גמר)
 - DevelopmentStage ← 1—N → DevelopmentItem (סעיפי פיתוח)
 - DevelopmentProject ← 1—N → CommitteeReview (דיוני ועדה)
 - DevelopmentStage ← 1—N → StageProgressUpdate (עדכוני התקדמות)
-- DevelopmentProject ← 1—N → CostAllocation (הקצאת עלויות למגרשים)
+- DevelopmentProject ← 1—N → DevelopmentProjectLot → 1—1 Lot
+- DevelopmentProject ← 1—N → CostAllocation (הקצאת עלויות למגרשים שנבחרו)
+- RegionalInfrastructureProject ← 1—N → Development Projects (באמצעות Regional Infrastructure Project Link)
 
 **הערות:**
-- ניתן לאפשר מספר DevelopmentProject לכל Plan רק אם זה נדרש עסקית (ברירת מחדל: אחד).
-- `CostAllocation` מחושב ברמת פרויקט ומשויך לכל Lot בפרויקט.
+- Lot יחיד לא יכול להשתייך לשני פרויקטי פיתוח במקביל (עלות משויכת לפרויקט בודד).
+- `CostAllocation` מחושב ברמת פרויקט ומשויך רק למגרשים שנמצאים ב־Development Project Lots.
 
 ---
 
@@ -57,6 +59,7 @@
 **שדות עיקריים:** ראה מילון שדות → DevelopmentProject.
 
 **הערה:** כולל טבלת היסטוריית מחיר למ"ר (Development Price History) לצורך תיעוד ושחזור.
+**מגרשים:** יש להוסיף את המגרשים הרלוונטיים בטבלת Development Project Lots; כל הלוגיקה הפיננסית נשענת על בחירה זו.
 
 ### 4) Development Stage – שלב פיתוח
 
@@ -105,6 +108,24 @@
 **שימוש:** נרשמת אוטומטית בעת שינוי המחיר, נעילה/ביטול נעילה, או עדכון ידני בהרשאה.
 
 **שדות עיקריים:** ראה מילון שדות → DevelopmentPriceHistory.
+
+### 10) Development Project Lots – מגרשי פרויקט
+
+**תיאור:** טבלת משנה בטופס פרויקט הפיתוח שמגדירה במפורש אילו מגרשים משתתפים בפרויקט וחייבים בעלויות.
+
+**פעולות עיקריות:** בחירת מגרשים מהתוכניות המאושרות, בדיקה שהם Chargeable, הסרה/החלפה של מגרשים לפי תחומי אחריות.
+
+**נתונים מחושבים:** שטח, יחידות דיור וסטטוס פיתוח נטענים אוטומטית מהמגרש לקריאה בלבד.
+
+**שדות עיקריים:** ראה מילון שדות → DevelopmentProjectLot.
+
+### 11) Regional Infrastructure Project – פרויקט תשתיות על
+
+**תיאור:** ישות עליונה לתיעוד פרויקטי תשתיות מנקודת מבט אזורית (שאינם מחויבים דרך מגרשים), עם קישור למספר פרויקטי פיתוח.
+
+**פעולות עיקריות:** מעקב אחרי מקור המימון, תקציב, סטטוס, וקישור הפרויקטים המקומיים שהפרויקט האזורי משרת.
+
+**שדות עיקריים:** ראה מילון שדות → RegionalInfrastructureProject.
 
 ---
 
@@ -176,13 +197,13 @@ Planned → InTender → InExecution → Completed | Canceled
 
 ### 4) חישוב מחיר פיתוח למ"ר
 
-- `Σ chargeable_area_sqm for lots in Plan` = סך השטחים לחיוב (ברירת מחדל: שטח מגרשי המגורים בלבד).
+- `Σ chargeable_area_sqm for Development Project Lots` = סך השטחים לחיוב של המגרשים שנבחרו בטבלה (Chargeable=1).
 - `dev_price_per_sqm = allocatable_total_cost / Σ chargeable_area_sqm`.
 - ניתן לקבע (`locked`) את המחיר למ"ר בנקודת זמן מוגדרת (לאחר אישור ועדה או לאחר חוזי קבלן) כדי למנוע תנודתיות.
 
 ### 5) הקצאת עלות לכל מגרש (CostAllocation)
 
-לכל Lot בפרויקט:
+לכל Lot שנמצא בטבלת Development Project Lots:
 - `chargeable_area_sqm = Lot.area_sqm` (או שדה חלופי לפי מדיניות).
 - `price_per_sqm = dev_price_per_sqm` (או ערך ידני כאשר `calculation_source = ManualAdjustment`).
 - `allocated_cost = chargeable_area_sqm × price_per_sqm`.
@@ -195,11 +216,17 @@ Planned → InTender → InExecution → Completed | Canceled
 - אי־אפשר לסמן Stage כ־Completed אם קיימים Items שאינם Completed.
 - `planned_cost` של Item = `quantity × unit_cost` (חישוב אוטומטי; ניתן לעדכון ידני רק בהרשאה).
 - סכומי עלויות בפועל חייבים להיות ≥ 0; אחוז התקדמות 0–100.
+- Lot לא יכול להיות משויך לשני פרויקטי פיתוח שונים; האימות מבוצע בעת שמירה של Development Project.
 
 ### 7) הצגה בטופס Lot
 
 - `lot_development_status` נגזר אוטומטית: NotStarted (אין שלב פעיל), InProgress (קיים שלב פעיל), Completed (כל השלבים Completed).
 - הצגת `dev_price_per_sqm` ו־`allocated_dev_cost` (מחושבים/מקובעים) כולל תאריך חישוב ומקור.
+
+### 8) Regional Infrastructure Project
+
+- מיועד לפרויקטי תשתיות על שאינם מגולגלים על המגרשים; העלויות ממומנות ממקור חיצוני (שדה `funding_source`).
+- מאפשר לקשר מספר Development Projects תחת מעטפת תשתיתית אחת לצורך תיעוד, תעדוף ודיווח. אין חישוב מחירים/הקצאות מתוך הישויות הללו.
 
 ---
 
@@ -244,6 +271,19 @@ Planned → InTender → InExecution → Completed | Canceled
 | בעלים | Owner | owner_name | string |
 | הערות | Notes | notes | text |
 
+### DevelopmentProjectLot – מגרשי פרויקט פיתוח
+
+| שם השדה בעברית | השם באנגלית | שם טכני | סוג |
+|:---|:---|:---|:---|
+| מגרש | Lot | lot | reference(Lot,reqd) |
+| תב\"ע | Plan | plan | reference(Plan,readonly,fetched) |
+| מספר מגרש | Lot Number | lot_number | string(readonly) |
+| לחיוב | Chargeable | chargeable | boolean(readonly) |
+| שטח לחישוב | Area (sqm) | area_sqm | decimal(readonly) |
+| יחידות דיור | Housing Units | housing_units | int(readonly) |
+| סטטוס פיתוח | Development Status | development_status | string(readonly) |
+| הערות | Notes | notes | text |
+
 ### DevelopmentProject – פרויקט פיתוח
 
 | שם השדה בעברית | השם באנגלית | שם טכני | סוג |
@@ -263,6 +303,30 @@ Planned → InTender → InExecution → Completed | Canceled
 | תאריך נעילה | Price Lock Date | price_lock_date | date(readonly) |
 | סיבת נעילה | Price Lock Reason | price_lock_reason | text |
 | היסטוריית מחיר | Price History | price_history | table(Development Price History) |
+
+### RegionalInfrastructureProject – פרויקט תשתיות על
+
+| שם השדה בעברית | השם באנגלית | שם טכני | סוג |
+|:---|:---|:---|:---|
+| שם פרויקט | Infrastructure Project Name | infrastructure_project_name | string |
+| היקף | Project Scope | project_scope | text |
+| מקור מימון | Funding Source | funding_source | string |
+| סטטוס | Status | status | enum(Planning,UnderExecution,Completed,OnHold) |
+| תאריך התחלה | Start Date | start_date | date |
+| תאריך סיום | End Date | end_date | date |
+| עלות משוערת כוללת | Total Estimate Cost | total_estimate_cost | money |
+| עלות בפועל כוללת | Total Actual Cost | total_actual_cost | money |
+| פרויקטי פיתוח מקושרים | Linked Development Projects | linked_projects | table(Regional Infrastructure Project Link) |
+| מיקום | Location | location | geolocation |
+| הערות | Notes | notes | text |
+
+### RegionalInfrastructureProjectLink – קישורי פרויקטי פיתוח
+
+| שם השדה בעברית | השם באנגלית | שם טכני | סוג |
+|:---|:---|:---|:---|
+| פרויקט פיתוח | Development Project | development_project | reference(DevelopmentProject,reqd) |
+| סטטוס פרויקט | Project Status | project_status | string(readonly,fetched) |
+| הערות | Notes | notes | text |
 
 ### DevelopmentStage – שלב פיתוח
 
@@ -356,7 +420,7 @@ Planned → InTender → InExecution → Completed | Canceled
 
 **Allocatable Total Cost:** עלות כוללת שמוקצית בין המגרשים; משמשת עם Calculation Source=Approved. שינוי דורש הרצת הקצאה מחדש.
 
-**Dev Price per sqm:** המחיר למ"ר המחושב: `allocatable_total_cost / Σ area_sqm (Chargeable=1)`; נכתב לפרויקט ול־Lot בעת הקצאה.
+**Dev Price per sqm:** המחיר למ"ר המחושב: `allocatable_total_cost / Σ area_sqm (Chargeable=1)` מתוך רשימת `Development Project Lots`; נכתב לפרויקט ול־Lot בעת הקצאה.
 
 **Price Locked:** סימון נעילה שמונע חישוב מחדש של `dev_price_per_sqm`. בעת נעילה נרשמת שורת היסטוריה.
 

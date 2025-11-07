@@ -6,17 +6,20 @@
 
 ## סקירה קצרה
 - מטרת היישום: ניהול פרויקט פיתוח תשתיות עבור תב"ע (Plan) מאושרת, כולל שלבים, סעיפים, ועדות, חישוב מחיר פיתוח למ"ר, הקצאה למגרשים ומעקב התקדמות.
-- תוספת עיקרית: היסטוריית מחיר למ"ר בפרויקט (Development Price History) ונעילת מחיר, יחד עם חישוב והפצה למגרשים.
+- תוספות אחרונות: הגדרת רשימת מגרשי הפרויקט (Development Project Lots) לצורך חישוב מדויק ועל מניעת כפילויות, ותיעוד פרויקטי תשתיות על (Regional Infrastructure Project) שאינם מחויבים דרך המגרשים.
 
 ---
 
 ## מה שונה בקוד
-- הוספת קובץ בקר חסר כדי לפתור תקלה במיגרציה:
-  - `frappe-bench/apps/rb/rb/development/doctype/development_price_history/development_price_history.py`
-- הרחבת מסמך אפיון:
-  - `docs/development/development-spec.md` – הוספת טופס היסטוריית מחיר, שדות חדשים בטפסי Lot ו־Development Project, ולוגיקת חישוב/נעילה.
-- תיקון פיקסצ'רים (Fixtures):
-  - `frappe-bench/apps/rb/rb/fixtures/workflow.json` – הוספת שדה `name` ל־Workflow למניעת שגיאת KeyError במיגרציה.
+- DocTypes חדשים:
+  - `Development Project Lot` – טבלת משנה שמחזיקה את המגרשים הרלוונטיים לפרויקט (כולל fetch לשדות plan/area וכו').
+  - `Regional Infrastructure Project` + `Regional Infrastructure Project Link` – ישות על לקישור מספר פרויקטי פיתוח תחת פרויקט תשתיות על.
+- Development Project מורחב:
+  - שדה `regional_infrastructure_project` (Link).
+  - טבלת `development_project_lots` עם אימות שמונע שיבוץ אותו מגרש בשני פרויקטים.
+  - חישובי המחיר למ"ר והקצאות נשענים כעת על רשימת המגרשים בפועל, כולל ניקוי הקצאות ישנות והסנכרון לשדות `Lot`.
+- קוד הדמו/seed עודכן ליצירת רשומות בטבלת המגרשים החדשה ולהפעלה של הקצאות בהתאם (קבצים `rb/demo/seed_development.py` ו־`rb/demo/seed_dummy.py`).
+- מסמכי האפיון (`docs/development/development-spec.md`, מסמך זה) הורחבו כדי לשקף את שיטת העבודה המעודכנת.
 
 ---
 
@@ -29,6 +32,8 @@
   - נעילת מחיר: `price_locked` (Check), `price_lock_date` (Date, לקריאה בלבד), `price_lock_reason` (Small Text)
   - היסטוריית מחיר: `price_history` (Table → Development Price History)
   - עלות להקצאה: `allocatable_total_cost` (Currency) – בסיס לחישוב המחיר למ"ר בעת מקור Approved/Manual
+  - מגרשי פרויקט: `development_project_lots` (Table → Development Project Lot) – קובע את רשימת המגרשים לחיוב.
+  - שיוך לפרויקט תשתיות על: `regional_infrastructure_project` (Link → Regional Infrastructure Project, אופציונלי).
 
 ### Development Price History – היסטוריית מחיר למ"ר (טבלת משנה)
 - שדות:
@@ -50,6 +55,21 @@
   - סטטוס פיתוח: `lot_development_status` (Select: NotStarted | InProgress | Completed, נגזר)
 - קובץ JSON: `frappe-bench/apps/rb/rb/planning/doctype/lot/lot.json`
 
+### Development Project Lot – טבלת מגרשי פרויקט
+- שדות:
+  - `lot` (Link → Lot, reqd) + שדות fetch לקריאה בלבד (`plan`, `lot_number`, `area_sqm`, `housing_units`, `chargeable`, `development_status`).
+  - `notes` לסימון פרטים מיוחדים (לדוגמה שכונה/שלב).
+- קבצים:
+  - JSON: `frappe-bench/apps/rb/rb/development/doctype/development_project_lot/development_project_lot.json`
+  - Controller: `frappe-bench/apps/rb/rb/development/doctype/development_project_lot/development_project_lot.py`
+
+### Regional Infrastructure Project – פרויקט תשתיות על
+- שדות עיקריים: `infrastructure_project_name`, `funding_source`, `status`, `total_estimate_cost`, `total_actual_cost`, שדה טבלה `linked_projects` (Regional Infrastructure Project Link) לקישור פרויקטי פיתוח.
+- קבצים:
+  - JSON: `frappe-bench/apps/rb/rb/development/doctype/regional_infrastructure_project/regional_infrastructure_project.json`
+  - Controller: `frappe-bench/apps/rb/rb/development/doctype/regional_infrastructure_project/regional_infrastructure_project.py`
+  - טבלת קישור: `regional_infrastructure_project_link` (JSON+PY) לאחסון הפרויקטים המשויכים.
+
 ### Development Stage / Item / Committee Review / Stage Progress Update / Cost Allocation
 - מבנה נשמר כפי שהוגדר, עם שילוב בלוגיקה של הפרויקט (ראו להלן).
 
@@ -67,17 +87,19 @@
     - ManualAdjustment → שומר ערך קיים; לא מחושב אוטומטית
 
 - מחיר למ"ר (`dev_price_per_sqm`):
-  - חישוב: `allocatable_total_cost / Σ area_sqm` של כל ה־Lots ב־Plan עם `chargeable=1`.
+  - חישוב: `allocatable_total_cost / Σ area_sqm` של המגרשים שנבחרו בטבלת `Development Project Lots` עם `chargeable=1`.
   - כש־`price_locked=1` המחיר לא יחושב מחדש (נשמר קיים).
   - רישום היסטוריה: בעת שינוי מחיר, נעילה/פתיחה – נרשמת שורה בטבלת `price_history` עם תאריך, מקור ונעילה.
+  - אימותים: לא ניתן להוסיף Lot שאינו Chargeable, שאינו בתוכנית המוצהרת או שכבר משויך לפרויקט אחר.
 
 - ניהול שלבים:
   - יצירת שלבי ברירת מחדל אם חסרים: StageA, StageB, Final.
   - עדכון סכומי שלב מתוך סעיפים.
 
 - הקצאת עלויות למגרשים (`recalculate_cost_allocation`):
-  - לכל Lot לחיוב: `allocated_cost = area_sqm × dev_price_per_sqm`.
-  - עדכון/יצירת רשומות `Development Cost Allocation` (דלג על רשומות נעולות).
+  - פועלת רק על רשימת המגרשים שבטבלת הפרויקט (Chargeable=1).
+  - לכל Lot: `allocated_cost = area_sqm × dev_price_per_sqm`, יצירת/עדכון `Development Cost Allocation`, ודילוג על רשומות נעולות.
+  - הסרה של מגרש מהטבלה תנקה את שדות העלות ב־Lot ותמחק הקצאות לא נעולות עבורו.
   - השתקפות בטופס Lot: עדכון `related_project`, `dev_price_per_sqm`, `allocated_dev_cost`, וסטטוס פיתוח.
 
 - פעולות נעילה/פתיחה:
@@ -86,6 +108,8 @@
 
 - Stage Progress Update:
   - אימות אחוזי התקדמות 0–100 ועדכון אחוז בשלב על בסיס עדכון אחרון (בקובץ `stage_progress_update.py`).
+- Regional Infrastructure Project:
+  - טופס תיעודי בלבד; מאפשר קישור מספר Development Projects ותיוג מקור מימון/סטטוס אזורי ללא השפעה על חישובי המגרשים.
 
 ---
 
@@ -95,6 +119,7 @@
 
 2) יצירת פרויקט פיתוח (Development Project)
    - יצירת שלבים וסעיפים; הזנת עלויות מתוכננות.
+   - בחירת מגרשים בטבלת `Development Project Lots` (ניתן לבחור רק מתוך התוכניות שהוגדרו בשדות Plan/Participating Plans).
 
 3) ועדה (Committee Review)
    - קביעת סטטוס הוועדה ל־Approved והזנת `approved_allocatable_cost` (אם רלוונטי).
@@ -105,8 +130,8 @@
    - אופציונלי: `lock_price_per_sqm` לאחר החלטת ועדה/חוזים.
 
 5) הקצאת עלויות למגרשים
-   - הפעלה: `recalculate_cost_allocation` מהפרויקט.
-   - עדכון שדות במגרשים: `dev_price_per_sqm`, `allocated_dev_cost`, וסטטוס פיתוח.
+   - הפעלה: `recalculate_cost_allocation` מהפרויקט (פועל רק על המגרשים שנבחרו).
+   - עדכון שדות במגרשים: `related_project`, `dev_price_per_sqm`, `allocated_dev_cost`, וסטטוס פיתוח.
 
 6) התחלת ביצוע ומעקב
    - מעבר פרויקט ל־InExecution.
@@ -114,6 +139,9 @@
 
 7) סגירת פרויקט
    - עם השלמת כל השלבים, סטטוס פרויקט → Completed; סטטוסי מגרשים → Completed.
+
+8) (אופציונלי) פרויקט תשתיות על
+   - יצירת `Regional Infrastructure Project` לצורך תיעוד מקור המימון וקישור מספר פרויקטי פיתוח תחת מעטפת אחת.
 
 ---
 
@@ -129,14 +157,19 @@
 ## קישורים לקבצים רלוונטיים
 - בקרי DocTypes (מפתח):
   - `frappe-bench/apps/rb/rb/development/doctype/development_project/development_project.py`
+  - `frappe-bench/apps/rb/rb/development/doctype/development_project_lot/development_project_lot.py`
   - `frappe-bench/apps/rb/rb/development/doctype/development_stage/development_stage.py`
   - `frappe-bench/apps/rb/rb/development/doctype/stage_progress_update/stage_progress_update.py`
   - `frappe-bench/apps/rb/rb/development/doctype/development_price_history/development_price_history.py`
+  - `frappe-bench/apps/rb/rb/development/doctype/regional_infrastructure_project/regional_infrastructure_project.py`
+  - `frappe-bench/apps/rb/rb/development/doctype/regional_infrastructure_project_link/regional_infrastructure_project_link.py`
 - הגדרות DocTypes (JSON):
   - `frappe-bench/apps/rb/rb/development/doctype/development_project/development_project.json`
+  - `frappe-bench/apps/rb/rb/development/doctype/development_project_lot/development_project_lot.json`
   - `frappe-bench/apps/rb/rb/development/doctype/development_price_history/development_price_history.json`
+  - `frappe-bench/apps/rb/rb/development/doctype/regional_infrastructure_project/regional_infrastructure_project.json`
+  - `frappe-bench/apps/rb/rb/development/doctype/regional_infrastructure_project_link/regional_infrastructure_project_link.json`
   - `frappe-bench/apps/rb/rb/planning/doctype/lot/lot.json`
 - מסמכי אפיון:
   - `docs/development/development-spec.md`
   - מסמך זה: `docs/development/development-implementation-report.md`
-

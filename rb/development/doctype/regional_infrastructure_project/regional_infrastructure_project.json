@@ -1,0 +1,194 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "allow_rename": 1,
+ "autoname": "format:rip-{YYYY}-{###}",
+ "creation": "2025-10-15 00:00:00",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "infrastructure_project_name",
+  "project_scope",
+  "funding_source",
+  "status",
+  "column_break_dates",
+  "start_date",
+  "end_date",
+  "section_break_costs",
+  "total_estimate_cost",
+  "total_actual_cost",
+  "section_break_regional_items",
+  "regional_infrastructure_development_items",
+  "section_break_links",
+  "linked_projects",
+  "section_break_notes",
+  "notes",
+  "location"
+ ],
+ "fields": [
+  {
+   "fieldname": "infrastructure_project_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Infrastructure Project Name",
+   "reqd": 1
+  },
+  {
+   "fieldname": "project_scope",
+   "fieldtype": "Small Text",
+   "label": "Project Scope"
+  },
+  {
+   "fieldname": "funding_source",
+   "fieldtype": "Data",
+   "label": "Funding Source"
+  },
+  {
+   "default": "Planning",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "Planning\nUnderExecution\nCompleted\nOnHold"
+  },
+  {
+   "fieldname": "column_break_dates",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "section_break_costs",
+   "fieldtype": "Section Break",
+   "label": "Cost Allocation"
+  },
+  {
+   "fieldname": "total_estimate_cost",
+   "fieldtype": "Currency",
+   "label": "Total Estimate Cost"
+  },
+  {
+   "fieldname": "total_actual_cost",
+   "fieldtype": "Currency",
+   "label": "Total Actual Cost"
+  },
+  {
+   "fieldname": "section_break_regional_items",
+   "fieldtype": "Section Break",
+   "label": "Regional Infrastructure Development Items"
+  },
+  {
+   "columns": 5,
+   "fieldname": "regional_infrastructure_development_items",
+   "fieldtype": "Table",
+   "label": "Regional Infrastructure Development Items",
+   "options": "Regional Infrastructure Development Items"
+  },
+  {
+   "fieldname": "section_break_links",
+   "fieldtype": "Section Break",
+   "label": "Linked Development Projects"
+  },
+  {
+   "fieldname": "linked_projects",
+   "fieldtype": "Table",
+   "label": "Development Projects",
+   "options": "Regional Infrastructure Project Link"
+  },
+  {
+   "fieldname": "section_break_notes",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "location",
+   "fieldtype": "Geolocation",
+   "label": "Location",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2025-11-07 15:28:32.245672",
+ "modified_by": "Administrator",
+ "module": "Development",
+ "name": "Regional Infrastructure Project",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "match": "department",
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Development Editor",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "match": "department",
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Finance Viewer",
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "match": "department",
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Management Viewer"
+  },
+  {
+   "export": 1,
+   "match": "department",
+   "read": 1,
+   "report": 1,
+   "role": "Planning Editor"
+  },
+  {
+   "export": 1,
+   "match": "department",
+   "read": 1,
+   "report": 1,
+   "role": "Arrangement Editor"
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

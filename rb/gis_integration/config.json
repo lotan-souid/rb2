@@ -45,7 +45,7 @@
       "id_field": "lot_id",
       "geometry_target_field": "location",
       "fetch_mode": "by_property",
-      "property_name": "lotId",
+      "property_name": "lot_id",
       "fallback_properties": ["lot_number"],
       "map": {
         "geolocation_field": "location",

@@ -3,6 +3,7 @@
  "allow_rename": 1,
  "creation": "2025-07-23 08:25:33.148983",
  "doctype": "DocType",
+ "is_submittable": 0,
  "engine": "InnoDB",
  "field_order": [
   "employee_id",

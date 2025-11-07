@@ -5,6 +5,7 @@
  "autoname": "format:AF-YYYY-{#####}",
  "creation": "2025-07-23 11:40:07.184628",
  "doctype": "DocType",
+ "is_submittable": 0,
  "engine": "InnoDB",
  "field_order": [
   "arrangement_file_number",
