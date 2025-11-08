@@ -30,9 +30,9 @@
  "owner": "Administrator",
  "permissions": [
   {
-   "amend": 1,
+   "amend": 0,
    "apply_user_permissions": 0,
-   "cancel": 1,
+   "cancel": 0,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -47,13 +47,13 @@
    "role": "System Manager",
    "select": 0,
    "share": 1,
-   "submit": 1,
+   "submit": 0,
    "write": 1
   },
   {
    "amend": 0,
    "apply_user_permissions": 1,
-   "cancel": 1,
+   "cancel": 0,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -68,7 +68,7 @@
    "role": "Development Editor",
    "select": 0,
    "share": 1,
-   "submit": 1,
+   "submit": 0,
    "write": 1
   },
   {

@@ -14,6 +14,15 @@ const get_allowed_plans = (frm) => {
     return plans;
 };
 
+const MANAGING_COMPANY_TYPE = "חברה מנהלת";
+
+const get_managing_company_query = () => ({
+    query: "rb.development.doctype.contractor.contractor.get_managing_company_query",
+    filters: {
+        managing_type: MANAGING_COMPANY_TYPE
+    }
+});
+
 const apply_project_type_rules = (frm) => {
     const project_type = frm.doc.development_project_type || "Single Plan";
     const is_single_plan = project_type === "Single Plan";
@@ -52,6 +61,7 @@ const ensure_project_type = (frm) => {
 
 frappe.ui.form.on("Development Project", {
     setup(frm) {
+        frm.set_query("contractor", () => get_managing_company_query());
         frm.set_query("contractor_contact", () => {
             if (!frm.doc.contractor) {
                 return {};

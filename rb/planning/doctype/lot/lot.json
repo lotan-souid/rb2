@@ -221,8 +221,8 @@
  "owner": "Administrator",
  "permissions": [
   {
-   "amend": 1,
-   "cancel": 1,
+   "amend": 0,
+   "cancel": 0,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -233,11 +233,11 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
-   "submit": 1,
+   "submit": 0,
    "write": 1
   },
   {
-   "cancel": 1,
+   "cancel": 0,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -248,7 +248,7 @@
    "report": 1,
    "role": "Planning Editor",
    "share": 1,
-   "submit": 1,
+   "submit": 0,
    "write": 1
   },
   {

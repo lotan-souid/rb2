@@ -1,7 +1,19 @@
 // Copyright (c) 2025, lotan souid and contributors
 // For license information, please see license.txt
 
+const MANAGING_COMPANY_TYPE = "חברה מנהלת";
+
+const get_managing_company_query = () => ({
+	query: "rb.development.doctype.contractor.contractor.get_managing_company_query",
+	filters: {
+		managing_type: MANAGING_COMPANY_TYPE,
+	},
+});
+
 frappe.ui.form.on("Regional Infrastructure Project", {
+	setup(frm) {
+		frm.set_query("managing_company", () => get_managing_company_query());
+	},
 	onload(frm) {
 		frm.events.calculate_totals(frm);
 	},

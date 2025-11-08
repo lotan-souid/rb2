@@ -51,7 +51,7 @@
    "fieldname": "enforcement_authority",
    "fieldtype": "Select",
    "label": "Enforcement Authority",
-   "options": "משטרה\nסיירת ירוקה\nמשרד הפנים\nאחר"
+   "options": "\u05de\u05e9\u05d8\u05e8\u05d4\n\u05e1\u05d9\u05d9\u05e8\u05ea \u05d9\u05e8\u05d5\u05e7\u05d4\n\u05de\u05e9\u05e8\u05d3 \u05d4\u05e4\u05e0\u05d9\u05dd\n\u05d0\u05d7\u05e8"
   },
   {
    "fieldname": "execution_date",
@@ -100,9 +100,9 @@
  "owner": "Administrator",
  "permissions": [
   {
-   "amend": 1,
+   "amend": 0,
    "apply_user_permissions": 0,
-   "cancel": 1,
+   "cancel": 0,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -117,13 +117,13 @@
    "role": "System Manager",
    "select": 0,
    "share": 1,
-   "submit": 1,
+   "submit": 0,
    "write": 1
   },
   {
    "amend": 0,
    "apply_user_permissions": 1,
-   "cancel": 1,
+   "cancel": 0,
    "create": 1,
    "delete": 1,
    "email": 1,
@@ -138,7 +138,7 @@
    "role": "Arrangement Editor",
    "select": 0,
    "share": 1,
-   "submit": 1,
+   "submit": 0,
    "write": 1
   },
   {

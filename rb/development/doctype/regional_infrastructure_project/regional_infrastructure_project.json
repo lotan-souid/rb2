@@ -10,6 +10,7 @@
   "infrastructure_project_name",
   "project_scope",
   "funding_source",
+  "managing_company",
   "status",
   "column_break_dates",
   "start_date",
@@ -42,6 +43,13 @@
    "fieldname": "funding_source",
    "fieldtype": "Data",
    "label": "Funding Source"
+  },
+  {
+   "fieldname": "managing_company",
+   "fieldtype": "Link",
+   "label": "Managing Company",
+   "options": "Contractor",
+   "get_query": "rb.development.doctype.contractor.contractor.get_managing_company_query"
   },
   {
    "default": "Planning",

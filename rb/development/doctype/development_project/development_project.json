@@ -97,7 +97,8 @@
   {
    "fieldname": "contractor",
    "fieldtype": "Link",
-   "label": "Contractor",
+   "get_query": "rb.development.doctype.contractor.contractor.get_managing_company_query",
+   "label": "Managing Company",
    "options": "Contractor"
   },
   {
@@ -114,12 +115,16 @@
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
-   "label": "Start Date"
+   "in_list_view": 1,
+   "label": "Start Date",
+   "reqd": 1
   },
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
-   "label": "End Date"
+   "in_list_view": 1,
+   "label": "End Date",
+   "reqd": 1
   },
   {
    "fieldname": "status_change",
@@ -252,7 +257,7 @@
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2025-11-07 15:08:50.031797",
+ "modified": "2025-11-07 21:27:44.340514",
  "modified_by": "Administrator",
  "module": "Development",
  "name": "Development Project",
